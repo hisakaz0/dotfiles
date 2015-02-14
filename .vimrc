@@ -1,13 +1,12 @@
 ""##########
 ""  Remap
 ""##########
-set notimeout
+inoremap OA <Up>
+inoremap OB <Down>
+inoremap OC <Right>
+inoremap OD <Left>
 set ttimeout
-set timeoutlen=100
-imap OA <Up>
-imap OB <Down>
-imap OC <Right>
-imap OD <Left>
+set timeoutlen=50
 ""######################
 ""	Neobundle setting
 ""######################
@@ -33,7 +32,6 @@ NeoBundle 'mattn/favstar-vim'
 NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Shougo/unite.vim'
-" NeoBundle 'Shougo/neocomplcache.vim'
 NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'Shougo/vimshell.vim'
 NeoBundle 'Shougo/vimproc.vim', {
@@ -69,6 +67,8 @@ set shiftwidth=2
 set tabstop=2
 NeoBundle 'nathanaelkane/vim-indent-guides'
 let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_auto_colors = 1
+let g:indent_guides_guide_size=1
 ""###############
 ""  Completion
 ""###############
@@ -80,6 +80,7 @@ NeoBundle 'MetalPhaeton/easybracket-vim'
 ""###############
 ""	Appearance
 ""###############
+colorscheme peachpuff
 set number
 set title 
 set list
@@ -127,12 +128,16 @@ nnoremap <C-q> <Esc>:q<CR>
 ""##########
 ""	Aided
 ""##########
+" shift押すのがめんどくさい
 nnoremap ; :
 vnoremap ; :
+" トグルスイッチ
 set pastetoggle=<F4>
+" convert markdown to html 
 command Mth :!mth % 
 " インデント調整
 map  <C-/>
+imap  <C-/>
 inoremap <C-/> <Esc>:call CorrectCode()<CR>a
 nnoremap <C-/> :call CorrectCode()<CR>
 function CorrectCode()
@@ -140,6 +145,8 @@ function CorrectCode()
   execute ":normal gg=G"
   execute ":loadview"
 endfunction
+" 行末の空白を削除
+NeoBundleInstall 'bronson/vim-trailing-whitespace'
 ""############
 ""  Zenkaku
 ""############
@@ -361,9 +368,19 @@ let g:vim_markdown_liquid=1
 let g:vim_markdown_frontmatter=1
 let g:vim_markdown_math=1
 " let g:previm_open_cmd
-""#########
-""  Gomi
-""#########
+""############
+""  Haskell
+""############
+"便利なghcmodなるコマンドをvimから便利に使うためのプラグイン
+" NeoBundle 'eagletmt/ghcmod-vim'
+"補完用
+" NeoBundle 'eagletmt/neco-ghc'
+"インデントを賢くしてくれる
+NeoBundle 'kana/vim-filetype-haskell' 
+""#######################
+""  ごみいちゃん
+""#######################
+"" map 
 " map OA <Up>
 " map OB <Down>
 " map OC <Right>
@@ -373,7 +390,7 @@ let g:vim_markdown_math=1
 " set t_kr=OC
 " set t_kl=OD
 " set nocompatible
-" 挿入モード時にctrl + rで置換
+"" 挿入モード時にctrl + rで置換
 " inoremap <C-r> <Esc>:call ReplaceonInsertMode()<CR>i
 " function! ReplaceonInsertMode()
 "   call inputsave()
@@ -382,3 +399,6 @@ let g:vim_markdown_math=1
 "   execute ":%s/".l:before."/".l:after."/gc"
 "   call inputrestore()
 " endfunction
+"" default indent-guides setting"
+" autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
+" autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
