@@ -123,6 +123,7 @@ noremap <Esc><Esc> :set hlsearch! hlsearch?<CR>
 "########################
 inoremap <C-s> <Esc>:w<CR>a
 inoremap <C-q> <Esc>:q<CR>
+
 nnoremap <C-s> <Esc>:w<CR>
 nnoremap <C-q> <Esc>:q<CR>
 ""##########
@@ -146,7 +147,7 @@ function CorrectCode()
   execute ":loadview"
 endfunction
 " 行末の空白を削除
-NeoBundleInstall 'bronson/vim-trailing-whitespace'
+NeoBundle 'bronson/vim-trailing-whitespace'
 ""############
 ""  Zenkaku
 ""############
