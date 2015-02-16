@@ -195,7 +195,7 @@ inoremap <silent>  ///  <C-R>=CommentBlock(input("Enter comment: "),'//','*')<CR
 inoremap <silent>  %%%  <C-R>=CommentBlock(input("Enter comment: "),'%%','*')<CR>
 inoremap <silent>  """  <C-R>=CommentBlock(input("Enter comment: "),'""','#')<CR>
 inoremap <silent>  ---  <C-R>=CommentBlock(input("Enter comment: "),'--','*')<CR>
-autocmd BufEnter * if &filetype == 'markdown' | imap <silent>  ###  <C-R>=CommentBlock(input("Enter comment: "),'##','#')<CR> | endif 
+autocmd BufEnter * if &filetype != 'markdown' | imap <silent>  ###  <C-R>=CommentBlock(input("Enter comment: "),'##','#')<CR> | endif 
 inoremap <silent>  DDD  <C-R>=CommentBlock(strftime("%Y/%m/%d"),'--','-',80)<CR>
 inoremap <silent> AAA   <C-R>=HeaderBlock(input("Author : "))<CR>
 function CommentBlock(comment, ...)
