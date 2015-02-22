@@ -5,8 +5,8 @@ inoremap OA <Up>
 inoremap OB <Down>
 inoremap OC <Right>
 inoremap OD <Left>
-set ttimeout
-set timeoutlen=50
+" set ttimeout
+" set timeoutlen=50
 ""######################
 ""  Neobundle setting
 ""######################
@@ -55,7 +55,7 @@ NeoBundle "tyru/caw.vim.git"
 ""#############
 set showmatch
 set mouse=a
-set nf=alpha 
+set nf=alpha
 set backspace=indent,eol,start
 " "set spell
 ""###########
@@ -65,7 +65,6 @@ set cindent
 set expandtab
 set shiftwidth=2
 set tabstop=2
-set softtabstop=2
 NeoBundle 'nathanaelkane/vim-indent-guides'
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_auto_colors = 1
@@ -83,7 +82,7 @@ NeoBundle 'MetalPhaeton/easybracket-vim'
 ""###############
 colorscheme peachpuff
 set number
-set title 
+set title
 set list
 set listchars=tab:..,trail:_,eol:§,extends:>,precedes:<,nbsp:%
 " set cursorline
@@ -135,8 +134,8 @@ nnoremap ; :
 vnoremap ; :
 " トグルスイッチ
 set pastetoggle=<F4>
-" convert markdown to html 
-command Mth :!mth % 
+" convert markdown to html
+command Mth :!mth %
 " インデント調整
 map  <C-/>
 imap  <C-/>
@@ -159,7 +158,7 @@ au WinEnter * let w:m3 = matchadd("ZenkakuSpace", '　')
 " 全角を半角に
 function! HZ()
   let zenkakuList = ['１','２','３','４','５','６','７','８','９']
-  let numLine = 
+  let numLine =
   for s:key in range(0,9)
     " echo zenkakulist[key]
     substitute(,zenkakuList[key],key)
@@ -184,30 +183,6 @@ function! RUN()
     :PrevimOpen
   endif
 endfunction
-""############
-""  Comment
-""############
-imap <C-K> <Esc><Plug>(caw:i:toggle)a
-nmap <C-K> <Plug>(caw:i:toggle)
-vmap <C-K> <Plug>(caw:i:toggle)
-" comment block
-inoremap <silent>  """  <C-R>=CommentBlock(input("Enter comment: "),'""','#')<CR>
-inoremap <silent>  ///  <C-R>=CommentBlock(input("Enter comment: "),'//','*')<CR>
-inoremap <silent>  %%%  <C-R>=CommentBlock(input("Enter comment: "),'%%','*')<CR>
-inoremap <silent>  """  <C-R>=CommentBlock(input("Enter comment: "),'""','#')<CR>
-inoremap <silent>  ---  <C-R>=CommentBlock(input("Enter comment: "),'--','*')<CR>
-autocmd BufEnter * if &filetype != 'markdown' | imap <silent>  ###  <C-R>=CommentBlock(input("Enter comment: "),'##','#')<CR> | endif 
-inoremap <silent>  DDD  <C-R>=CommentBlock(strftime("%Y/%m/%d"),'--','-',80)<CR>
-inoremap <silent> AAA   <C-R>=HeaderBlock(input("Author : "))<CR>
-function CommentBlock(comment, ...)
-  let introducer =  a:0 >= 1  ?  a:1  :  "//"
-  let box_char   =  a:0 >= 2  ?  a:2  :  "*"
-  let width      =  a:0 >= 3  ?  a:3  :  strlen(a:comment) + 5
-  " Build the comment box and put the comment inside it...
-  return introducer . repeat(box_char,width) . "\<CR>"
-        \    . introducer . "\<Tab>" . a:comment   . "\<CR>"
-        \    . introducer . repeat(box_char,width) . "\<CR>"
-endfunction
 ""################
 ""  Neocomplete
 ""################
@@ -218,19 +193,19 @@ let g:neocomplete#enable_at_startup = 1
 " Use smartcase.
 let g:neocomplete#enable_smart_case = 1
 " Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 2 
+let g:neocomplete#sources#syntax#min_keyword_length = 2
 let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
 " Define dictionary.
 let g:neocomplete#sources#dictionary#dictionaries = {
-      \ 'default'  : '',
-      \ 'vimshell' : $HOME.'/.vimshell_hist',
-      \ 'scheme'   : $HOME.'/.gosh_completions',
-      \ 'html'     : $HOME.'/.vim/dict/html.dict',
+      \ 'default'   : '',
+      \ 'vimshell'  : $HOME.'/.vimshell_hist',
+      \ 'scheme'     : $HOME.'/.gosh_completions',
+      \ 'html'    : $HOME.'/.vim/dict/html.dict',
       \ 'php'      : $HOME.'/.vim/dict/php.dict',
-      \ 'css'      : $HOME.'/.vim/dict/css.dict',
-      \ 'c'        : $HOME.'/.vim/dict/c.dict',
-      \ 'tex'      : $HOME.'/.vim/dict/tex.dict',
-      \ 'java'     : $HOME.'/.vim/dict/java.dict'
+      \ 'css'     : $HOME.'/.vim/dict/css.dict',
+      \ 'c'       : $HOME.'/.vim/dict/c.dict',
+      \ 'tex'     : $HOME.'/.vim/dict/tex.dict',
+      \ 'java'    : $HOME.'/.vim/dict/java.dict'
       \ }
 " keymapping
 " Define keyword.
@@ -295,7 +270,7 @@ endif
 let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
 "let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
 "let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-" For perlomni.vim setting.
+" For perlomni.vim settinendendif
 " https://github.com/c9s/perlomni.vim
 ""let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 "############################################################
@@ -323,7 +298,7 @@ autocmd BufNewFile *.html 0r $HOME/.vim/templates/skel.html
 ""  Filetype setting
 ""#####################
 filetype plugin indent on
-syntax on 
+syntax on
 ""#########
 ""  LISP
 ""######### http://jiroukaja-memo.hatenablog.com/entry/2013/05/06/010315
@@ -378,11 +353,35 @@ let g:vim_markdown_math=1
 "補完用
 " NeoBundle 'eagletmt/neco-ghc'
 "インデントを賢くしてくれる
-NeoBundle 'kana/vim-filetype-haskell' 
+NeoBundle 'kana/vim-filetype-haskell'
+""############
+""  Comment
+""############
+imap <C-K> <Esc><Plug>(caw:i:toggle)a
+nmap <C-K> <Plug>(caw:i:toggle)
+vmap <C-K> <Plug>(caw:i:toggle)
+" comment block
+inoremap <silent>  """  <C-R>=CommentBlock(input("Enter comment: "),'""','#')<CR>
+inoremap <silent>  ///  <C-R>=CommentBlock(input("Enter comment: "),'//','*')<CR>
+inoremap <silent>  %%%  <C-R>=CommentBlock(input("Enter comment: "),'%%','*')<CR>
+inoremap <silent>  """  <C-R>=CommentBlock(input("Enter comment: "),'""','#')<CR>
+inoremap <silent>  ---  <C-R>=CommentBlock(input("Enter comment: "),'--','*')<CR>
+if &filetype != 'markdown'
+  imap <silent>  ###  <C-R>=CommentBlock(input("Enter comment: "),'##','#')<CR>
+endif
+function CommentBlock(comment, ...)
+  let introducer =  a:0 >= 1  ?  a:1  :  "//"
+  let box_char   =  a:0 >= 2  ?  a:2  :  "*"
+  let width      =  a:0 >= 3  ?  a:3  :  strlen(a:comment) + 5
+  " Build the comment box and put the comment inside it...
+  return introducer . repeat(box_char,width) . "\<CR>"
+        \    . introducer . "\<Tab>" . a:comment   . "\<CR>"
+        \    . introducer . repeat(box_char,width) . "\<CR>"
+endfunction
 ""#######################
 ""  ごみいちゃん
 ""#######################
-"" map 
+"" map
 " map OA <Up>
 " map OB <Down>
 " map OC <Right>
@@ -404,3 +403,5 @@ NeoBundle 'kana/vim-filetype-haskell'
 "" default indent-guides setting"
 " autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
 " autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
+" inoremap <silent>  DDD  <C-R>=CommentBlock(strftime("%Y/%m/%d"),'--','-',80)<CR>
+" inoremap <silent> AAA   <C-R>=HeaderBlock(input("Author : "))<CR>
