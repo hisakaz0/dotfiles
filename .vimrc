@@ -324,7 +324,7 @@ autocmd BufNewFile *.html 0r $HOME/.vim/templates/skel.html
 filetype plugin indent on
 syntax on 
 ""#########
-""	LISP
+""  LISP
 ""######### http://jiroukaja-memo.hatenablog.com/entry/2013/05/06/010315
 function! s:generate_lisp_tags()
   let g:slimv_ctags =  'ctags -a -f '.$HOME.'/.vim/tags/lisp.tags '.expand('%:p').' --language-force=Lisp'
@@ -348,7 +348,7 @@ let g:paredit_mode=1
 let g:paredit_electric_return = 0
 autocmd BufNewFile,BufRead *.asd   set filetype=lisp
 ""##############################
-""	Instance markdown preview
+""  Instance markdown preview
 ""##############################
 let g:instant_markdown_slow = 1
 let g:instant_markdown_autostart = 0
