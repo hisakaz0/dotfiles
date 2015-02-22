@@ -8,7 +8,7 @@ inoremap OD <Left>
 set ttimeout
 set timeoutlen=50
 ""######################
-""	Neobundle setting
+""  Neobundle setting
 ""######################
 set runtimepath+=~/.vim/bundle/neobundle.vim/
 call neobundle#rc(expand('~/.vim/bundle'))
@@ -51,7 +51,7 @@ NeoBundle "tyru/caw.vim.git"
 " add plugins
 " NeoBundleCheck
 ""#############
-""	Behavior
+""  Behavior
 ""#############
 set showmatch
 set mouse=a
@@ -59,12 +59,13 @@ set nf=alpha
 set backspace=indent,eol,start
 " "set spell
 ""###########
-""	Indent
+""  Indent
 ""###########
 set cindent
 set expandtab
 set shiftwidth=2
 set tabstop=2
+set softtabstop=2
 NeoBundle 'nathanaelkane/vim-indent-guides'
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_auto_colors = 1
@@ -78,7 +79,7 @@ NeoBundle 'MetalPhaeton/easybracket-vim'
 " inoremap <Enter> []<Left><CR><ESC><S-o>
 " inoremap <Enter> ()<Left><CR><ESC><S-o>
 ""###############
-""	Appearance
+""  Appearance
 ""###############
 colorscheme peachpuff
 set number
@@ -98,12 +99,12 @@ set statusline+=[ENC=%{&fileencoding}]/
 set statusline+=[LOW=%l/%L]/
 set statusline+=[COLUM=%c/%{col('$')-1}]
 ""###########
-""	Encode
+""  Encode
 ""###########
 set encoding=utf-8
 set fileencodings=utf-8,iso-2022-jp,cp932,sjis,euc-jp
 ""###########
-""	Backup
+""  Backup
 ""###########
 set backup "backupを有効化
 set backupdir=~/.vim/backup/ "backupfileを保存するフォルダ
@@ -113,13 +114,13 @@ set backupdir=~/.vim/backup/ "backupfileを保存するフォルダ
 set clipboard+=autoselect
 set clipboard+=unnamed
 ""###########
-""	Search
+""  Search
 ""###########
 set incsearch
 set hlsearch
 noremap <Esc><Esc> :set hlsearch! hlsearch?<CR>
 "########################
-""	Windows like keymap
+""  Windows like keymap
 "########################
 inoremap <C-s> <Esc>:w<CR>a
 inoremap <C-q> <Esc>:q<CR>
@@ -127,7 +128,7 @@ inoremap <C-q> <Esc>:q<CR>
 nnoremap <C-s> <Esc>:w<CR>
 nnoremap <C-q> <Esc>:q<CR>
 ""##########
-""	Aided
+""  Aided
 ""##########
 " shift押すのがめんどくさい
 nnoremap ; :
@@ -208,7 +209,7 @@ function CommentBlock(comment, ...)
         \    . introducer . repeat(box_char,width) . "\<CR>"
 endfunction
 ""################
-""	Neocomplete
+""  Neocomplete
 ""################
 " Disable AutoComplPop.
 let g:acp_enableAtStartup = 0
@@ -221,15 +222,15 @@ let g:neocomplete#sources#syntax#min_keyword_length = 2
 let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
 " Define dictionary.
 let g:neocomplete#sources#dictionary#dictionaries = {
-      \ 'default' 	: '',
-      \ 'vimshell'	: $HOME.'/.vimshell_hist',
-      \ 'scheme' 		: $HOME.'/.gosh_completions',
-      \ 'html'		: $HOME.'/.vim/dict/html.dict',
-      \ 'php'			: $HOME.'/.vim/dict/php.dict',
-      \ 'css' 		: $HOME.'/.vim/dict/css.dict',
-      \ 'c'   		: $HOME.'/.vim/dict/c.dict',
-      \ 'tex' 		: $HOME.'/.vim/dict/tex.dict',
-      \ 'java'		: $HOME.'/.vim/dict/java.dict'
+      \ 'default'  : '',
+      \ 'vimshell' : $HOME.'/.vimshell_hist',
+      \ 'scheme'   : $HOME.'/.gosh_completions',
+      \ 'html'     : $HOME.'/.vim/dict/html.dict',
+      \ 'php'      : $HOME.'/.vim/dict/php.dict',
+      \ 'css'      : $HOME.'/.vim/dict/css.dict',
+      \ 'c'        : $HOME.'/.vim/dict/c.dict',
+      \ 'tex'      : $HOME.'/.vim/dict/tex.dict',
+      \ 'java'     : $HOME.'/.vim/dict/java.dict'
       \ }
 " keymapping
 " Define keyword.
@@ -319,7 +320,7 @@ autocmd BufNewFile *.html 0r $HOME/.vim/templates/skel.html
 ""#################
 " let g:openbrowser_browser_commands = { "name": "xdg-open", "args": ["{browser}", "{uri}"] }
 ""#####################
-""	Filetype setting
+""  Filetype setting
 ""#####################
 filetype plugin indent on
 syntax on 
