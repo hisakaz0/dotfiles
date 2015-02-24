@@ -1,5 +1,5 @@
 ""##########
-""  Remap
+""  Arrow
 ""##########
 inoremap OA <Up>
 inoremap OB <Down>
@@ -128,6 +128,8 @@ nnoremap <C-q> <Esc>:q<CR>
 ""##########
 ""  Aided
 ""##########
+" mapleader
+let mapleader=','
 " インデントハイライトのトグルスイッ"
 nnoremap <silent><F3> :IndentGuidesToggle<CR>
 " shift押すのがめんどくさい
@@ -137,8 +139,12 @@ vnoremap ; :
 set pastetoggle=<F4>
 " convert markdown to html
 command Mth :!mth %
-" インデント調整
-map  <C-/>
+" 行末の空白を削除
+NeoBundle 'bronson/vim-trailing-whitespace'
+""################
+""  CorrectCode
+""################
+nnoremap  <C-/>
 inoremap  <C-/>
 inoremap <C-/> <Esc>:call CorrectCode()<CR>a
 nnoremap <C-/> :call CorrectCode()<CR>
@@ -147,8 +153,6 @@ function CorrectCode()
   execute ":normal gg=G"
   execute ":loadview"
 endfunction
-" 行末の空白を削除
-NeoBundle 'bronson/vim-trailing-whitespace'
 ""############
 ""  Zenkaku
 ""############
