@@ -7,9 +7,9 @@ inoremap OC <Right>
 inoremap OD <Left>
 " set ttimeout
 " set timeoutlen=50
-""######################
-""  Neobundle setting
-""######################
+""#############
+""  Neobundle
+""#############
 set runtimepath+=~/.vim/bundle/neobundle.vim/
 call neobundle#rc(expand('~/.vim/bundle'))
 " Let NeoBundle manage NeoBundle
@@ -68,6 +68,7 @@ NeoBundle 'nathanaelkane/vim-indent-guides'
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_auto_colors = 1
 let g:indent_guides_guide_size=1
+NeoBundle 'Align'
 ""###############
 ""  Completion
 ""###############
@@ -127,6 +128,8 @@ nnoremap <C-q> <Esc>:q<CR>
 ""##########
 ""  Aided
 ""##########
+" インデントハイライトのトグルスイッ"
+nnoremap <silent><F3> :IndentGuidesToggle<CR>
 " shift押すのがめんどくさい
 nnoremap ; :
 vnoremap ; :
@@ -333,8 +336,9 @@ let g:instant_markdown_autostart = 0
 ""#############
 ""  Markdown
 ""#############
-NeoBundle 'plasticboy/vim-markdown'
+NeoBundle "joker1007/vim-markdown-quote-syntax"
 NeoBundle 'kannokanno/previm'
+NeoBundle "rcmdnk/vim-markdown"
 augroup MD
   autocmd BufRead,BufNewFile *.{md,mdwn,mkd,mkdn,mark} set filetype=markdown
   autocmd BufRead,BufNewFile *.txt set filetype=markdown
@@ -363,14 +367,12 @@ imap <C-K> <Esc><Plug>(caw:i:toggle)a
 nmap <C-K> <Plug>(caw:i:toggle)
 vmap <C-K> <Plug>(caw:i:toggle)
 " comment block
-inoremap <silent>  """  <C-R>=CommentBlock(input("Enter comment: "),'""','#')<CR>
-inoremap <silent>  ///  <C-R>=CommentBlock(input("Enter comment: "),'//','*')<CR>
-inoremap <silent>  %%%  <C-R>=CommentBlock(input("Enter comment: "),'%%','*')<CR>
-inoremap <silent>  """  <C-R>=CommentBlock(input("Enter comment: "),'""','#')<CR>
-inoremap <silent>  ---  <C-R>=CommentBlock(input("Enter comment: "),'--','*')<CR>
-if &filetype != 'markdown'
-  imap <silent>  ###  <C-R>=CommentBlock(input("Enter comment: "),'##','#')<CR>
-endif
+inoremap <silent>  """   <C-R>=CommentBlock(input("Enter comment: "),'""','#')<CR>
+inoremap <silent>  ///   <C-R>=CommentBlock(input("Enter comment: "),'//','*')<CR>
+inoremap <silent>  %%%   <C-R>=CommentBlock(input("Enter comment: "),'%%','*')<CR>
+inoremap <silent>  """   <C-R>=CommentBlock(input("Enter comment: "),'""','#')<CR>
+inoremap <silent>  ---   <C-R>=CommentBlock(input("Enter comment: "),'--','*')<CR>
+inoremap <silent>  ####  <C-R>=CommentBlock(input("Enter comment: "),'##','#')<CR>
 function CommentBlock(comment, ...)
   let introducer =  a:0 >= 1  ?  a:1  :  "//"
   let box_char   =  a:0 >= 2  ?  a:2  :  "*"
