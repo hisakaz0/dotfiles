@@ -64,11 +64,6 @@ set cindent
 set expandtab
 set shiftwidth=2
 set tabstop=2
-NeoBundle 'nathanaelkane/vim-indent-guides'
-let g:indent_guides_enable_on_vim_startup = 1
-let g:indent_guides_auto_colors = 1
-let g:indent_guides_guide_size=1
-NeoBundle 'Align'
 ""###############
 ""  Completion
 ""###############
@@ -116,8 +111,8 @@ set clipboard+=unnamed
 ""  Search
 ""###########
 set incsearch
-set hlsearch
 noremap <Esc><Esc> :set hlsearch! hlsearch?<CR>
+" set hlsearch
 "########################
 ""  Windows like keymap
 "########################
@@ -130,8 +125,6 @@ nnoremap <C-q> <Esc>:q<CR>
 ""##########
 " mapleader
 let mapleader=','
-" インデントハイライトのトグルスイッ"
-nnoremap <silent><F3> :IndentGuidesToggle<CR>
 " shift押すのがめんどくさい
 nnoremap ; :
 vnoremap ; :
@@ -141,11 +134,21 @@ set pastetoggle=<F4>
 command Mth :!mth %
 " 行末の空白を削除
 NeoBundle 'bronson/vim-trailing-whitespace'
+" 整形ツール
+NeoBundle 'Align'
+""################
+""  IndentGuide
+""################
+NeoBundle 'nathanaelkane/vim-indent-guides'
+let g:indent_guides_enable_on_vim_startup = 0
+let g:indent_guides_auto_colors = 1
+let g:indent_guides_guide_size=1
+" インデントハイライトのトグルスイッチ
+nnoremap <silent><F3> :IndentGuidesToggle<CR>
 ""################
 ""  CorrectCode
 ""################
-nnoremap  <C-/>
-inoremap  <C-/>
+map  <C-/>
 inoremap <C-/> <Esc>:call CorrectCode()<CR>a
 nnoremap <C-/> :call CorrectCode()<CR>
 function CorrectCode()
@@ -343,14 +346,9 @@ let g:instant_markdown_autostart = 0
 NeoBundle "joker1007/vim-markdown-quote-syntax"
 NeoBundle 'kannokanno/previm'
 NeoBundle "rcmdnk/vim-markdown"
-augroup MD
-  autocmd BufRead,BufNewFile *.{md,mdwn,mkd,mkdn,mark} set filetype=markdown
-  autocmd BufRead,BufNewFile *.txt set filetype=markdown
-  autocmd BufEnter * if &filetype == '' | setlocal filetype=markdown | endif
-  autocmd FileType markdown  setlocal shiftwidth=2
-  autocmd FileType markdown  setlocal tabstop=2
-augroup END
-let g:vim_markdown_folding_disabled=0
+autocmd BufRead,BufNewFile *.{md,mdwn,mkd,mkdn,mark} set filetype=markdown
+autocmd BufEnter * if &filetype == '' | setlocal filetype=markdown | endif
+let g:vim_markdown_folding_disabled=1
 let g:vim_markdown_liquid=1
 let g:vim_markdown_frontmatter=1
 let g:vim_markdown_math=1
