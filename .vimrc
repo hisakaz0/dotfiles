@@ -56,7 +56,8 @@ set showmatch
 set mouse=a
 set nf=alpha
 set backspace=indent,eol,start
-" "set spell
+" autocmd FileType * setlocal formatoptions-=or
+"set spell
 ""###########
 ""  Indent
 ""###########
@@ -67,11 +68,23 @@ set tabstop=2
 ""###############
 ""  Completion
 ""###############
-set wildmode=list,longest
 NeoBundle 'MetalPhaeton/easybracket-vim'
+set wildmode=list,longest
 inoremap {<Enter> {}<Left><CR><ESC><S-o>
 inoremap [<Enter> []<Left><CR><ESC><S-o>
 inoremap (<Enter> ()<Left><CR><ESC><S-o>
+""################
+""  IndentGuide
+""################
+NeoBundle 'nathanaelkane/vim-indent-guides'
+let g:indent_guides_enable_on_vim_startup = 0
+let g:indent_guides_guide_size=1
+"" default indent-guides setting"
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=lightgray
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=3
+" インデントハイライトのトグルスイッチ
+nnoremap <silent><F3> :IndentGuidesToggle<CR>
 ""###############
 ""  Appearance
 ""###############
@@ -111,7 +124,7 @@ set clipboard+=unnamed
 ""  Search
 ""###########
 set incsearch
-noremap <Esc><Esc> :set hlsearch! hlsearch?<CR>
+noremap <F2> :set hlsearch! hlsearch?<CR>
 " set hlsearch
 "########################
 ""  Windows like keymap
@@ -137,21 +150,12 @@ NeoBundle 'bronson/vim-trailing-whitespace'
 " 整形ツール
 NeoBundle 'Align'
 ""################
-""  IndentGuide
-""################
-NeoBundle 'nathanaelkane/vim-indent-guides'
-let g:indent_guides_enable_on_vim_startup = 0
-let g:indent_guides_auto_colors = 1
-let g:indent_guides_guide_size=1
-" インデントハイライトのトグルスイッチ
-nnoremap <silent><F3> :IndentGuidesToggle<CR>
-""################
 ""  CorrectCode
 ""################
 map  <C-/>
 inoremap <C-/> <Esc>:call CorrectCode()<CR>a
 nnoremap <C-/> :call CorrectCode()<CR>
-function CorrectCode()
+function! CorrectCode()
   execute ":mkview"
   execute ":normal gg=G"
   execute ":loadview"
@@ -179,18 +183,7 @@ command Count %s/./&/g  "テキスト内の文字数をカウントする
 ""########
 ""  Run
 ""########
-noremap <F5> <ESC>:call RUN()<ENTER>
-function! RUN()
-  if &filetype == 'sh'
-    :w|!php %;read
-  endif
-  if &filetype == 'php'
-    :w|!php %;read
-  endif
-  if &filetype == 'markdown'
-    :PrevimOpen
-  endif
-endfunction
+noremap <F5> <ESC>:QuickRun<CR>
 ""################
 ""  Neocomplete
 ""################
@@ -311,7 +304,7 @@ autocmd BufNewFile *.html 0r $HOME/.vim/templates/skel.html
 ""#####################
 filetype plugin indent on
 syntax on
-""#########
+"#########
 ""  LISP
 ""######### http://jiroukaja-memo.hatenablog.com/entry/2013/05/06/010315
 function! s:generate_lisp_tags()
@@ -347,7 +340,7 @@ NeoBundle "joker1007/vim-markdown-quote-syntax"
 NeoBundle 'kannokanno/previm'
 NeoBundle "rcmdnk/vim-markdown"
 autocmd BufRead,BufNewFile *.{md,mdwn,mkd,mkdn,mark} set filetype=markdown
-autocmd BufEnter * if &filetype == '' | setlocal filetype=markdown | endif
+autocmd BufEnter * if &filetype == '' | setlocal filetype=text | endif
 let g:vim_markdown_folding_disabled=1
 let g:vim_markdown_liquid=1
 let g:vim_markdown_frontmatter=1
@@ -373,9 +366,7 @@ inoremap <silent>  """   <C-R>=CommentBlock(input("Enter comment: "),'""','#')<C
 inoremap <silent>  ///   <C-R>=CommentBlock(input("Enter comment: "),'//','*')<CR>
 inoremap <silent>  %%%   <C-R>=CommentBlock(input("Enter comment: "),'%%','*')<CR>
 inoremap <silent>  """   <C-R>=CommentBlock(input("Enter comment: "),'""','#')<CR>
-inoremap <silent>  ---   <C-R>=CommentBlock(input("Enter comment: "),'--','*')<CR>
-inoremap <silent>  ####  <C-R>=CommentBlock(input("Enter comment: "),'##','#')<CR>
-function CommentBlock(comment, ...)
+function! CommentBlock(comment, ...)
   let introducer =  a:0 >= 1  ?  a:1  :  "//"
   let box_char   =  a:0 >= 2  ?  a:2  :  "*"
   let width      =  a:0 >= 3  ?  a:3  :  strlen(a:comment) + 5
@@ -384,6 +375,10 @@ function CommentBlock(comment, ...)
         \    . introducer . "\<Tab>" . a:comment   . "\<CR>"
         \    . introducer . repeat(box_char,width) . "\<CR>"
 endfunction
+""###############
+""  RunCommand
+""###############
+autocmd BufEnter,BufRead *.conf set ft=conf
 ""#######################
 ""  ごみいちゃん
 ""#######################
@@ -406,8 +401,5 @@ endfunction
 "   execute ":%s/".l:before."/".l:after."/gc"
 "   call inputrestore()
 " endfunction
-"" default indent-guides setting"
-" autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
-" autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
 " inoremap <silent>  DDD  <C-R>=CommentBlock(strftime("%Y/%m/%d"),'--','-',80)<CR>
 " inoremap <silent> AAA   <C-R>=HeaderBlock(input("Author : "))<CR>
