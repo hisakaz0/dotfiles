@@ -5,8 +5,8 @@ inoremap OA <Up>
 inoremap OB <Down>
 inoremap OC <Right>
 inoremap OD <Left>
-" set ttimeout
-" set timeoutlen=50
+set ttimeout
+set timeoutlen=50
 ""#############
 ""  Neobundle
 ""#############
