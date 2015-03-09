@@ -56,7 +56,6 @@ set showmatch
 set mouse=a
 set nf=alpha
 set backspace=indent,eol,start
-" autocmd FileType * setlocal formatoptions-=or
 "set spell
 ""###########
 ""  Indent
@@ -68,27 +67,30 @@ set tabstop=2
 ""###############
 ""  Completion
 ""###############
-NeoBundle 'MetalPhaeton/easybracket-vim'
+" NeoBundle 'MetalPhaeton/easybracket-vim'
+NeoBundle 'Townk/vim-autoclose'
 set wildmode=list,longest
-inoremap {<Enter> {}<Left><CR><ESC><S-o>
-inoremap [<Enter> []<Left><CR><ESC><S-o>
-inoremap (<Enter> ()<Left><CR><ESC><S-o>
+" inoremap {<Enter> {}<Left><CR><ESC><S-o>
+" inoremap [<Enter> []<Left><CR><ESC><S-o>
+" inoremap (<Enter> ()<Left><CR><ESC><S-o>
 ""################
 ""  IndentGuide
 ""################
 NeoBundle 'nathanaelkane/vim-indent-guides'
 let g:indent_guides_enable_on_vim_startup = 0
-let g:indent_guides_guide_size=1
-"" default indent-guides setting"
+" let g:indent_guides_guide_size=1
+" custom color setting
 let g:indent_guides_auto_colors = 0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=lightgray
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=3
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=17
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=143
 " インデントハイライトのトグルスイッチ
 nnoremap <silent><F3> :IndentGuidesToggle<CR>
 ""###############
 ""  Appearance
 ""###############
+set t_Co=256
 colorscheme peachpuff
+" colorscheme inkpot
 set number
 set title
 set list
@@ -152,9 +154,8 @@ NeoBundle 'Align'
 ""################
 ""  CorrectCode
 ""################
-map  <C-/>
-inoremap <C-/> <Esc>:call CorrectCode()<CR>a
-nnoremap <C-/> :call CorrectCode()<CR>
+inoremap  <Esc>:call CorrectCode()<CR>a
+nnoremap  :call CorrectCode()<CR>
 function! CorrectCode()
   execute ":mkview"
   execute ":normal gg=G"
@@ -277,7 +278,6 @@ if has('lua')
   " https://github.com/c9s/perlomni.vim
   ""let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 endif
-
 "############################################################
 "" Vim-latex (with platex and omake)
 "############################################################
@@ -299,14 +299,16 @@ autocmd BufNewFile *.html 0r $HOME/.vim/templates/skel.html
 ""  Open Browser
 ""#################
 " let g:openbrowser_browser_commands = { "name": "xdg-open", "args": ["{browser}", "{uri}"] }
-""#####################
-""  Filetype setting
-""#####################
+""#############
+""  Filetype
+""#############
 filetype plugin indent on
 syntax on
+autocmd BufEnter,BufRead *.conf set ft=conf
+autocmd BufEnter * if &filetype == '' | setlocal filetype=text | endif
 "#########
 ""  LISP
-""######### http://jiroukaja-memo.hatenablog.com/entry/2013/05/06/010315
+""######## http://jiroukaja-memo.hatenablog.com/entry/2013/05/06/010315
 function! s:generate_lisp_tags()
   let g:slimv_ctags =  'ctags -a -f '.$HOME.'/.vim/tags/lisp.tags '.expand('%:p').' --language-force=Lisp'
   call SlimvGenerateTags()
@@ -328,11 +330,6 @@ let g:lisp_rainbow=1
 let g:paredit_mode=1
 let g:paredit_electric_return = 0
 autocmd BufNewFile,BufRead *.asd   set filetype=lisp
-""##############################
-""  Instance markdown preview
-""##############################
-let g:instant_markdown_slow = 1
-let g:instant_markdown_autostart = 0
 ""#############
 ""  Markdown
 ""#############
@@ -340,12 +337,14 @@ NeoBundle "joker1007/vim-markdown-quote-syntax"
 NeoBundle 'kannokanno/previm'
 NeoBundle "rcmdnk/vim-markdown"
 autocmd BufRead,BufNewFile *.{md,mdwn,mkd,mkdn,mark} set filetype=markdown
-autocmd BufEnter * if &filetype == '' | setlocal filetype=text | endif
 let g:vim_markdown_folding_disabled=1
 let g:vim_markdown_liquid=1
 let g:vim_markdown_frontmatter=1
 let g:vim_markdown_math=1
 " let g:previm_open_cmd
+" Instance markdown preview
+let g:instant_markdown_slow = 1
+let g:instant_markdown_autostart = 0
 ""############
 ""  Haskell
 ""############
@@ -375,31 +374,3 @@ function! CommentBlock(comment, ...)
         \    . introducer . "\<Tab>" . a:comment   . "\<CR>"
         \    . introducer . repeat(box_char,width) . "\<CR>"
 endfunction
-""###############
-""  RunCommand
-""###############
-autocmd BufEnter,BufRead *.conf set ft=conf
-""#######################
-""  ごみいちゃん
-""#######################
-"" map
-" map OA <Up>
-" map OB <Down>
-" map OC <Right>
-" map OD <Left>
-" set t_ku=OA
-" set t_kd=OB
-" set t_kr=OC
-" set t_kl=OD
-" set nocompatible
-"" 挿入モード時にctrl + rで置換
-" inoremap <C-r> <Esc>:call ReplaceonInsertMode()<CR>i
-" function! ReplaceonInsertMode()
-"   call inputsave()
-"   let l:before=input("Befor:")
-"   let l:after=input("Aefor:")
-"   execute ":%s/".l:before."/".l:after."/gc"
-"   call inputrestore()
-" endfunction
-" inoremap <silent>  DDD  <C-R>=CommentBlock(strftime("%Y/%m/%d"),'--','-',80)<CR>
-" inoremap <silent> AAA   <C-R>=HeaderBlock(input("Author : "))<CR>
