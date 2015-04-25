@@ -1,17 +1,18 @@
-""##########
+"#########
 ""  Arrow
 ""##########
-inoremap OA <Up>
-inoremap OB <Down>
-inoremap OC <Right>
-inoremap OD <Left>
-set ttimeout
-set timeoutlen=50
+" inoremap OA <Up>
+" inoremap OB <Down>
+" inoremap OC <Right>
+" inoremap OD <Left>
+"set timeoutlen=10
+"set ttimeoutlen=15
 ""#############
 ""  Neobundle
 ""#############
 set runtimepath+=~/.vim/bundle/neobundle.vim/
-call neobundle#rc(expand('~/.vim/bundle'))
+call neobundle#begin(expand('~/.vim/bundle'))
+call neobundle#end()
 " Let NeoBundle manage NeoBundle
 NeoBundleFetch 'Shougo/neobundle.vim'
 " vim plugins
@@ -47,8 +48,9 @@ NeoBundle 'tpope/vim-pathogen'
 NeoBundle 'tyru/open-browser.vim'
 NeoBundle 'wookiehangover/jshint.vim'
 NeoBundle "tyru/caw.vim.git"
+NeoBundle "groenewege/vim-less"
 " add plugins
-" NeoBundleCheck
+NeoBundleCheck
 ""#############
 ""  Behavior
 ""#############
@@ -69,7 +71,8 @@ set tabstop=2
 ""###############
 " NeoBundle 'MetalPhaeton/easybracket-vim'
 NeoBundle 'Townk/vim-autoclose'
-set wildmode=list,longest
+set wildmenu
+set wildmode=longest,list
 " inoremap {<Enter> {}<Left><CR><ESC><S-o>
 " inoremap [<Enter> []<Left><CR><ESC><S-o>
 " inoremap (<Enter> ()<Left><CR><ESC><S-o>
@@ -78,24 +81,21 @@ set wildmode=list,longest
 ""################
 NeoBundle 'nathanaelkane/vim-indent-guides'
 let g:indent_guides_enable_on_vim_startup = 0
-" let g:indent_guides_guide_size=1
+let g:indent_guides_guide_size=1
 " custom color setting
 let g:indent_guides_auto_colors = 0
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=17
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=143
 " インデントハイライトのトグルスイッチ
-nnoremap <silent><F3> :IndentGuidesToggle<CR>
+nnoremap <F3> :IndentGuidesToggle<CR>
 ""###############
 ""  Appearance
 ""###############
-set t_Co=256
-colorscheme peachpuff
-" colorscheme inkpot
 set number
 set title
 set list
 set listchars=tab:..,trail:_,eol:§,extends:>,precedes:<,nbsp:%
-" set cursorline
+set cursorline
 " set cursorcolumn
 set showcmd
 set cmdheight=2
@@ -107,6 +107,23 @@ set statusline+=[FORMAT=%{&ff}]/
 set statusline+=[ENC=%{&fileencoding}]/
 set statusline+=[LOW=%l/%L]/
 set statusline+=[COLUM=%c/%{col('$')-1}]
+""################
+""  ColorScheme
+""################
+set t_Co=256
+NeoBundle 'ciaranm/inkpot'
+NeoBundle 'w0ng/vim-hybrid'
+" set colorscheme
+" colorscheme peachpuff
+" colorscheme hybrid
+colorscheme inkpot
+autocmd BufEnter * :hi CursorLine ctermbg=235 guibg=DarkRed cterm=bold
+""#########
+""  Fold
+""#########
+set foldmethod=indent
+set foldlevel=2
+set foldcolumn=3
 ""###########
 ""  Encode
 ""###########
@@ -126,18 +143,50 @@ set clipboard+=unnamed
 ""  Search
 ""###########
 set incsearch
-noremap <F2> :set hlsearch! hlsearch?<CR>
 " set hlsearch
+noremap <F2> :set hlsearch! hlsearch?<CR>
+nnoremap n nzz
+nnoremap N Nzz
+nnoremap * *zz
+nnoremap # #zz
+nnoremap g* g*zz
+nnoremap g# g#zz
+""###########
+""  Buffer
+""###########
+nnoremap <C-n> :bn<CR>
+nnoremap <C-p> :bp<CR>
+" NeoBundle 'bling/vim-bufferline'
+" let g:bufferline_show_bufnr = 0
+" let g:bufferline_active_buffer_left = '-> '
+" let g:bufferline_active_buffer_right = ''
+" let g:bufferline_echo = 0
+" autocmd VimEnter *
+" \ let &statusline='%{bufferline#refresh_status()}'
+" \ .bufferline#get_status_string()
+" let g:bufferline_active_highlight = 'Tag'
+"###########
+""  Window
+""###########
+nnoremap <silent> <S-Left>  :5wincmd <<CR>
+nnoremap <silent> <S-Right> :5wincmd ><CR>
+nnoremap <silent> <S-Up>    :5wincmd -<CR>
+nnoremap <silent> <S-Down>  :5wincmd +<CR>
 "########################
 ""  Windows like keymap
 "########################
-inoremap <C-s> <Esc>:w<CR>a
+" Save and back to Insert mode
+" inoremap <C-s> <Esc>:w<CR>a
+" Save and enter Normal mode
+inoremap <C-s> <Esc>:w<CR>
 inoremap <C-q> <Esc>:q<CR>
 nnoremap <C-s> <Esc>:w<CR>
 nnoremap <C-q> <Esc>:q<CR>
 ""##########
 ""  Aided
 ""##########
+" <F1>のtypoをなくす
+nmap <F1> <Nop>
 " mapleader
 let mapleader=','
 " shift押すのがめんどくさい
@@ -146,14 +195,16 @@ vnoremap ; :
 " トグルスイッチ
 set pastetoggle=<F4>
 " convert markdown to html
-command Mth :!mth %
+command! Mth :!mth %
 " 行末の空白を削除
 NeoBundle 'bronson/vim-trailing-whitespace'
 " 整形ツール
-NeoBundle 'Align'
+"NeoBundle 'Align'
 ""################
 ""  CorrectCode
 ""################
+" inoremap <C-k> <Esc>:call CorrectCode()<CR>a
+" nnoremap <C-k> :call CorrectCode()<CR>
 inoremap  <Esc>:call CorrectCode()<CR>a
 nnoremap  :call CorrectCode()<CR>
 function! CorrectCode()
@@ -180,16 +231,20 @@ endfunction
 ""##########
 ""  Count
 ""##########
-command Count %s/./&/g  "テキスト内の文字数をカウントする
+command! Count %s/./&/g  "テキスト内の文字数をカウントする
 ""########
 ""  Run
 ""########
-noremap <F5> <ESC>:QuickRun<CR>
+"noremap <F5> <ESC>:QuickRun<CR>
 ""################
 ""  Neocomplete
 ""################
 if has('lua')
   NeoBundle 'Shougo/neocomplete.vim'
+
+
+
+  "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
   " Disable AutoComplPop.
   let g:acp_enableAtStartup = 0
   " Use neocomplete.
@@ -197,46 +252,37 @@ if has('lua')
   " Use smartcase.
   let g:neocomplete#enable_smart_case = 1
   " Set minimum syntax keyword length.
-  let g:neocomplete#sources#syntax#min_keyword_length = 2
+  let g:neocomplete#sources#syntax#min_keyword_length = 3
   let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+
   " Define dictionary.
   let g:neocomplete#sources#dictionary#dictionaries = {
-        \ 'default'   : '',
-        \ 'vimshell'  : $HOME.'/.vimshell_hist',
-        \ 'scheme'     : $HOME.'/.gosh_completions',
-        \ 'html'    : $HOME.'/.vim/dict/html.dict',
-        \ 'php'      : $HOME.'/.vim/dict/php.dict',
-        \ 'css'     : $HOME.'/.vim/dict/css.dict',
-        \ 'c'       : $HOME.'/.vim/dict/c.dict',
-        \ 'tex'     : $HOME.'/.vim/dict/tex.dict',
-        \ 'java'    : $HOME.'/.vim/dict/java.dict'
+        \ 'default' : '',
+        \ 'vimshell' : $HOME.'/.vimshell_hist',
+        \ 'scheme' : $HOME.'/.gosh_completions'
         \ }
-  " keymapping
+
   " Define keyword.
   if !exists('g:neocomplete#keyword_patterns')
     let g:neocomplete#keyword_patterns = {}
   endif
   let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
   " Plugin key-mappings.
   inoremap <expr><C-g>     neocomplete#undo_completion()
   inoremap <expr><C-l>     neocomplete#complete_common_string()
+
   " Recommended key-mappings.
   " <CR>: close popup and save indent.
   inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
   function! s:my_cr_function()
-    return neocomplete#close_popup() . "\<CR>"
+    " return neocomplete#close_popup() . "\<CR>"
     " For no inserting <CR> key.
-    "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+    return pumvisible() ? neocomplete#close_popup() : "\<CR>"
   endfunction
   " <TAB>: completion.
   inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-  inoremap <expr><Up> pumvisible() ? neocomplete#close_popup()."\<Up>" : "\<Up>"
-  inoremap <expr><Down> pumvisible() ? neocomplete#close_popup()."\<Down>" : "\<Down>"
-  inoremap <expr><MouseDown> pumvisible() ? neocomplete#close_popup()."\<MouseDown>" : "\<MouseDown>"
-  inoremap <expr><MouseUp> pumvisible() ? neocomplete#close_popup()."\<MouseUp>" : "\<MouseUp>"
-  inoremap <expr><PageDown> pumvisible() ? neocompe#close_popup()."\<PageDown>" : "\<PageDown>"
-  inoremap <expr><PageUp> pumvisible() ? neocomplete#close_popup()."\<PageUp>" : "\<PageUp>"
+  inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
   " <C-h>, <BS>: close popup and delete backword char.
   inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
   inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
@@ -244,6 +290,7 @@ if has('lua')
   inoremap <expr><C-e>  neocomplete#cancel_popup()
   " Close popup by <Space>.
   "inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
+
   " For cursor moving in insert mode(Not recommended)
   "inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
   "inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
@@ -253,48 +300,63 @@ if has('lua')
   "let g:neocomplete#enable_cursor_hold_i = 1
   " Or set this.
   "let g:neocomplete#enable_insert_char_pre = 1
+
   " AutoComplPop like behavior.
   "let g:neocomplete#enable_auto_select = 1
+
   " Shell like behavior(not recommended).
   "set completeopt+=longest
   "let g:neocomplete#enable_auto_select = 1
   "let g:neocomplete#disable_auto_complete = 1
   "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+
   " Enable omni completion.
   autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
   autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
   autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
   autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
   autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-  autocmd FileType php setlocal omnifunc=phpcomplete#CompleteTags
+
   " Enable heavy omni completion.
   if !exists('g:neocomplete#sources#omni#input_patterns')
     let g:neocomplete#sources#omni#input_patterns = {}
   endif
-  let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+  "let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
   "let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
   "let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-  " For perlomni.vim settinendendif
+
+  " For perlomni.vim setting.
   " https://github.com/c9s/perlomni.vim
-  ""let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+  let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+
+
+
+
 endif
+""################
+""  HTML(ERUBY)
+""################
+" emmet
+NeoBundle 'mattn/emmet-vim'
+let g:user_emmet_leader_key='<C-F>'
+" endtag comment
+" let g:endtagcommentFormat = '<!-- /%tag_name%id%class -->'
+" nnoremap ,t :<C-u>c<!-- / -->ll Endtagcomment()<CR>
+" eruby
+" autocmd BufEnter * if &filetype == 'eruby' |  setlocal omnifunc=htmlcomplete#CompleteTags | endif
 "############################################################
 "" Vim-latex (with platex and omake)
 "############################################################
-let tex_flavor='latex'
-set grepprg=grep\ -nH\ $*
-set shellslash
-let tex_flavor='latex'
-let g:Tex_DefaultTargetFormat='pdf'
-let g:Tex_CompileRule_dvi='platex $*.tex'
-let g:Tex_CompileRule_pdf='dvipdfmx $*.dvi'
-let g:Tex_FormatDependency_pdf='dvi,pdf'
-" PDFはPreview.appで開く
-let g:Tex_ViewRule_pdf='open -a Preview.app'
-""###############################
-""  Hyper Text Markup Language
-""###############################
-autocmd BufNewFile *.html 0r $HOME/.vim/templates/skel.html
+"let tex_flavor='latex'
+"set grepprg=grep\ -nH\ $*
+"set shellslash
+"let tex_flavor='latex'
+"let g:Tex_DefaultTargetFormat='pdf'
+"let g:Tex_CompileRule_dvi='platex $*.tex'
+"let g:Tex_CompileRule_pdf='dvipdfmx $*.dvi'
+"let g:Tex_FormatDependency_pdf='dvi,pdf'
+"" PDFはPreview.appで開く
+"let g:Tex_ViewRule_pdf='open -a Preview.app'
 ""#################
 ""  Open Browser
 ""#################
@@ -309,27 +371,27 @@ autocmd BufEnter * if &filetype == '' | setlocal filetype=text | endif
 "#########
 ""  LISP
 ""######## http://jiroukaja-memo.hatenablog.com/entry/2013/05/06/010315
-function! s:generate_lisp_tags()
-  let g:slimv_ctags =  'ctags -a -f '.$HOME.'/.vim/tags/lisp.tags '.expand('%:p').' --language-force=Lisp'
-  call SlimvGenerateTags()
-endfunction
-command! -nargs=0 GenerateLispTags call <SID>generate_lisp_tags()
-function! s:generate_lisp_tags_recursive()
-  let g:slimv_ctags =  'ctags -a -f '.$HOME.'/.vim/tags/lisp.tags -R '.expand('%:p:h').' --language-force=Lisp'
-  call SlimvGenerateTags()
-endfunction
-command! -nargs=0 GenerateLispTagsRecursive call <SID>generate_lisp_tags_recursive()
-let g:slimv_repl_split = 4
-let g:slimv_repl_name = 'REPL'
-let g:slimv_repl_simple_eval = 0
-let g:slimv_lisp = '/usr/local/bin/clisp'
-let g:slimv_impl = 'clisp'
-let g:slimv_preferred = 'clisp'
-let g:slimv_swank_cmd = '!osascript -e "tell application \"Terminal\" to do script \"clisp '.$HOME.'/.vim/bundle/slimv/slime/start-swank.lisp\""'
-let g:lisp_rainbow=1
-let g:paredit_mode=1
-let g:paredit_electric_return = 0
-autocmd BufNewFile,BufRead *.asd   set filetype=lisp
+"function! s:generate_lisp_tags()
+"  let g:slimv_ctags =  'ctags -a -f '.$HOME.'/.vim/tags/lisp.tags '.expand('%:p').' --language-force=Lisp'
+"  call SlimvGenerateTags()
+"endfunction
+"command! -nargs=0 GenerateLispTags call <SID>generate_lisp_tags()
+"function! s:generate_lisp_tags_recursive()
+"  let g:slimv_ctags =  'ctags -a -f '.$HOME.'/.vim/tags/lisp.tags -R '.expand('%:p:h').' --language-force=Lisp'
+"  call SlimvGenerateTags()
+"endfunction
+"command! -nargs=0 GenerateLispTagsRecursive call <SID>generate_lisp_tags_recursive()
+"let g:slimv_repl_split = 4
+"let g:slimv_repl_name = 'REPL'
+"let g:slimv_repl_simple_eval = 0
+"let g:slimv_lisp = '/usr/local/bin/clisp'
+"let g:slimv_impl = 'clisp'
+"let g:slimv_preferred = 'clisp'
+"let g:slimv_swank_cmd = '!osascript -e "tell application \"Terminal\" to do script \"clisp '.$HOME.'/.vim/bundle/slimv/slime/start-swank.lisp\""'
+"let g:lisp_rainbow=1
+"let g:paredit_mode=1
+"let g:paredit_electric_return = 0
+"autocmd BufNewFile,BufRead *.asd   set filetype=lisp
 ""#############
 ""  Markdown
 ""#############
@@ -342,7 +404,7 @@ let g:vim_markdown_liquid=1
 let g:vim_markdown_frontmatter=1
 let g:vim_markdown_math=1
 " let g:previm_open_cmd
-" Instance markdown preview
+"" Instance markdown preview
 let g:instant_markdown_slow = 1
 let g:instant_markdown_autostart = 0
 ""############
@@ -353,7 +415,7 @@ let g:instant_markdown_autostart = 0
 "補完用
 " NeoBundle 'eagletmt/neco-ghc'
 "インデントを賢くしてくれる
-NeoBundle 'kana/vim-filetype-haskell'
+"NeoBundle 'kana/vim-filetype-haskell'
 ""############
 ""  Comment
 ""############
@@ -374,3 +436,7 @@ function! CommentBlock(comment, ...)
         \    . introducer . "\<Tab>" . a:comment   . "\<CR>"
         \    . introducer . repeat(box_char,width) . "\<CR>"
 endfunction
+""#############
+""  Pathogen
+""#############
+call pathogen#infect()
