@@ -103,15 +103,15 @@ set listchars=tab:..,trail:_,eol:§,extends:>,precedes:<,nbsp:%
 set cursorline
 " set cursorcolumn
 set showcmd
-set cmdheight=2
+set cmdheight=1
 set laststatus=2
-set statusline=%F%m%r%h%w
-set statusline+=%=
-set statusline+=[TYPE=%Y]/
-set statusline+=[FORMAT=%{&ff}]/
-set statusline+=[ENC=%{&fileencoding}]/
-set statusline+=[LOW=%l/%L]/
-set statusline+=[COLUM=%c/%{col('$')-1}]
+" set statusline=%F%m%r%h%w
+" set statusline+=%=
+" set statusline+=[TYPE=%Y]/
+" set statusline+=[FORMAT=%{&ff}]/
+" set statusline+=[ENC=%{&fileencoding}]/
+" set statusline+=[LOW=%l/%L]/
+" set statusline+=[COLUM=%c/%{col('$')-1}]
 ""################
 ""  ColorScheme
 ""################
