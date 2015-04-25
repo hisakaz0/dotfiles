@@ -51,6 +51,11 @@ NeoBundle "tyru/caw.vim.git"
 NeoBundle "groenewege/vim-less"
 " add plugins
 NeoBundleCheck
+""############
+""  Airline
+""############
+NeoBundle 'bling/vim-airline'
+let g:airline#extensions#tabline#enabled = 1
 ""#############
 ""  Behavior
 ""#############
