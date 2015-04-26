@@ -54,8 +54,26 @@ NeoBundleCheck
 ""############
 ""  Airline
 ""############
+" Q&A Pages
+" https://github.com/bling/vim-airline/wiki/FAQ
 NeoBundle 'bling/vim-airline'
+let g:airline_powerline_fonts = 1
+let g:airline_section_a = airline#section#create(['mode','','branch'])
+" denote buffers on the top bar
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#tab_nr_type = 1
+let g:airline#extensions#tabline#fnamemod = ':t'
+let g:airline_left_sep = '⮀ '
+let g:airline_right_sep = ' ⮂'
+let g:airline_left_alt_sep = ' ⮁ '
+let g:airline_right_alt_sep = ' ⮃ '
+let g:airline_symbols.linenr = '⭡'
+let g:airline_symbols.branch = '⎇ '
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.whitespace = 'Ξ'
+let g:airline_symbols.space = "\ua0"
+let g:airline_symbols.readonly = '⭤'
+
 ""#############
 ""  Behavior
 ""#############
@@ -92,7 +110,7 @@ let g:indent_guides_auto_colors = 0
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=17
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=143
 " インデントハイライトのトグルスイッチ
-nnoremap <F3> :IndentGuidesToggle<CR>
+nnoremap <silent> <F3> :IndentGuidesToggle<CR>
 ""###############
 ""  Appearance
 ""###############
@@ -118,17 +136,20 @@ set laststatus=2
 set t_Co=256
 NeoBundle 'ciaranm/inkpot'
 NeoBundle 'w0ng/vim-hybrid'
+NeoBundle 'chriskempson/base16-vim'
 " set colorscheme
 " colorscheme peachpuff
 " colorscheme hybrid
 colorscheme inkpot
+" colorscheme base16-default
+" autocmd BufWrite  * :hi CursorLine ctermbg=235 guibg=DarkRed cterm=bold
 autocmd BufEnter * :hi CursorLine ctermbg=235 guibg=DarkRed cterm=bold
 ""#########
 ""  Fold
 ""#########
 set foldmethod=indent
-set foldlevel=2
-set foldcolumn=3
+" set foldlevel=2
+" set foldcolumn=3
 ""###########
 ""  Encode
 ""###########
@@ -149,7 +170,7 @@ set clipboard+=unnamed
 ""###########
 set incsearch
 " set hlsearch
-noremap <F2> :set hlsearch! hlsearch?<CR>
+noremap <silent> <F2> :set hlsearch! hlsearch?<CR>
 nnoremap n nzz
 nnoremap N Nzz
 nnoremap * *zz
@@ -159,8 +180,8 @@ nnoremap g# g#zz
 ""###########
 ""  Buffer
 ""###########
-nnoremap <C-n> :bn<CR>
-nnoremap <C-p> :bp<CR>
+nnoremap <silent> <C-n> :bn<CR>
+nnoremap <silent> <C-p> :bp<CR>
 " NeoBundle 'bling/vim-bufferline'
 " let g:bufferline_show_bufnr = 0
 " let g:bufferline_active_buffer_left = '-> '
@@ -444,4 +465,4 @@ endfunction
 ""#############
 ""  Pathogen
 ""#############
-call pathogen#infect()
+" call pathogen#infect()
