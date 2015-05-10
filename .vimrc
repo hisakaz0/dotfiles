@@ -169,6 +169,9 @@ set clipboard+=unnamed
 ""  Search
 ""###########
 set incsearch
+set ignorecase
+set smartcase
+set magic
 " set hlsearch
 noremap <silent> <F2> :set hlsearch! hlsearch?<CR>
 nnoremap n nzz
@@ -445,14 +448,18 @@ let g:instant_markdown_autostart = 0
 ""############
 ""  Comment
 ""############
-imap <C-K> <Esc><Plug>(caw:i:toggle)a
-nmap <C-K> <Plug>(caw:i:toggle)
-vmap <C-K> <Plug>(caw:i:toggle)
+im <C-K> <Esc><Plug>(caw:i:toggle)a
+nm <C-K> <Plug>(caw:i:toggle)
+vm <C-K> <Plug>(caw:i:toggle)
 " comment block
-inoremap <silent>  """   <C-R>=CommentBlock(input("Enter comment: "),'""','#')<CR>
-inoremap <silent>  ///   <C-R>=CommentBlock(input("Enter comment: "),'//','*')<CR>
-inoremap <silent>  %%%   <C-R>=CommentBlock(input("Enter comment: "),'%%','*')<CR>
-inoremap <silent>  """   <C-R>=CommentBlock(input("Enter comment: "),'""','#')<CR>
+ino <silent> """ <C-R>=CommentBlock(input("Enter comment: "),'""','#')<CR>
+ino <silent> /// <C-R>=CommentBlock(input("Enter comment: "),'//','*')<CR>
+ino <silent> %%% <C-R>=CommentBlock(input("Enter comment: "),'%%','*')<CR>
+ino <silent> """ <C-R>=CommentBlock(input("Enter comment: "),'""','#')<CR>
+ino <silent> ### <C-R>=CommentBlock(input("Enter comment: "),'##','#')<CR>
+au BufRead,BufNewFile *.{md,mdwn,mkd,mkdn,mark} iu ---
+au BufRead,BufNewFile *.{md,mdwn,mkd,mkdn,mark} iu ###
+ino <silent> --- <C-R>=CommentBlock(input("Enter comment: "),'--','*')<CR>
 function! CommentBlock(comment, ...)
   let introducer =  a:0 >= 1  ?  a:1  :  "//"
   let box_char   =  a:0 >= 2  ?  a:2  :  "*"
