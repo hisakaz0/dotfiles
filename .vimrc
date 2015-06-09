@@ -1,3 +1,4 @@
+
 "#########
 ""  Arrow
 ""##########
@@ -201,6 +202,7 @@ nnoremap <silent> <S-Left>  :5wincmd <<CR>
 nnoremap <silent> <S-Right> :5wincmd ><CR>
 nnoremap <silent> <S-Up>    :5wincmd -<CR>
 nnoremap <silent> <S-Down>  :5wincmd +<CR>
+nnoremap <silent> <C-w>e    <C-w>v<C-w>l:enew<CR>
 "########################
 ""  Windows like keymap
 "########################
@@ -270,9 +272,6 @@ command! Count %s/./&/g  "テキスト内の文字数をカウントする
 ""################
 if has('lua')
   NeoBundle 'Shougo/neocomplete.vim'
-
-
-
   "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
   " Disable AutoComplPop.
   let g:acp_enableAtStartup = 0
@@ -303,7 +302,7 @@ if has('lua')
 
   " Recommended key-mappings.
   " <CR>: close popup and save indent.
-  inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+  inoremap <silent> <CR>  <C-r>=<SID>my_cr_function()<CR>
   function! s:my_cr_function()
     " return neocomplete#close_popup() . "\<CR>"
     " For no inserting <CR> key.
@@ -313,13 +312,12 @@ if has('lua')
   inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
   inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
   " <C-h>, <BS>: close popup and delete backword char.
-  inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-  inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+  inoremap <expr><C-h>  neocomplete#smart_close_popup()."\<C-h>"
+  inoremap <expr><BS>   neocomplete#smart_close_popup()."\<C-h>"
   inoremap <expr><C-y>  neocomplete#close_popup()
   inoremap <expr><C-e>  neocomplete#cancel_popup()
   " Close popup by <Space>.
-  "inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
-
+  inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
   " For cursor moving in insert mode(Not recommended)
   "inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
   "inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
@@ -338,7 +336,6 @@ if has('lua')
   "let g:neocomplete#enable_auto_select = 1
   "let g:neocomplete#disable_auto_complete = 1
   "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-
   " Enable omni completion.
   autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
   autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
@@ -357,10 +354,6 @@ if has('lua')
   " For perlomni.vim setting.
   " https://github.com/c9s/perlomni.vim
   let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-
-
-
-
 endif
 ""################
 ""  HTML(ERUBY)
@@ -452,14 +445,6 @@ im <C-K> <Esc><Plug>(caw:i:toggle)a
 nm <C-K> <Plug>(caw:i:toggle)
 vm <C-K> <Plug>(caw:i:toggle)
 " comment block
-ino <silent> """ <C-R>=CommentBlock(input("Enter comment: "),'""','#')<CR>
-ino <silent> /// <C-R>=CommentBlock(input("Enter comment: "),'//','*')<CR>
-ino <silent> %%% <C-R>=CommentBlock(input("Enter comment: "),'%%','*')<CR>
-ino <silent> """ <C-R>=CommentBlock(input("Enter comment: "),'""','#')<CR>
-ino <silent> ### <C-R>=CommentBlock(input("Enter comment: "),'##','#')<CR>
-au BufRead,BufNewFile *.{md,mdwn,mkd,mkdn,mark} iu ---
-au BufRead,BufNewFile *.{md,mdwn,mkd,mkdn,mark} iu ###
-ino <silent> --- <C-R>=CommentBlock(input("Enter comment: "),'--','*')<CR>
 function! CommentBlock(comment, ...)
   let introducer =  a:0 >= 1  ?  a:1  :  "//"
   let box_char   =  a:0 >= 2  ?  a:2  :  "*"
@@ -469,7 +454,36 @@ function! CommentBlock(comment, ...)
         \    . introducer . "\<Tab>" . a:comment   . "\<CR>"
         \    . introducer . repeat(box_char,width) . "\<CR>"
 endfunction
+ino <silent> """ <C-R>=CommentBlock(input("Enter comment: "),'""','#')<CR>
+ino <silent> /// <C-R>=CommentBlock(input("Enter comment: "),'//','*')<CR>
+ino <silent> %%% <C-R>=CommentBlock(input("Enter comment: "),'%%','*')<CR>
+ino <silent> """ <C-R>=CommentBlock(input("Enter comment: "),'""','#')<CR>
+ino <silent> DDD <C-R>=strftime("%c")<CR>
+function! MarkdonwMapping ()
+  if &filetype == 'markdown'
+    if hasmapto('###')
+      iu ###
+    endif
+    if hasmapto('---')
+      iu ---
+    endif
+  else
+    ino <silent> ### <C-R>=CommentBlock(input("Enter comment: "),'##','#')<CR>
+    ino <silent> --- <C-R>=CommentBlock(input("Enter comment: "),'--','*')<CR>
+  endif
+endfunction
+au BufRead * :call MarkdonwMapping()
 ""#############
 ""  Pathogen
 ""#############
 " call pathogen#infect()
+""#############
+""  Autosave
+""#############
+function! Autosave ()
+  if &modified && g:autosave_on_focus_change
+    write
+    echo "Autosaved file while you were absent"
+  endif
+endfunction
+au FocusLost * :call Autosave()
