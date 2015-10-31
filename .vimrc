@@ -92,7 +92,7 @@ call neobundle#begin(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 " My Bundles here:
-NeoBundle 'ciaranm/inkpot'
+" NeoBundle 'ciaranm/inkpot'
 NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'kannokanno/previm'
 NeoBundle 'plasticboy/vim-markdown'
