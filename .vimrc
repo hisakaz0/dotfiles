@@ -1,4 +1,3 @@
-
 "#########
 ""  Arrow
 ""##########
@@ -17,11 +16,13 @@ call neobundle#end()
 " Let NeoBundle manage NeoBundle
 NeoBundleFetch 'Shougo/neobundle.vim'
 " vim plugins
-NeoBundle 'basyura/jslint.vim'
+NeoBundle 'itchyny/dictionary.vim'
+NeoBundle 'kchmck/vim-coffee-script'
+" NeoBundle 'basyura/jslint.vim'
+NeoBundle 'glidenote/memolist.vim'
 NeoBundle 'basyura/bitly.vim'
 NeoBundle 'basyura/twibill.vim'
 NeoBundle 'basyura/TweetVim'
-NeoBundle "godlygeek/tabular"
 NeoBundle 'h1mesuke/unite-outline'
 NeoBundle 'jcf/vim-latex'
 NeoBundle 'kovisoft/slimv'
@@ -47,7 +48,7 @@ NeoBundle 'Shougo/vimproc.vim', {
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'tpope/vim-pathogen'
 NeoBundle 'tyru/open-browser.vim'
-NeoBundle 'wookiehangover/jshint.vim'
+" NeoBundle 'wookiehangover/jshint.vim'
 NeoBundle "tyru/caw.vim.git"
 NeoBundle "groenewege/vim-less"
 " add plugins
@@ -83,6 +84,8 @@ set mouse=a
 set nf=alpha
 set backspace=indent,eol,start
 "set spell
+set noswapfile
+set confirm
 ""###########
 ""  Indent
 ""###########
@@ -263,10 +266,11 @@ endfunction
 ""  Count
 ""##########
 command! Count %s/./&/g  "テキスト内の文字数をカウントする
+
 ""########
 ""  Run
 ""########
-"noremap <F5> <ESC>:QuickRun<CR>
+noremap <F5> <ESC>:QuickRun<CR>
 ""################
 ""  Neocomplete
 ""################
@@ -417,9 +421,10 @@ autocmd BufEnter * if &filetype == '' | setlocal filetype=text | endif
 ""#############
 ""  Markdown
 ""#############
+NeoBundle "godlygeek/tabular"
 NeoBundle "joker1007/vim-markdown-quote-syntax"
-NeoBundle 'kannokanno/previm'
 NeoBundle "rcmdnk/vim-markdown"
+NeoBundle 'kannokanno/previm'
 autocmd BufRead,BufNewFile *.{md,mdwn,mkd,mkdn,mark} set filetype=markdown
 let g:vim_markdown_folding_disabled=1
 let g:vim_markdown_liquid=1
@@ -459,20 +464,23 @@ ino <silent> /// <C-R>=CommentBlock(input("Enter comment: "),'//','*')<CR>
 ino <silent> %%% <C-R>=CommentBlock(input("Enter comment: "),'%%','*')<CR>
 ino <silent> """ <C-R>=CommentBlock(input("Enter comment: "),'""','#')<CR>
 ino <silent> DDD <C-R>=strftime("%c")<CR>
-function! MarkdonwMapping ()
-  if &filetype == 'markdown'
-    if hasmapto('###')
+function! Markdown ()
+  if &filetype=='markdown'
+    let mapping = maparg('###', 'i')
+    if mapping != ''
       iu ###
     endif
-    if hasmapto('---')
+    let mapping = maparg('---', 'i')
+    if mapping != ''
       iu ---
     endif
+    noremap <F5> :PrevimOpen<CR>
   else
     ino <silent> ### <C-R>=CommentBlock(input("Enter comment: "),'##','#')<CR>
     ino <silent> --- <C-R>=CommentBlock(input("Enter comment: "),'--','*')<CR>
   endif
 endfunction
-au BufRead * :call MarkdonwMapping()
+au BufRead * :call Markdown()
 ""#############
 ""  Pathogen
 ""#############
@@ -487,3 +495,8 @@ function! Autosave ()
   endif
 endfunction
 au FocusLost * :call Autosave()
+
+""##############
+""  MemeList
+""##############
+let g:memolist_path = "~/tmp/MemoList"
