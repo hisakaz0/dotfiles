@@ -19,7 +19,7 @@
   " ColorSheme
   NeoBundle 'ciaranm/inkpot'
   " Comment toggle
-  NeoBundle 'tyru/caw.vim'
+  NeoBundle 'tomtom/tcomment_vim'
   " Bufferline
   NeoBundle 'ap/vim-buftabline'
   " Coffee script Plugin
@@ -31,14 +31,38 @@
   NeoBundle 'godlygeek/tabular'
   NeoBundle 'kannokanno/previm'
   NeoBundle 'rcmdnk/vim-markdown'
-  " Unite.vim & Filer
+  " Unite.vim & Filer & Mru(buf history)
   NeoBundle 'Shougo/unite.vim'
   NeoBundle 'Shougo/vimfiler.vim'
-  " Completion
+  NeoBundle 'Shougo/neomru.vim'
+  " insert 'end' word in ruby, then you type if
+  NeoBundle 'tpope/vim-endwise'
+  " enable color log if log files have ansi color codes
+  NeoBundle 'vim-scripts/AnsiEsc.vim'
+  " bracket completion
+  NeoBundle 'Townk/vim-autoclose'
+  " turn boolean true/flase
+  NeoBundle 'AndrewRadev/switch.vim'
+  " show whitespace of line end  & delete it
+  NeoBundle 'bronson/vim-trailing-whitespace'
+  " show color status bar
+  NeoBundle 'itchyny/lightline.vim'
+  " css3 plugin
+  NeoBundle 'hail2u/vim-css3-syntax'
+  " Completion(words
   NeoBundle 'Shougo/neocomplete.vim'
+  " ansync process plugin to make over speed
+  NeoBundle 'Shougo/vimproc.vim', {
+  \ 'build' : {
+  \     'windows' : 'tools\\update-dll-mingw',
+  \     'cygwin' : 'make -f make_cygwin.mak',
+  \     'mac' : 'make',
+  \     'linux' : 'make',
+  \     'unix' : 'gmake',
+  \    },
+  \ }
   " Refer to |:NeoBundle-examples|.
   " Note: You don't set neobundle setting in .gvimrc!
-
   call neobundle#end()
 
   " Required:
@@ -205,8 +229,14 @@
   let g:unite_enable_start_insert = 1
   let g:unite_source_history_yank_enable = 1
   nnoremap <silent> <Leader>ua :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+  " open buffers
   nnoremap <silent> <Leader>ub :<C-u>Unite<Space>buffer<CR>
+  " open registers
   nnoremap <silent> <Leader>ur :<C-u>Unite<Space>register<CR>
+  " open buffer history
+  nnoremap <silent> <Leader>uh :<C-u>Unite<Space>neomru/file<CR>
+  " open bookmark
+  nnoremap <silent> <Leader>uf :<C-u>Unite<Space>bookmark<CR>
   autocmd FileType unite call s:unite_my_settings()
   function! s:unite_my_settings()
     nmap <buffer> <ESC> <Plug>(unite_exit)
@@ -217,11 +247,3 @@
   let g:vimfiler_as_default_explorer = 1
   nnoremap <silent> <Leader>f :VimFiler<CR>
 
-" Caw(comment toggle) ------------------------------
-  imap  <Esc><Plug>(caw:i:toggle)a
-  nmap  <Plug>(caw:i:toggle)
-  vmap  <Plug>(caw:i:toggle)
-
-" IndentGuide --------------------------------------
-  nnoremap <silent> <Fj> :IndentGuidesToggle<CR>
-  nnoremap <silent> <F2> :set hlsearch! hlsearch?<CR>
