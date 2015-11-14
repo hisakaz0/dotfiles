@@ -220,10 +220,16 @@
   let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
 " Previm -------------------------------------------
-  let g:previm_open_cmd = 'open -a "/Applications/Google Chrome.app/"'
+  if s:os == "Darwin"
+    let g:previm_open_cmd = 'open -a "/Applications/Google Chrome.app/"'
+  endif
 
 " MemoList -----------------------------------------
-  let g:memolist_path = "~/tmp/MemoList"
+  if s:os != "Linux" || s:os != "Darwin"
+    let g:memolist_path = "/d/Users/hisakazu/tmp/MemoList"
+  elseif
+    let g:memolist_path = "~/tmp/MemoList"
+  endif
   nnoremap <Leader>mn  :MemoNew<CR>
   nnoremap <Leader>ml  :MemoList<CR>
   nnoremap <Leader>mg  :MemoGrep<CR>
