@@ -1,13 +1,13 @@
 
 " NeoBundle ----------------------------------------
-    if has('vim_starting')
-      if &compatible
-        set nocompatible               " Be iMproved
-      endif
-
-      " Required:
-      set runtimepath+=~/.vim/bundle/neobundle.vim/
+  if has('vim_starting')
+    if &compatible
+      set nocompatible               " Be iMproved
     endif
+
+    " Required:
+    set runtimepath+=~/.vim/bundle/neobundle.vim/
+  endif
 
   " Required:
   call neobundle#begin(expand('~/.vim/bundle/'))
@@ -22,11 +22,11 @@
   NeoBundle 'tomtom/tcomment_vim'
   " Bufferline
   NeoBundle 'ap/vim-buftabline'
-  " Coffee script Plugin
+  " Coffee script Filetype Plugin
   NeoBundle 'kchmck/vim-coffee-script'
   " MemoList
   NeoBundle 'glidenote/memolist.vim'
-  " Markdown
+  " Markdown Filetyle Plugin
   NeoBundle 'joker1007/vim-markdown-quote-syntax'
   NeoBundle 'godlygeek/tabular'
   NeoBundle 'kannokanno/previm'
@@ -35,7 +35,7 @@
   NeoBundle 'Shougo/unite.vim'
   NeoBundle 'Shougo/vimfiler.vim'
   NeoBundle 'Shougo/neomru.vim'
-  " insert 'end' word in ruby, then you type if
+  " insert 'end' word in ruby and any languages, then you type if
   NeoBundle 'tpope/vim-endwise'
   " enable color log if log files have ansi color codes
   NeoBundle 'vim-scripts/AnsiEsc.vim'
@@ -52,15 +52,18 @@
   " Completion(words
   NeoBundle 'Shougo/neocomplete.vim'
   " ansync process plugin to make over speed
-  NeoBundle 'Shougo/vimproc.vim', {
-  \ 'build' : {
-  \     'windows' : 'tools\\update-dll-mingw',
-  \     'cygwin' : 'make -f make_cygwin.mak',
-  \     'mac' : 'make',
-  \     'linux' : 'make',
-  \     'unix' : 'gmake',
-  \    },
-  \ }
+  let s:os = system('uname')
+  if s:os == 'Linux' || s:os == 'Darwin'
+    NeoBundle 'Shougo/vimproc.vim', {
+        \ 'build' : {
+        \     'windows' : 'tools\\update-dll-mingw',
+        \     'cygwin' : 'make -f make_cygwin.mak',
+        \     'mac' : 'make',
+        \     'linux' : 'make',
+        \     'unix' : 'gmake',
+        \    },
+        \ }
+    endif
   " Refer to |:NeoBundle-examples|.
   " Note: You don't set neobundle setting in .gvimrc!
   call neobundle#end()
@@ -73,7 +76,7 @@
   NeoBundleCheck
 
 " ColorSheme ---------------------------------------
-  colorscheme inkpot
+  " colorscheme inkpot
   syntax enable
 
 " general ------------------------------------------
@@ -127,7 +130,8 @@
   autocmd BufEnter * if &filetype == '' | setlocal filetype=markdown | endif
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.coffee set ft=coffee
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.conf set ft=configuration
-  autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.{mkd,mk,markdown} set filetype=markdown 
+  autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.{mkd,mk,markdown} set filetype=markdown
+  autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.json set filetype=javascript
 
 " Revise Indent(CorrectCode) -----------------------
   inoremap <C-K> <Esc>:call CorrectCode()<CR>a
@@ -247,3 +251,8 @@
   let g:vimfiler_as_default_explorer = 1
   nnoremap <silent> <Leader>f :VimFiler<CR>
 
+" Jq / Json Parser ---------------------------------
+  command! Jq %!jq '.'
+
+" Autoclose Configure
+  let g:AutoClosePairs_add = "|"
