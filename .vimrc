@@ -28,14 +28,13 @@
   NeoBundle 'ciaranm/inkpot'
   " Comment toggle
   NeoBundle 'tomtom/tcomment_vim'
-  " Show buf list in header line
-  NeoBundle 'ap/vim-buftabline' " when open a dir, does not work well.
-  " NeoBundle 'zefei/vim-wintabs'
-  " Coffee script Plugin
+  " Bufferline
+  NeoBundle 'ap/vim-buftabline'
+  " Coffee script Filetype Plugin
   NeoBundle 'kchmck/vim-coffee-script'
   " MemoList
   NeoBundle 'glidenote/memolist.vim'
-  " Markdown
+  " Markdown Filetyle Plugin
   NeoBundle 'joker1007/vim-markdown-quote-syntax'
   NeoBundle 'godlygeek/tabular'
   NeoBundle 'kannokanno/previm'
@@ -44,7 +43,7 @@
   NeoBundle 'Shougo/unite.vim'
   NeoBundle 'Shougo/vimfiler.vim'
   NeoBundle 'Shougo/neomru.vim'
-  " insert 'end' word in ruby, then you type if
+  " insert 'end' word in ruby and any languages, then you type if
   NeoBundle 'tpope/vim-endwise'
   " enable color log if log files have ansi color codes
   NeoBundle 'vim-scripts/AnsiEsc.vim'
@@ -68,15 +67,18 @@
   " Completion(words
   NeoBundle 'Shougo/neocomplete.vim'
   " ansync process plugin to make over speed
-  NeoBundle 'Shougo/vimproc.vim', {
-  \ 'build' : {
-  \     'windows' : 'tools\\update-dll-mingw',
-  \     'cygwin' : 'make -f make_cygwin.mak',
-  \     'mac' : 'make',
-  \     'linux' : 'make',
-  \     'unix' : 'gmake',
-  \    },
-  \ }
+  let s:os = system('uname')
+  if s:os == 'Linux' || s:os == 'Darwin'
+    NeoBundle 'Shougo/vimproc.vim', {
+        \ 'build' : {
+        \     'windows' : 'tools\\update-dll-mingw',
+        \     'cygwin' : 'make -f make_cygwin.mak',
+        \     'mac' : 'make',
+        \     'linux' : 'make',
+        \     'unix' : 'gmake',
+        \    },
+        \ }
+    endif
   " Refer to |:NeoBundle-examples|.
   " Note: You don't set neobundle setting in .gvimrc!
   call neobundle#end()
@@ -89,7 +91,7 @@
   NeoBundleCheck
 
 " ColorSheme ---------------------------------------
-  colorscheme inkpot
+  " colorscheme inkpot
   syntax enable
 
 " general ------------------------------------------
@@ -238,10 +240,16 @@
   endif
 
 " Previm -------------------------------------------
-  let g:previm_open_cmd = 'open -a "/Applications/Google Chrome.app/"'
+  if s:os == "Darwin"
+    let g:previm_open_cmd = 'open -a "/Applications/Google Chrome.app/"'
+  endif
 
 " MemoList -----------------------------------------
-  let g:memolist_path = "~/tmp/MemoList"
+  if s:os != "Linux" || s:os != "Darwin"
+    let g:memolist_path = "/d/Users/hisakazu/tmp/MemoList"
+  elseif
+    let g:memolist_path = "~/tmp/MemoList"
+  endif
   nnoremap <Leader>mn  :MemoNew<CR>
   nnoremap <Leader>ml  :MemoList<CR>
   nnoremap <Leader>mg  :MemoGrep<CR>
@@ -286,7 +294,7 @@
   let g:go_play_open_browser = 0
 
 " Autodirmak.vim
-  let g:autodirmake#is_confirm = 0
+  let g:autodirmake#is_confirm = 0 " No confirmation
 
 " Auto Pairs
   let g:AutoPairs =  {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`', '「':'」'}
@@ -324,3 +332,6 @@
   " let g:paredit_mode=1
   " let g:paredit_electric_return = 0
   " let g:slimv_swank_cmd = 'clisp ~/.vim/bundle/slimv/slime/start-swank.lisp'
+
+" Jq / Json Parser ---------------------------------
+  command! Jq %!jq '.'
