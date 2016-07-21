@@ -67,8 +67,8 @@
   " Completion(words
   NeoBundle 'Shougo/neocomplete.vim'
   " ansync process plugin to make over speed
-  let s:os = system('uname')
-  if s:os == 'Linux' || s:os == 'Darwin'
+  let g:os_type = substitute(system('uname'), "\n", "", "g")
+  if g:os_type == 'Linux' || g:os_type == 'Darwin'
     NeoBundle 'Shougo/vimproc.vim', {
         \ 'build' : {
         \     'windows' : 'tools\\update-dll-mingw',
@@ -91,7 +91,7 @@
   NeoBundleCheck
 
 " ColorSheme ---------------------------------------
-  " colorscheme inkpot
+  colorscheme inkpot
   syntax enable
 
 " general ------------------------------------------
@@ -142,7 +142,7 @@
 
 " autocmd ------------------------------------------
   autocmd BufEnter * :hi CursorLine ctermbg=235 guibg=DarkRed cterm=bold
-  autocmd BufEnter * if &filetype == '' | setlocal filetype=markdown | endif
+  " autocmd BufEnter * if &filetype == '' | setlocal filetype=markdown | endif
   autocmd BufEnter * if &filetype == 'lisp' | let g:AutoPairs = {'(':')'} | endif
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.coffee set ft=coffee
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.conf set ft=configuration
@@ -240,12 +240,12 @@
   endif
 
 " Previm -------------------------------------------
-  if s:os == "Darwin"
+  if g:os_type == "Darwin"
     let g:previm_open_cmd = 'open -a "/Applications/Google Chrome.app/"'
   endif
 
 " MemoList -----------------------------------------
-  if s:os != "Linux" || s:os != "Darwin"
+  if g:os_type != "Linux" || g:os_type != "Darwin"
     let g:memolist_path = "/d/Users/hisakazu/tmp/MemoList"
   elseif
     let g:memolist_path = "~/tmp/MemoList"
@@ -329,9 +329,12 @@
   inoremap <C-Y> <C-X><C-Y>
 
 " Common Lisp / Slimv
-  " let g:paredit_mode=1
-  " let g:paredit_electric_return = 0
-  " let g:slimv_swank_cmd = 'clisp ~/.vim/bundle/slimv/slime/start-swank.lisp'
+  aug lisp
+    au!
+    au Filetype listp setl cindent& lispwords=define
+  aug END
 
 " Jq / Json Parser ---------------------------------
   command! Jq %!jq '.'
+
+
