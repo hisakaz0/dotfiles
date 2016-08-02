@@ -94,6 +94,13 @@
   colorscheme inkpot
   syntax enable
 
+" CursorHighlight
+  function! MyCursorHighlight()
+    highlight CursorLine ctermbg=235 guibg=DarkRed cterm=bold
+  endfunction
+  call MyCursorHighlight()
+  autocmd BufRead,BufEnter,BufNewFile,BufReadPre * call MyCursorHighlight()
+
 " Set Options --------------------------------------
   set showmatch
   set mouse=a
@@ -141,7 +148,6 @@
   nnoremap <C-q> <Esc>:q<CR>
 
 " autocmd ------------------------------------------
-  autocmd BufEnter * :hi CursorLine ctermbg=235 guibg=DarkRed cterm=bold
   " autocmd BufEnter * if &filetype == '' | setlocal filetype=markdown | endif
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.coffee set ft=coffee
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.conf set ft=configuration
@@ -335,3 +341,4 @@
 
 " Utilities
   command! Date echo substitute(system('date'), "\n", "", "g")
+  command! -nargs=1 -complete=shellcmd Pipe echo system(<f-args>)
