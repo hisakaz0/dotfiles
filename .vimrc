@@ -49,7 +49,7 @@
   NeoBundle 'vim-scripts/AnsiEsc.vim'
   " bracket completion
   " NeoBundle 'Townk/vim-autoclose'
-  NeoBundle 'jiangmiao/auto-pairs'
+  " NeoBundle 'jiangmiao/auto-pairs' " おせっかいなので，使いません@2016-08-02
   " Go lang syntax & indent
   " Use it, vim hung up!
   " So I dont use this plugin
@@ -94,7 +94,7 @@
   colorscheme inkpot
   syntax enable
 
-" general ------------------------------------------
+" Set Options --------------------------------------
   set showmatch
   set mouse=a
   set nf=alpha
@@ -297,7 +297,7 @@
   let g:autodirmake#is_confirm = 0 " No confirmation
 
 " Auto Pairs
-  let g:AutoPairs =  {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`', '「':'」'}
+  let g:AutoPairs =  {'(':')', '{':'}',"'":"'",'"':'"', '`':'`', '「':'」'}
 
 " ShortShort
   "  augroup shortshort
@@ -337,4 +337,5 @@
 " Jq / Json Parser ---------------------------------
   command! Jq %!jq '.'
 
-
+" Utilities
+  command! Date echo substitute(system('date'), "\n", "", "g")
