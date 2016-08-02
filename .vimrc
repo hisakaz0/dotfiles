@@ -143,7 +143,6 @@
 " autocmd ------------------------------------------
   autocmd BufEnter * :hi CursorLine ctermbg=235 guibg=DarkRed cterm=bold
   " autocmd BufEnter * if &filetype == '' | setlocal filetype=markdown | endif
-  autocmd BufEnter * if &filetype == 'lisp' | let g:AutoPairs = {'(':')'} | endif
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.coffee set ft=coffee
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.conf set ft=configuration
   " autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.erb set ft=html
@@ -295,9 +294,6 @@
 
 " Autodirmak.vim
   let g:autodirmake#is_confirm = 0 " No confirmation
-
-" Auto Pairs
-  let g:AutoPairs =  {'(':')', '{':'}',"'":"'",'"':'"', '`':'`', '「':'」'}
 
 " ShortShort
   "  augroup shortshort
