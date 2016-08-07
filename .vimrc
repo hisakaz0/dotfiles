@@ -78,7 +78,8 @@
         \     'unix' : 'gmake',
         \    },
         \ }
-    endif
+  endif
+  NeoBundle 'vim-jp/vimdoc-ja' " japanese vim documents
   " Refer to |:NeoBundle-examples|.
   " Note: You don't set neobundle setting in .gvimrc!
   call neobundle#end()
@@ -341,4 +342,11 @@
 
 " Utilities
   command! Date echo substitute(system('date'), "\n", "", "g")
-  command! -nargs=1 -complete=shellcmd Pipe echo system(<f-args>)
+  command! -nargs=+ -complete=shellcmd Shell echo system(<f-args>)
+
+" Help Documents
+  set helplang=ja,en
+  " If you want to read english  vim  documents,  then  you  type  :help  @en.
+
+" Text Align
+  " type :help 25.2
