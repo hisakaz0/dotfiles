@@ -135,6 +135,7 @@
   set magic
   set pastetoggle=<F4>
   set ruler " show line and column
+  set iskeyword+=-
 
 " map ----------------------------------------------
   let mapleader=','
@@ -251,10 +252,10 @@
   endif
 
 " MemoList -----------------------------------------
-  if g:os_type != "Linux" || g:os_type != "Darwin"
-    let g:memolist_path = "/d/Users/hisakazu/tmp/MemoList"
-  elseif
+  if or(g:os_type == "Linux", g:os_type == "Darwin")
     let g:memolist_path = "~/tmp/MemoList"
+  else
+    let g:memolist_path = "/d/Users/hisakazu/tmp/MemoList"
   endif
   nnoremap <Leader>mn  :MemoNew<CR>
   nnoremap <Leader>ml  :MemoList<CR>
@@ -350,3 +351,39 @@
 
 " Text Align
   " type :help 25.2
+
+
+" Dictionary
+  let g:open_dictionary_window_cmd = 'new'
+  command! -nargs=1 Dict  call OpendictSearch(<f-args>)
+  nnoremap <Leader>dict :call OpendictSearchwordcursor()<CR>
+
+  function! OpendictSearchwordcursor()
+    let s:line = getline('.')
+    let s:wstart = getpos('.')[2] - 1
+    let s:wend = s:wstart
+    while(matchstr(s:line[s:wstart], "[A-Za-z]") != "")
+      let s:wstart -= 1
+    endwhile
+    let s:wstart += 1
+    while(matchstr(s:line[s:wend], "[A-Za-z]" ) != "")
+      let s:wend += 1
+    endwhile
+    let s:wend -= 1
+    let s:word =  s:line[s:wstart:s:wend]
+    call OpendictSearch(s:word)
+  endfunction
+
+  function! OpendictSearch(word)
+    let s:mean = system("dict " . a:word)
+    if (matchstr(s:mean, "null") == "null" )
+      echoerr "Error: No meaning in dictionary."
+      return
+    endif
+    execute g:open_dictionary_window_cmd .
+          \ " DICT:" . a:word . " | put =s:mean"
+    execute "1,2delete"
+    setlocal buftype=nofile
+    setlocal bufhidden=delete
+    setlocal noswapfile
+  endfunction
