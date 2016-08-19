@@ -352,7 +352,6 @@
 " Text Align
   " type :help 25.2
 
-
 " Dictionary
   let g:open_dictionary_window_cmd = 'new'
   command! -nargs=1 Dict  call OpendictSearch(<f-args>)
@@ -387,3 +386,9 @@
     setlocal bufhidden=delete
     setlocal noswapfile
   endfunction
+
+" Openrcnt
+  nnoremap <Leader>rcnt :RecentList<CR>
+
+" Markdown
+  nnoremap <Leader>mkdn :set ft=markdown<CR>
