@@ -31,6 +31,7 @@ call dein#add('hail2u/vim-css3-syntax')
 call dein#add('scrooloose/syntastic')
 call dein#add('vim-jp/vimdoc-ja')
 call dein#add('Shougo/NeoComplete.vim')
+" call dein#add('Valloric/YouCompleteMe')
 
 " Let dein manage dein
 " Required:
@@ -83,7 +84,6 @@ set showcmd
 set cmdheight=1
 set laststatus=2
 set t_Co=256
-set foldmethod=indent
 set encoding=utf-8
 set fileencodings=utf-8,iso-2022-jp,cp932,sjis,euc-jp
 set clipboard+=autoselect
@@ -95,6 +95,9 @@ set magic
 set pastetoggle=<F4>
 set ruler " show line and column
 set iskeyword+=-
+
+" Fold Setting -------------------------------------
+set foldmethod=marker
 
 " Common Map ---------------------------------------
 let mapleader=','
@@ -131,7 +134,7 @@ endfunction
 " Disable AutoComplPop.
 let g:acp_enableAtStartup = 0
 " Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_at_startup = 0
 " Use smartcase.
 let g:neocomplete#enable_smart_case = 1
 " Set minimum syntax keyword length.
@@ -231,8 +234,8 @@ let g:go_play_open_browser = 0
 let g:autodirmake#is_confirm = 0 " No confirmation
 
 " Moving
-inoremap <C-E> <C-X><C-E>
-inoremap <C-Y> <C-X><C-Y>
+" inoremap <C-E> <C-X><C-E>
+" inoremap <C-Y> <C-X><C-Y>
 
 " Jq / Json Parser ---------------------------------
 command! Jq %!jq '.'
@@ -283,9 +286,10 @@ function! OpendictSearch(word)
   setlocal noswapfile
 endfunction
 
-" Openrcnt
+" Openrcnt(plugin)
 nnoremap <Leader>rcnt :RecentList<CR>
 
 " Markdown
 nnoremap <Leader>mkdn :set ft=markdown<CR>
+
 
