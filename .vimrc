@@ -114,6 +114,7 @@ inoremap <C-s> <Esc>:w<CR>
 inoremap <C-q> <Esc>:q<CR>
 nnoremap <C-s> <Esc>:w<CR>
 nnoremap <C-q> <Esc>:q<CR>
+inoremap <S-Tab> <Esc><<i
 
 " autocmd ------------------------------------------
 augroup my_filetype
@@ -301,6 +302,22 @@ nnoremap <Leader>rcnt :RecentList<CR>
 
 " Markdown
 nnoremap <Leader>mkdn :set ft=markdown<CR>
+
+nnoremap <Leader>hl :call InsertHeaderLine()<CR>
+
+" Insert header line (for h1)
+function! InsertHeaderLine()
+  let s:virtcol = virtcol('$') - 1
+  let s:line = line('.')
+  let s:i = 0
+  let s:dash = ""
+  while s:i < s:virtcol
+    let s:dash .= "-"
+    let s:i += 1
+  endwhile
+  echo s:dash
+  execute s:line . "put =s:dash"
+endfunction
 
 augroup c_lang " not clang
   autocmd!
