@@ -96,6 +96,9 @@ set pastetoggle=<F4>
 set ruler " show line and column
 set iskeyword+=-
 
+" Fold Setting -------------------------------------
+set foldmethod=marker
+
 " Common Map ---------------------------------------
 let mapleader=','
 nmap <F1> <Nop>
@@ -241,4 +244,17 @@ command! Jq %!jq '.'
 " Utilities
 command! Date echo substitute(system('date'), "\n", "", "g")
 command! -nargs=+ -complete=shellcmd Shell echo system(<f-args>)
+
+" Help Documents
+set helplang=ja,en
+" If you want to read english  vim  documents,  then  you  type  :help  @en.
+
+" Text Align
+" type :help 25.2
+
+" Openrcnt(plugin)
+nnoremap <Leader>rcnt :RecentList<CR>
+
+" Markdown
+nnoremap <Leader>mkdn :set ft=markdown<CR>
 
