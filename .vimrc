@@ -56,11 +56,15 @@ colorscheme inkpot
 syntax enable
 
 " CursorHighlight
-  function! MyCursorHighlight()
-    highlight CursorLine ctermbg=235 guibg=DarkRed cterm=bold
-  endfunction
-  call MyCursorHighlight()
+function! MyCursorHighlight()
+  highlight CursorLine ctermbg=235 guibg=DarkRed cterm=bold
+endfunction
+call MyCursorHighlight()
+
+augroup my_highlight
+  autocmd!
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre * call MyCursorHighlight()
+augroup END
 
 " Set Options --------------------------------------
 set showmatch
@@ -112,6 +116,8 @@ nnoremap <C-s> <Esc>:w<CR>
 nnoremap <C-q> <Esc>:q<CR>
 
 " autocmd ------------------------------------------
+augroup my_filetype
+  autocmd!
   " autocmd BufEnter * if &filetype == '' | setlocal filetype=markdown | endif
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.coffee set ft=coffee
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.conf set ft=configuration
@@ -122,11 +128,6 @@ nnoremap <C-q> <Esc>:q<CR>
 augroup END
 
 " Revise Indent(CorrectCode) -----------------------
-    autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-    autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-    autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-    autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-    autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 inoremap <C-K> <Esc>:call CorrectCode()<CR>a
 nnoremap <C-K> :call CorrectCode()<CR>
 function! CorrectCode()
@@ -190,6 +191,14 @@ inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
 
 " Enable omni completion.
+augroup neocomp_omni
+  autocmd!
+  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+  autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+  autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+augroup END
 
 " Enable heavy omni completion.
 if !exists('g:neocomplete#sources#omni#input_patterns')
@@ -293,3 +302,23 @@ nnoremap <Leader>rcnt :RecentList<CR>
 " Markdown
 nnoremap <Leader>mkdn :set ft=markdown<CR>
 
+augroup c_lang " not clang
+  autocmd!
+  autocmd BufEnter,BufRead,BufNewFile *.c call CLangSetting()
+augroup END
+
+function! CLangSetting()
+  if Chomp(system("ls -1 Makefile")) == "Makefile"
+    nnoremap <Leader>make :make<CR>
+    nnoremap <Leader>run :make run<CR>
+    nnoremap <Leader>arun :make run ARGS="
+  else
+    nnoremap <Leader>make :!gcc %<CR>
+    nnoremap <Leader>run :!./a.out<CR>
+    nnoremap <Leader>arun :!./a.out
+  endif
+endfunction
+
+function! Chomp(str)
+  return substitute(a:str, '\n$', '', "")
+endfunction
