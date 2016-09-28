@@ -252,6 +252,41 @@ set helplang=ja,en
 " Text Align
 " type :help 25.2
 
+" Mac Dictionary
+let g:open_dictionary_window_cmd = 'new'
+command! -nargs=1 Dict  call OpendictSearch(<f-args>)
+nnoremap <Leader>dict :call OpendictSearchwordcursor()<CR>
+
+function! OpendictSearchwordcursor()
+  let s:line = getline('.')
+  let s:wstart = getpos('.')[2] - 1
+  let s:wend = s:wstart
+  while(matchstr(s:line[s:wstart], "[A-Za-z]") != "")
+    let s:wstart -= 1
+  endwhile
+  let s:wstart += 1
+  while(matchstr(s:line[s:wend], "[A-Za-z]" ) != "")
+    let s:wend += 1
+  endwhile
+  let s:wend -= 1
+  let s:word =  s:line[s:wstart:s:wend]
+  call OpendictSearch(s:word)
+endfunction
+
+function! OpendictSearch(word)
+  let s:mean = system("dict " . a:word)
+  if (matchstr(s:mean, "null") == "null" )
+    echoerr "Error: No meaning in dictionary."
+    return
+  endif
+  execute g:open_dictionary_window_cmd .
+        \ " DICT:" . a:word . " | put =s:mean"
+  execute "1,2delete"
+  setlocal buftype=nofile
+  setlocal bufhidden=delete
+  setlocal noswapfile
+endfunction
+
 " Openrcnt(plugin)
 nnoremap <Leader>rcnt :RecentList<CR>
 
