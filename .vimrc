@@ -312,7 +312,7 @@ function! InsertHeaderLine()
   let s:i = 0
   let s:dash = ""
   while s:i < s:virtcol
-    let s:dash .= "-"
+    let s:dash .= "="
     let s:i += 1
   endwhile
   echo s:dash
