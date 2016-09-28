@@ -1,0 +1,1 @@
+/Users/hisakazu/tmp/vim/plugin/openrcnt/openrcnt.vim
