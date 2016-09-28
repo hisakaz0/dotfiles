@@ -364,3 +364,9 @@ if g:os_type == 'Linux'
 endif
 nnoremap <k0> :tabn<CR>
 nnoremap <k1> :tabp<CR>
+
+" Verilog
+augroup my_verilog
+  autocmd!
+  autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.vh set filetype=verilog
+augroup END
