@@ -8,10 +8,16 @@ if &compatible
 endif
 
 " Required:
-set runtimepath^=/Users/hisakazu/.vim/bundle/repos/github.com/Shougo/dein.vim
+if g:os_type == 'Darwin'
+  set runtimepath^=/Users/hisakazu/.vim/bundle/repos/github.com/Shougo/dein.vim
+  call dein#begin('/Users/hisakazu/.vim/bundle')
+endif
+if g:os_type == 'Linux'
+  set runtimepath^=/home/hisakazu-fu/.vim/bundle/repos/github.com/Shougo/dein.vim
+  call dein#begin('/home/hisakazu-fu/.vim/bundle')
+endif
 
 " Required:
-call dein#begin('/Users/hisakazu/.vim/bundle')
 
 call dein#add('dhruvasagar/vim-table-mode')
 call dein#add('ciaranm/inkpot')
@@ -93,15 +99,22 @@ set fileencodings=utf-8,iso-2022-jp,cp932,sjis,euc-jp
 set clipboard+=autoselect
 set clipboard+=unnamed
 set incsearch
+set nohlsearch
 set ignorecase
 set smartcase
 set magic
 set pastetoggle=<F4>
 set ruler " show line and column
 set iskeyword+=-
+set <BS>=
+
+au BufRead,BufEnter,BufNewFile * set formatoptions-=ro
+
+
 
 " Fold Setting -------------------------------------
-set foldmethod=marker
+" set foldmethod=marker
+set foldmethod=indent
 
 " Common Map ---------------------------------------
 let mapleader=','
@@ -230,8 +243,12 @@ nnoremap <Leader>mg  :MemoGrep<CR>
 
 " Syntastic
 " let g:syntastic_javascript_checker = "jshint" "JavaScriptのSyntaxチェックはjshintで
-" let g:syntastic_check_on_open = 0 "ファイルオープン時にはチェックをしない
-" let g:syntastic_check_on_save = 0 "ファイル保存時にはチェックを実施
+let g:syntastic_check_on_open = 0 "ファイルオープン時にはチェックをしない
+let g:syntastic_check_on_wq = 0
+let g:syntastic_mode_map = {
+    \ "mode": "passive",
+    \ "active_filetypes": [],
+    \ "passive_filetypes": [] }
 
 " VIM Table Mode
 let g:table_mode_corner_corner = "|"
@@ -339,3 +356,11 @@ endfunction
 function! Chomp(str)
   return substitute(a:str, '\n$', '', "")
 endfunction
+
+" Tabpage
+if g:os_type == 'Linux'
+  set <k0>=n " alt + n
+  set <k1>=p " alt + p
+endif
+nnoremap <k0> :tabn<CR>
+nnoremap <k1> :tabp<CR>
