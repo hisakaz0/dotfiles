@@ -1,98 +1,59 @@
 
-" NeoBundle ----------------------------------------
-  if has('vim_starting')
-    if &compatible
-      set nocompatible               " Be iMproved
-    endif
+" Comman variables ----------------------------
+let g:os_type = substitute(system('uname'), "\n", "", "g")
 
-    " Required:
-    set runtimepath+=~/.vim/bundle/neobundle.vim/
-  endif
+" dein ----------------------------------------
+if &compatible
+  set nocompatible               " Be iMproved
+endif
 
-  " Required:
-  call neobundle#begin(expand('~/.vim/bundle/'))
+" Required:
+set runtimepath^=/Users/hisakazu/.vim/bundle/repos/github.com/Shougo/dein.vim
 
-  " Let NeoBundle manage NeoBundle
-  " Required:
+" Required:
+call dein#begin('/Users/hisakazu/.vim/bundle')
 
-  """ Tool List
-  " Common lisp plugin
-  " NeoBundle 'https://bitbucket.org/kovisoft/slimv'
-  " Closure plugin
-  NeoBundle 'guns/vim-clojure-static'
-  " Auto make directory
-  NeoBundle 'mopp/autodirmake.vim'
-  " Create table
-  NeoBundle 'dhruvasagar/vim-table-mode'
-  " ColorSheme
-  NeoBundle 'ciaranm/inkpot'
-  " Comment toggle
-  NeoBundle 'tomtom/tcomment_vim'
-  " Bufferline
-  NeoBundle 'ap/vim-buftabline'
-  " Coffee script Filetype Plugin
-  NeoBundle 'kchmck/vim-coffee-script'
-  " MemoList
-  NeoBundle 'glidenote/memolist.vim'
-  " Markdown Filetyle Plugin
-  NeoBundle 'joker1007/vim-markdown-quote-syntax'
-  NeoBundle 'godlygeek/tabular'
-  NeoBundle 'kannokanno/previm'
-  NeoBundle 'rcmdnk/vim-markdown'
-  " Unite.vim & Filer & Mru(buf history)
-  NeoBundle 'Shougo/unite.vim'
-  NeoBundle 'Shougo/vimfiler.vim'
-  NeoBundle 'Shougo/neomru.vim'
-  " insert 'end' word in ruby and any languages, then you type if
-  NeoBundle 'tpope/vim-endwise'
-  " enable color log if log files have ansi color codes
-  NeoBundle 'vim-scripts/AnsiEsc.vim'
-  " bracket completion
-  " NeoBundle 'Townk/vim-autoclose'
-  " NeoBundle 'jiangmiao/auto-pairs' " おせっかいなので，使いません@2016-08-02
-  " Go lang syntax & indent
-  " Use it, vim hung up!
-  " So I dont use this plugin
-  NeoBundle 'fatih/vim-go'
-  " turn boolean true/flase
-  NeoBundle 'AndrewRadev/switch.vim'
-  " show whitespace of line end  & delete it
-  NeoBundle 'bronson/vim-trailing-whitespace'
-  " show color status bar
-  NeoBundle 'itchyny/lightline.vim'
-  " css3 plugin
-  NeoBundle 'hail2u/vim-css3-syntax'
-  " syntastic
-  " NeoBundle 'scrooloose/syntastic'
-  " Completion(words
-  NeoBundle 'Shougo/neocomplete.vim'
-  " ansync process plugin to make over speed
-  let g:os_type = substitute(system('uname'), "\n", "", "g")
-  if g:os_type == 'Linux' || g:os_type == 'Darwin'
-    NeoBundle 'Shougo/vimproc.vim', {
-        \ 'build' : {
-        \     'windows' : 'tools\\update-dll-mingw',
-        \     'cygwin' : 'make -f make_cygwin.mak',
-        \     'mac' : 'make',
-        \     'linux' : 'make',
-        \     'unix' : 'gmake',
-        \    },
-        \ }
-    endif
-  " Refer to |:NeoBundle-examples|.
-  " Note: You don't set neobundle setting in .gvimrc!
-  call neobundle#end()
+call dein#add('dhruvasagar/vim-table-mode')
+call dein#add('ciaranm/inkpot')
+call dein#add('tomtom/tcomment_vim')
+call dein#add('ap/vim-buftabline')
+call dein#add('kchmck/vim-coffee-script')
+call dein#add('glidenote/memolist.vim')
+call dein#add('joker1007/vim-markdown-quote-syntax')
+call dein#add('godlygeek/tabular')
+call dein#add('kannokanno/previm')
+call dein#add('rcmdnk/vim-markdown')
+call dein#add('vim-scripts/AnsiEsc.vim')
+call dein#add('fatih/vim-go')
+call dein#add('bronson/vim-trailing-whitespace')
+call dein#add('itchyny/lightline.vim')
+call dein#add('hail2u/vim-css3-syntax')
+call dein#add('scrooloose/syntastic')
+call dein#add('vim-jp/vimdoc-ja')
+call dein#add('Shougo/NeoComplete.vim')
+" call dein#add('Valloric/YouCompleteMe')
 
-  " Required:
-  filetype plugin indent on
+" Let dein manage dein
+" Required:
+call dein#add('Shougo/dein.vim')
 
-  " If there are uninstalled bundles found on startup,
-  " this will conveniently prompt you to install them.
-  NeoBundleCheck
+" Required:
+call dein#end()
+
+" Required:
+filetype plugin indent on
+
+" If you want to install not installed plugins on startup.
+"if dein#check_install()
+"  call dein#install()
+"endif
+
+" deoplete
+let g:deoplete#enable_at_startup = 1
 
 " ColorSheme ---------------------------------------
-  colorscheme inkpot
-  syntax enable
+colorscheme inkpot
+syntax enable
 
 " CursorHighlight
   function! MyCursorHighlight()
