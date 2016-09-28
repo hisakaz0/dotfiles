@@ -63,50 +63,50 @@ syntax enable
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre * call MyCursorHighlight()
 
 " Set Options --------------------------------------
-  set showmatch
-  set mouse=a
-  set nf=alpha
-  set backspace=indent,eol,start
-  set noswapfile
-  set confirm
-  set hidden
-  set cindent
-  set expandtab
-  set shiftwidth=2
-  set tabstop=2
-  set wildmode=longest,list
-  set number
-  set title
-  set list
-  set listchars=tab:..,trail:_,eol:§,extends:>,precedes:<,nbsp:%
-  set cursorline
-  set showcmd
-  set cmdheight=1
-  set laststatus=2
-  set t_Co=256
-  set foldmethod=indent
-  set encoding=utf-8
-  set fileencodings=utf-8,iso-2022-jp,cp932,sjis,euc-jp
-  set clipboard+=autoselect
-  set clipboard+=unnamed
-  set incsearch
-  set ignorecase
-  set smartcase
-  set magic
-  set pastetoggle=<F4>
-  set ruler " show line and column
+set showmatch
+set mouse=a
+set nf=alpha
+set backspace=indent,eol,start
+set noswapfile
+set confirm
+set hidden
+set cindent
+set expandtab
+set shiftwidth=2
+set tabstop=2
+set wildmode=longest,list
+set number
+set title
+set list
+set listchars=tab:..,trail:_,eol:§,extends:>,precedes:<,nbsp:%
+set cursorline
+set showcmd
+set cmdheight=1
+set laststatus=2
+set t_Co=256
+set encoding=utf-8
+set fileencodings=utf-8,iso-2022-jp,cp932,sjis,euc-jp
+set clipboard+=autoselect
+set clipboard+=unnamed
+set incsearch
+set ignorecase
+set smartcase
+set magic
+set pastetoggle=<F4>
+set ruler " show line and column
+set iskeyword+=-
 
-" map ----------------------------------------------
-  let mapleader=','
-  nmap <F1> <Nop>
-  nnoremap ; :
-  vnoremap ; :
-  nnoremap <silent> <C-n> :bn<CR>
-  nnoremap <silent> <C-p> :bp<CR>
-  inoremap <C-s> <Esc>:w<CR>
-  inoremap <C-q> <Esc>:q<CR>
-  nnoremap <C-s> <Esc>:w<CR>
-  nnoremap <C-q> <Esc>:q<CR>
+" Common Map ---------------------------------------
+let mapleader=','
+nmap <F1> <Nop>
+nnoremap ; :
+vnoremap ; :
+nnoremap <silent> <C-n> :bn<CR>
+nnoremap <silent> <C-p> :bp<CR>
+inoremap <C-s> <Esc>:w<CR>
+inoremap <C-q> <Esc>:q<CR>
+nnoremap <C-s> <Esc>:w<CR>
+nnoremap <C-q> <Esc>:q<CR>
 
 " autocmd ------------------------------------------
   " autocmd BufEnter * if &filetype == '' | setlocal filetype=markdown | endif
@@ -116,190 +116,129 @@ syntax enable
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.{mkd,mk,markdown} set filetype=markdown
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.json set filetype=javascript
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.short set filetype=short
+augroup END
 
 " Revise Indent(CorrectCode) -----------------------
-  inoremap <C-K> <Esc>:call CorrectCode()<CR>a
-  nnoremap <C-K> :call CorrectCode()<CR>
-  function! CorrectCode()
-    execute ":mkview"
-    execute ":normal gg=G"
-    execute ":loadview"
-  endfunction
-
-" Count Charactor ----------------------------------
-  command! Count %s/./&/g
-
-" NeoComplete --------------------------------------
-  if (has('lua'))
-    "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
-    " Disable AutoComplPop.
-    let g:acp_enableAtStartup = 0
-    " Use neocomplete.
-    let g:neocomplete#enable_at_startup = 1
-    " Use smartcase.
-    let g:neocomplete#enable_smart_case = 1
-    " Set minimum syntax keyword length.
-    let g:neocomplete#sources#syntax#min_keyword_length = 3
-    let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-
-    " Define dictionary.
-    let g:neocomplete#sources#dictionary#dictionaries = {
-          \ 'default' : '',
-          \ 'vimshell' : $HOME.'/.vimshell_hist',
-          \ 'scheme' : $HOME.'/.gosh_completions'
-          \ }
-
-    " Define keyword.
-    if !exists('g:neocomplete#keyword_patterns')
-      let g:neocomplete#keyword_patterns = {}
-    endif
-    let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-    " Plugin key-mappings.
-    inoremap <expr><C-g>     neocomplete#undo_completion()
-    inoremap <expr><C-l>     neocomplete#complete_common_string()
-
-    " Recommended key-mappings.
-    " <CR>: close popup and save indent.
-    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-    function! s:my_cr_function()
-      " return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-      " For no inserting <CR> key.
-      return pumvisible() ? "\<C-y>" : "\<CR>"
-    endfunction
-    " <TAB>: completion.
-    inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-    inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
-    " <C-h>, <BS>: close popup and delete backword char.
-    inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-    inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-    " Close popup by <Space>.
-    "inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
-
-    " AutoComplPop like behavior.
-    "let g:neocomplete#enable_auto_select = 1
-
-    " Shell like behavior(not recommended).
-    "set completeopt+=longest
-    "let g:neocomplete#enable_auto_select = 1
-    "let g:neocomplete#disable_auto_complete = 1
-    "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-
-    " Enable omni completion.
     autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
     autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
     autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
     autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
     autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+inoremap <C-K> <Esc>:call CorrectCode()<CR>a
+nnoremap <C-K> :call CorrectCode()<CR>
+function! CorrectCode()
+  execute ":mkview"
+  execute ":normal gg=G"
+  execute ":loadview"
+endfunction
 
-    " Enable heavy omni completion.
-    if !exists('g:neocomplete#sources#omni#input_patterns')
-      let g:neocomplete#sources#omni#input_patterns = {}
-    endif
-    "let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-    "let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-    "let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 
-    " For perlomni.vim setting.
-    " https://github.com/c9s/perlomni.vim
-    let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-  endif
+" Neocomplete --------------------------------------
+" Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 0
+" Use smartcase.
+let g:neocomplete#enable_smart_case = 1
+" Set minimum syntax keyword length.
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+
+" Define dictionary.
+let g:neocomplete#sources#dictionary#dictionaries = {
+    \ 'default' : '',
+    \ 'vimshell' : $HOME.'/.vimshell_hist',
+    \ 'scheme' : $HOME.'/.gosh_completions'
+        \ }
+
+" Define keyword.
+if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplete#undo_completion()
+inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+  " For no inserting <CR> key.
+  "return pumvisible() ? "\<C-y>" : "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+" Close popup by <Space>.
+"inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
+
+" AutoComplPop like behavior.
+"let g:neocomplete#enable_auto_select = 1
+
+" Shell like behavior(not recommended).
+"set completeopt+=longest
+"let g:neocomplete#enable_auto_select = 1
+"let g:neocomplete#disable_auto_complete = 1
+"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+
+" Enable omni completion.
+
+" Enable heavy omni completion.
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+
+" For perlomni.vim setting.
+" https://github.com/c9s/perlomni.vim
+let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+
 
 " Previm -------------------------------------------
-  if g:os_type == "Darwin"
-    let g:previm_open_cmd = 'open -a "/Applications/Google Chrome.app/"'
-  endif
+if g:os_type == "Darwin"
+  let g:previm_open_cmd = 'open -a "/Applications/Google Chrome.app/"'
+endif
 
 " MemoList -----------------------------------------
-  if g:os_type != "Linux" || g:os_type != "Darwin"
-    let g:memolist_path = "/d/Users/hisakazu/tmp/MemoList"
-  elseif
-    let g:memolist_path = "~/tmp/MemoList"
-  endif
-  nnoremap <Leader>mn  :MemoNew<CR>
-  nnoremap <Leader>ml  :MemoList<CR>
-  nnoremap <Leader>mg  :MemoGrep<CR>
-
-" Unite.vim & Vimfiler -----------------------------
-  " Unite.vim
-  let g:unite_enable_start_insert = 1
-  let g:unite_source_history_yank_enable = 1
-  nnoremap <silent> <Leader>ua :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
-  " open buffers
-  nnoremap <silent> <Leader>ub :<C-u>Unite<Space>buffer<CR>
-  " open registers
-  nnoremap <silent> <Leader>ur :<C-u>Unite<Space>register<CR>
-  " open buffer history
-  nnoremap <silent> <Leader>uh :<C-u>Unite<Space>neomru/file<CR>
-  " open bookmark
-  nnoremap <silent> <Leader>uf :<C-u>Unite<Space>bookmark<CR>
-  autocmd FileType unite call s:unite_my_settings()
-  function! s:unite_my_settings()
-    nmap <buffer> <ESC> <Plug>(unite_exit)
-    nnoremap <silent><buffer><expr> f unite#smart_map('f', unite#do_action('vimfiler'))
-    inoremap <silent><buffer><expr> f unite#smart_map('f', unite#do_action('vimfiler'))
-  endfunction
-  " Vimfiler
-  let g:vimfiler_as_default_explorer = 1
-  nnoremap <silent> <Leader>f :VimFiler<CR>
+let g:memolist_path = "~/tmp/MemoList"
+if g:os_type == "Windows"
+  let g:memolist_path = "/d/Users/hisakazu/tmp/MemoList"
+endif
+nnoremap <Leader>mn  :MemoNew<CR>
+nnoremap <Leader>ml  :MemoList<CR>
+nnoremap <Leader>mg  :MemoGrep<CR>
 
 " Syntastic
-  " let g:syntastic_javascript_checker = "jshint" "JavaScriptのSyntaxチェックはjshintで
-  " let g:syntastic_check_on_open = 0 "ファイルオープン時にはチェックをしない
-  " let g:syntastic_check_on_save = 0 "ファイル保存時にはチェックを実施
+" let g:syntastic_javascript_checker = "jshint" "JavaScriptのSyntaxチェックはjshintで
+" let g:syntastic_check_on_open = 0 "ファイルオープン時にはチェックをしない
+" let g:syntastic_check_on_save = 0 "ファイル保存時にはチェックを実施
 
 " VIM Table Mode
-  let g:table_mode_corner_corner = "|"
-  let g:table_mode_corner        = "|"
-
-" Created Vim plugin
-  source ~/tmp/vim/todo.vim
+let g:table_mode_corner_corner = "|"
+let g:table_mode_corner        = "|"
 
 " Go lang
-  let g:go_fmt_autosave = 0
-  let g:go_play_open_browser = 0
+let g:go_fmt_autosave = 0
+let g:go_play_open_browser = 0
 
 " Autodirmak.vim
-  let g:autodirmake#is_confirm = 0 " No confirmation
-
-" ShortShort
-  "  augroup shortshort
-  "    autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.short set filetype=short
-  "    " TODO: imap/inoremapで設定したDeleteCornerBrackets()が動かない
-  "    autocmd Filetype short inoremap <BS> <C-R>=DeleteCornerBrackets(getline('.'))<CR>
-  "    autocmd Filetype short inoremap ｢ ｢｣<left>
-  "  augroup END
-  "  function! DeleteCornerBrackets(line)
-  "    echomsg a:line
-  "    if a:line =~ '｢'
-  "      if a:line !~ '｣'
-  "        call setline('.', substitute(a:line, '｢', '', ''))
-  "      endif
-  "    endif
-  "    if a:line =~ '｣'
-  "      if a:line !~ '｢'
-  "        call setline('.', substitute(a:line, '｣', '', ''))
-  "      endif
-  "    endif
-  "    return ''
-  "  endfunction
-
-" Thor that ruby gem
-  autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.thor set ft=ruby
+let g:autodirmake#is_confirm = 0 " No confirmation
 
 " Moving
-  inoremap <C-E> <C-X><C-E>
-  inoremap <C-Y> <C-X><C-Y>
-
-" Common Lisp / Slimv
-  aug lisp
-    au!
-    au Filetype listp setl cindent& lispwords=define
-  aug END
+" inoremap <C-E> <C-X><C-E>
+" inoremap <C-Y> <C-X><C-Y>
 
 " Jq / Json Parser ---------------------------------
-  command! Jq %!jq '.'
+command! Jq %!jq '.'
 
 " Utilities
-  command! Date echo substitute(system('date'), "\n", "", "g")
-  command! -nargs=1 -complete=shellcmd Pipe echo system(<f-args>)
+command! Date echo substitute(system('date'), "\n", "", "g")
+command! -nargs=+ -complete=shellcmd Shell echo system(<f-args>)
+
