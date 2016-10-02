@@ -370,3 +370,15 @@ augroup my_verilog
   autocmd!
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.vh set filetype=verilog
 augroup END
+
+" Quickfix
+nnoremap <silent> <Leader>cn :cn<CR>
+nnoremap <silent> <Leader>cp :cp<CR>
+nnoremap <silent> <Leader>cc :cc<CR>
+nnoremap <silent> <Leader>tab :tab split<CR>
+
+" Highlight search toggle
+nnoremap <silent> <Leader>hls :set invhlsearch<CR>
+
+" Maplist
+nnoremap <silent> <Leader>nmap :nmap<CR>
