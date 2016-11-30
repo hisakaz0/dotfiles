@@ -101,7 +101,8 @@ set ruler " show line and column
 set iskeyword+=-
 
 " Fold Setting -------------------------------------
-set foldmethod=marker
+" set foldmethod=marker
+set foldmethod=indent
 
 " Common Map ---------------------------------------
 let mapleader=','
@@ -114,7 +115,7 @@ inoremap <C-s> <Esc>:w<CR>
 inoremap <C-q> <Esc>:q<CR>
 nnoremap <C-s> <Esc>:w<CR>
 nnoremap <C-q> <Esc>:q<CR>
-inoremap <S-Tab> <Esc><<i
+inoremap <S-Tab> <Esc><<a
 
 " autocmd ------------------------------------------
 augroup my_filetype
@@ -230,8 +231,12 @@ nnoremap <Leader>mg  :MemoGrep<CR>
 
 " Syntastic
 " let g:syntastic_javascript_checker = "jshint" "JavaScriptのSyntaxチェックはjshintで
-" let g:syntastic_check_on_open = 0 "ファイルオープン時にはチェックをしない
-" let g:syntastic_check_on_save = 0 "ファイル保存時にはチェックを実施
+let g:syntastic_check_on_open = 0 "ファイルオープン時にはチェックをしない
+let g:syntastic_check_on_save = 0 "ファイル保存時にはチェックを実施
+let g:syntastic_check_on_wq = 0
+let g:syntastic_mode_map = {
+  \ "mode": "passive", "active_filetypes": [], "passive_filetypes": [] }
+" if you want to active save-on-check, change "passive" to "active"
 
 " VIM Table Mode
 let g:table_mode_corner_corner = "|"
@@ -339,3 +344,10 @@ endfunction
 function! Chomp(str)
   return substitute(a:str, '\n$', '', "")
 endfunction
+
+noremap <silent> <F5> :set hlsearch!<CR>
+
+"////////////////////////////////////////////////////////////
+" abbreviatio
+iabbrev lenght length
+iabbrev assing assign
