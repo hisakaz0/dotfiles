@@ -124,10 +124,10 @@ vnoremap ; :
 nnoremap <silent> <C-n> :bn<CR>
 nnoremap <silent> <C-p> :bp<CR>
 inoremap <C-s> <Esc>:w<CR>
-inoremap <C-q> <Esc>:q<CR>
+"inoremap <C-q> <Esc>:q<CR>
 nnoremap <C-s> <Esc>:w<CR>
-nnoremap <C-q> <Esc>:q<CR>
 inoremap <S-Tab> <Esc><<a
+"nnoremap <C-q> <Esc>:q<CR>
 
 " autocmd ------------------------------------------
 augroup my_filetype
