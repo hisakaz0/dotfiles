@@ -389,3 +389,4 @@ nnoremap <silent> <Leader>nmap :nmap<CR>
 " abbreviatio
 iabbrev lenght length
 iabbrev assing assign
+iabbrev bse base
