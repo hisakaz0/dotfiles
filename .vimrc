@@ -126,8 +126,24 @@ nnoremap <silent> <C-p> :bp<CR>
 inoremap <C-s> <Esc>:w<CR>
 "inoremap <C-q> <Esc>:q<CR>
 nnoremap <C-s> <Esc>:w<CR>
-inoremap <S-Tab> <Esc><<a
 "nnoremap <C-q> <Esc>:q<CR>
+inoremap <S-Tab> <Esc>:call RightShiftOneLine(2)<CR>a
+function! RightShiftOneLine(volume)
+  let s:pos  = getpos('.')
+  let s:line = getline('.')
+  let s:i = 0
+  while (s:i < a:volume)
+    if (s:line[0] == ' ')
+      let s:line = s:line[1:]
+    else
+      break
+    endif
+    let s:i = s:i + 1
+  endwhile
+  let s:pos[2] = s:pos[2] - s:i " col position
+  call setline('.', s:line)
+  call setpos('.', s:pos)
+endfunction
 
 " autocmd ------------------------------------------
 augroup my_filetype
