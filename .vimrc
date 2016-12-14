@@ -142,13 +142,13 @@ augroup my_filetype
 augroup END
 
 " Revise Indent(CorrectCode) -----------------------
-inoremap <C-K> <Esc>:call CorrectCode()<CR>a
-nnoremap <C-K> :call CorrectCode()<CR>
-function! CorrectCode()
-  execute ":mkview"
-  execute ":normal gg=G"
-  execute ":loadview"
-endfunction
+"inoremap <C-K> <Esc>:call CorrectCode()<CR>a
+"nnoremap <C-K> :call CorrectCode()<CR>
+"function! CorrectCode()
+"  execute ":mkview"
+"  execute ":normal gg=G"
+"  execute ":loadview"
+"endfunction
 
 
 " Neocomplete --------------------------------------
