@@ -110,8 +110,6 @@ set <BS>=
 
 au BufRead,BufEnter,BufNewFile * set formatoptions-=ro
 
-
-
 " Fold Setting -------------------------------------
 " set foldmethod=marker
 set foldmethod=indent
@@ -127,8 +125,9 @@ inoremap <C-s> <Esc>:w<CR>
 "inoremap <C-q> <Esc>:q<CR>
 nnoremap <C-s> <Esc>:w<CR>
 "nnoremap <C-q> <Esc>:q<CR>
-inoremap <S-Tab> <Esc>:call RightShiftOneLine(2)<CR>a
-function! RightShiftOneLine(volume)
+
+inoremap <S-Tab> <C-R>=RightShiftOneTab()<CR><BS>
+function! RightShiftOneLine()
   let s:pos  = getpos('.')
   let s:line = getline('.')
   let s:i = 0
