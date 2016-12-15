@@ -127,12 +127,18 @@ nnoremap <C-s> <Esc>:w<CR>
 "nnoremap <C-q> <Esc>:q<CR>
 
 inoremap <S-Tab> <C-R>=RightShiftOneTab()<CR><BS>
-function! RightShiftOneLine()
+function! RightShiftOneTab()
   let s:pos  = getpos('.')
   let s:line = getline('.')
   let s:i = 0
-  while (s:i < a:volume)
-    if (s:line[0] == ' ')
+  let s:space = ' '
+  let s:volume = &tabstop
+  if (!(&expandtab))
+    let s:space = "	"
+    let s:volume = 1
+  endif
+  while (s:i < s:volume)
+    if (s:line[0] == s:space)
       let s:line = s:line[1:]
     else
       break
