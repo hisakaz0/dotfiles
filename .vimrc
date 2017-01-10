@@ -296,8 +296,9 @@ command! Date echo substitute(system('date'), "\n", "", "g")
 command! -nargs=+ -complete=shellcmd Shell echo system(<f-args>)
 
 " Help Documents
-set helplang=ja,en
+set helplang=en,ja
 " If you want to read english  vim  documents,  then  you  type  :help  @en.
+" 2017/01/10: version of vim japanese documents is 7.4
 
 " Text Align
 " type :help 25.2
