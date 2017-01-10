@@ -88,7 +88,7 @@ set wildmode=longest,list
 set number
 set title
 set list
-set listchars=tab:..,trail:_,eol:§,extends:>,precedes:<,nbsp:%
+set listchars=tab:..,trail:_,eol:$,extends:>,precedes:<,nbsp:%
 set cursorline
 set showcmd
 set cmdheight=1
@@ -107,6 +107,8 @@ set pastetoggle=<F4>
 set ruler " show line and column
 set iskeyword+=-
 set <BS>=
+" for multibyte character
+set ambiwidth=double
 
 au BufRead,BufEnter,BufNewFile * set formatoptions-=ro
 
