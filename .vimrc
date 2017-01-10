@@ -335,6 +335,7 @@ function! OpendictSearch(word)
   execute "1,2delete"
   setlocal buftype=nofile
   setlocal bufhidden=delete
+  setlocal nomodifiable
   setlocal noswapfile
 endfunction
 
