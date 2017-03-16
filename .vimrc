@@ -253,8 +253,10 @@ nnoremap <C-s> <Esc>:w<CR>
 "nnoremap <C-q> <Esc>:q<CR>
 
 " moving
-" inoremap <C-E> <C-X><C-E>
-" inoremap <C-Y> <C-X><C-Y>
+inoremap <C-E> <C-X><C-E>
+inoremap <C-Y> <C-X><C-Y>
+
+" shift tab
 inoremap <S-Tab> <C-R>=RightShiftOneTab()<CR><BS>
 
 function! RightShiftOneTab()
