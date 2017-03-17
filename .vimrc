@@ -251,6 +251,9 @@ inoremap <C-s> <Esc>:w<CR>
 "inoremap <C-q> <Esc>:q<CR>
 nnoremap <C-s> <Esc>:w<CR>
 "nnoremap <C-q> <Esc>:q<CR>
+" search in magic mode
+nnoremap / /v
+nnoremap ? ?v
 
 " moving
 inoremap <C-E> <C-X><C-E>
@@ -425,7 +428,6 @@ endfunction
 " Count chars
 " help g_CTRL-G
 
-
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " %% DOMAIN-SPECIFIC SETTINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -454,7 +456,7 @@ nnoremap <Leader>mkdn :set ft=markdown<CR>
 
 " ============================================================
 " C
-augroup c_lang " not clang
+augroup c_lang " not meaned clang compiler
   autocmd!
   autocmd BufEnter,BufRead,BufNewFile *.c call CLangSetting()
 augroup END
