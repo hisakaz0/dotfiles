@@ -252,8 +252,8 @@ inoremap <C-s> <Esc>:w<CR>
 nnoremap <C-s> <Esc>:w<CR>
 "nnoremap <C-q> <Esc>:q<CR>
 " search in magic mode
-nnoremap / /v
-nnoremap ? ?v
+nnoremap / /\v
+nnoremap ? ?\v
 
 " moving
 inoremap <C-E> <C-X><C-E>
