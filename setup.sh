@@ -1,5 +1,6 @@
 #!/bin/bash
 cd `dirname $0`
+pwd=`pwd`
 for file in `ls -a`
 do
   if [ "$file" = "." -o \
@@ -11,5 +12,5 @@ do
        "$file" = "setup.sh" ] ; then
     continue
   fi
-  echo ln -sf $file $HOME/
+  echo ln -sf $pwd/$file $HOME/
 done
