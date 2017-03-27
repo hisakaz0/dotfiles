@@ -1,0 +1,1 @@
+/Users/hisakazu/work/bashrc/.bashrc
