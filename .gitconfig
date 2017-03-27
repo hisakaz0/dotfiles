@@ -1,0 +1,53 @@
+# This is Git's per-user configuration file.
+[core]
+# Please adapt and uncomment the following lines:
+  user = pinkienort
+  email = cantabilehisa@gmail.com
+  pager = less -x2
+  excludesfile = /Users/hisakazu/.gitignore_global
+[user]
+  ae = pinkienort
+  email = cantabilehisa@gmail.com
+  name = pinkienort
+[color]
+  ui = auto
+[difftool "sourcetree"]
+  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+  path =
+[mergetool "sourcetree"]
+  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+  trustExitCode = true
+[alias]
+  # イシュー番号に紐付いたコミット
+  ic = "!f () {\
+    b=`git s | head -n 1 | cut -d '_' -f2`;\
+    git commit -m \"refs ${b} / $1\";\
+    }; f"
+  # イシュー番号に紐付いたブランチ
+  ib = "!f () {\
+    if [ $1 = '-r' ]; then\
+      lb=issue_#${2};\
+      rb=origin/issue_#${2};\
+    else\
+      lb=issue_#${1};\
+      rb='';\
+    fi;\
+    git ch -b ${lb} ${rb};\
+    }; f"
+  a = add
+  b = branch
+  c = commit
+  cma = commit -a -m
+  cancel = reset --soft HEAD^
+  ch = checkout
+  chb = checkout -b
+  cm = commit -m
+  diff = diff --word-diff
+  l = log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s'
+  s = status
+  today = log --oneline --since='12 hour ago'
+  pretty = log --pretty=oneline -10
+[filter "lfs"]
+  clean = git-lfs clean %f
+  smudge = git-lfs smudge %f
+  required = true
