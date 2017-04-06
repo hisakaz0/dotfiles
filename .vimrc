@@ -14,43 +14,41 @@ if &compatible
   set nocompatible " Be iMproved
 endif
 
-" Required:
-if g:os_type == 'Darwin'
-  set runtimepath^=/Users/hisakazu/.vim/bundle/repos/github.com/Shougo/dein.vim
-  call dein#begin('/Users/hisakazu/.vim/bundle')
+set runtimepath^=~/.vim/bundle/repos/github.com/Shougo/dein.vim
+if dein#load_state('~/.vim/bundle')
+  " Required:
+  call dein#begin('~/.vim/bundle')
+
+  call dein#add('dhruvasagar/vim-table-mode')
+  call dein#add('ciaranm/inkpot')
+  call dein#add('tomtom/tcomment_vim')
+  call dein#add('ap/vim-buftabline')
+  call dein#add('kchmck/vim-coffee-script')
+  call dein#add('glidenote/memolist.vim')
+  call dein#add('joker1007/vim-markdown-quote-syntax')
+  call dein#add('godlygeek/tabular')
+  call dein#add('kannokanno/previm')
+  call dein#add('rcmdnk/vim-markdown')
+  call dein#add('vim-scripts/AnsiEsc.vim')
+  call dein#add('fatih/vim-go')
+  call dein#add('bronson/vim-trailing-whitespace')
+  call dein#add('itchyny/lightline.vim')
+  call dein#add('hail2u/vim-css3-syntax')
+  call dein#add('scrooloose/syntastic')
+  call dein#add('vim-jp/vimdoc-ja')
+  call dein#add('Shougo/NeoComplete.vim')
+  call dein#add('apple/swift', {'rtp': 'utils/vim'})
+  " call dein#add('Valloric/YouCompleteMe')
+
+  " Let dein manage dein
+  " Required:
+  call dein#add('Shougo/dein.vim')
+
+  " Required:
+  call dein#end()
+  call dein#save_state()
 endif
-if g:os_type == 'Linux'
-  set runtimepath^=/home/hisakazu-fu/.vim/bundle/repos/github.com/Shougo/dein.vim
-  call dein#begin('/home/hisakazu-fu/.vim/bundle')
-endif
 
-" Required:
-call dein#add('dhruvasagar/vim-table-mode')
-call dein#add('ciaranm/inkpot')
-call dein#add('tomtom/tcomment_vim')
-call dein#add('ap/vim-buftabline')
-call dein#add('kchmck/vim-coffee-script')
-call dein#add('glidenote/memolist.vim')
-call dein#add('joker1007/vim-markdown-quote-syntax')
-call dein#add('godlygeek/tabular')
-call dein#add('kannokanno/previm')
-call dein#add('rcmdnk/vim-markdown')
-call dein#add('vim-scripts/AnsiEsc.vim')
-call dein#add('fatih/vim-go')
-call dein#add('bronson/vim-trailing-whitespace')
-call dein#add('itchyny/lightline.vim')
-call dein#add('hail2u/vim-css3-syntax')
-call dein#add('scrooloose/syntastic')
-call dein#add('vim-jp/vimdoc-ja')
-call dein#add('Shougo/NeoComplete.vim')
-" call dein#add('Valloric/YouCompleteMe')
-
-" Let dein manage dein
-" Required:
-call dein#add('Shougo/dein.vim')
-
-" Required:
-call dein#end()
 
 " Required:
 filetype plugin indent on
