@@ -33,6 +33,8 @@ if dein#load_state('~/.vim/bundle')
   call dein#add('scrooloose/syntastic')
   call dein#add('vim-jp/vimdoc-ja')
   call dein#add('Shougo/NeoComplete.vim')
+  call dein#add('itchyny/dictionary.vim')
+  call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
   call dein#add('apple/swift', {'rtp': 'utils/vim'})
   " call dein#add('Valloric/YouCompleteMe')
 
@@ -358,42 +360,42 @@ command! -nargs=+ -complete=shellcmd Shell echo system(<f-args>)
 
 " ============================================================
 " dictionary (ONLY MacOS)
-if g:os_type == 'Darwin'
-  let g:open_dictionary_window_cmd = 'new'
-  command! -nargs=1 Dict  call OpendictSearch(<f-args>)
-  nnoremap <Leader>dict :call OpendictSearchwordcursor()<CR>
+if has('mac')
+  "let g:open_dictionary_window_cmd = 'new'
+  " command! -nargs=1 Dict  call OpendictSearch(<f-args>)
+  " nnoremap <Leader>dict :call OpendictSearchwordcursor()<CR>
+
+  "function! OpendictSearchwordcursor()
+  "  let s:line = getline('.')
+  "  let s:wstart = getpos('.')[2] - 1
+  "  let s:wend = s:wstart
+  "  while(matchstr(s:line[s:wstart], "[A-Za-z]") != "")
+  "    let s:wstart -= 1
+  "  endwhile
+  "  let s:wstart += 1
+  "  while(matchstr(s:line[s:wend], "[A-Za-z]" ) != "")
+  "    let s:wend += 1
+  "  endwhile
+  "  let s:wend -= 1
+  "  let s:word =  s:line[s:wstart:s:wend]
+  "  call OpendictSearch(s:word)
+  "endfunction
+
+  "function! OpendictSearch(word)
+  "  let s:mean = system("dict " . a:word)
+  "  if (matchstr(s:mean, "null") == "null" )
+  "    echoerr "Error: No meaning in dictionary."
+  "    return
+  "  endif
+  "  execute g:open_dictionary_window_cmd .
+  "        \ " DICT:" . a:word . " | put =s:mean"
+  "  execute "1,2delete"
+  "  setlocal buftype=nofile
+  "  setlocal bufhidden=delete
+  "  setlocal nomodifiable
+  "  setlocal noswapfile
+  "endfunction
 end
-
-function! OpendictSearchwordcursor()
-  let s:line = getline('.')
-  let s:wstart = getpos('.')[2] - 1
-  let s:wend = s:wstart
-  while(matchstr(s:line[s:wstart], "[A-Za-z]") != "")
-    let s:wstart -= 1
-  endwhile
-  let s:wstart += 1
-  while(matchstr(s:line[s:wend], "[A-Za-z]" ) != "")
-    let s:wend += 1
-  endwhile
-  let s:wend -= 1
-  let s:word =  s:line[s:wstart:s:wend]
-  call OpendictSearch(s:word)
-endfunction
-
-function! OpendictSearch(word)
-  let s:mean = system("dict " . a:word)
-  if (matchstr(s:mean, "null") == "null" )
-    echoerr "Error: No meaning in dictionary."
-    return
-  endif
-  execute g:open_dictionary_window_cmd .
-        \ " DICT:" . a:word . " | put =s:mean"
-  execute "1,2delete"
-  setlocal buftype=nofile
-  setlocal bufhidden=delete
-  setlocal nomodifiable
-  setlocal noswapfile
-endfunction
 
 " ============================================================
 " Insert header line (for h1)
