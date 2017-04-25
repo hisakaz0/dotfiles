@@ -1,8 +1,4 @@
 
-" ============================================================
-" Comman variables
-let g:os_type = substitute(system('uname'), "\n", "", "g")
-
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " %% PLUGINS SETTIGNS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -139,14 +135,14 @@ let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
 " ============================================================
 " Previm
-if g:os_type == "Darwin"
+if has('mac')
   let g:previm_open_cmd = 'open -a "/Applications/Google Chrome.app/"'
 endif
 
 " ============================================================
 " MemoList
 let g:memolist_path = "~/tmp/MemoList"
-if g:os_type == "Windows"
+if has('win32') || has('win64')
   let g:memolist_path = "/d/Users/hisakazu/tmp/MemoList"
 endif
 nnoremap <Leader>mn  :MemoNew<CR>
@@ -296,7 +292,7 @@ iabbrev bse base
 
 " ============================================================
 " tabpage
-if g:os_type == 'Linux'
+if has('unix')
   set <k0>=n " alt + n
   set <k1>=p " alt + p
 endif
