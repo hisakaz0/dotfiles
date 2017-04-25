@@ -457,14 +457,14 @@ nnoremap <Leader>mkdn :set ft=markdown<CR>
 " C
 augroup c_lang " not meaned clang compiler
   autocmd!
-  autocmd BufEnter,BufRead,BufNewFile *.c call CLangSetting()
+  autocmd BufEnter,BufRead,BufNewFile *.{c,h} call CLangSetting()
 augroup END
 
 function! CLangSetting()
-  if Chomp(system("ls -1 Makefile")) == "Makefile"
+  if findfile("Makefile") == "Makefile"
     nnoremap <Leader>make :make<CR>
     nnoremap <Leader>run :make run<CR>
-    nnoremap <Leader>arun :make run ARGS="
+    nnoremap <F5> :make && make run<CR>
   else
     nnoremap <Leader>make :!gcc %<CR>
     nnoremap <Leader>run :!./a.out<CR>
