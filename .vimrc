@@ -35,7 +35,11 @@ if dein#load_state('~/.vim/bundle')
   call dein#add('Shougo/NeoComplete.vim')
   call dein#add('itchyny/dictionary.vim')
   call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
-  call dein#add('apple/swift', {'rtp': 'utils/vim'})
+  call dein#add('apple/swift',
+    \ {
+    \ 'rtp': 'utils/vim',
+    \ 'type__depth': 1,
+    \ })
   " call dein#add('Valloric/YouCompleteMe')
 
   " Let dein manage dein
