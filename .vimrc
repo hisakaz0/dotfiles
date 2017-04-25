@@ -209,7 +209,7 @@ set cmdheight=1
 set laststatus=2
 set t_Co=256
 set encoding=utf-8
-set fileencodings=utf-8,iso-2022-jp,cp932,sjis,euc-jp
+set fileencodings=iso-2022-jp,cp932,sjis,euc-jp,utf-8
 set clipboard+=autoselect
 set clipboard+=unnamed
 set incsearch
@@ -284,7 +284,7 @@ endfunction
 " ============================================================
 " toggle highlight search
 nnoremap <silent> <Leader>hls :set invhlsearch<CR>
-nnoremap <silent> <F5>        :set invhlsearch<CR>
+" nnoremap <silent> <F5>        :set invhlsearch<CR>
 
 " ============================================================
 " abbreviatio
@@ -428,6 +428,9 @@ endfunction
 " %% DOMAIN-SPECIFIC SETTINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+" Gnuplot
+autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.plt set ft=sh
 
 " ============================================================
 " Coffee Script
