@@ -1,0 +1,312 @@
+if ( ! $?prompt ) then
+	exit 0
+endif
+
+# source system wide aliases
+if ( -f /etc/csh.cshrc ) then
+    source /etc/csh.cshrc
+endif
+
+# PATH (firstly setup
+set path=(\
+  ~/.rbenv/bin \
+  ~/script \
+  ~/.go/versions/1.6/bin \
+  ~/work/emaxv/gitbucket/emax5-utils/bin \
+  /usr/lib/qt-3.3/bin \
+  /usr/local/bin \
+  /usr/bin \
+  /usr/local/sbin \
+  /bin \
+  /usr/sbin \
+  $path \
+)
+
+stty sane
+if ( "`stty | grep erase`" == "" ) then
+    stty erase 
+endif
+
+# console style
+if ( $TERM == 'screen' ) then
+    set echo_style=both
+    set prompt="%n@%m:%~$ "
+    alias precmd 'echo -n "\033k\033\0134\033k`basename ${cwd}`\033\\"'
+else
+    set prompt="%n@%m:%~$ "
+endif
+
+alias rm 'rm -i'
+alias cp 'cp -i'
+alias mv 'mv -i'
+alias ll 'ls -l'
+alias l  'ls'
+alias la 'ls -aF'
+alias open 'xdg-open'
+set sh_hostname = "hostname"
+if ( `uname` == Linux ) then
+  set sh_hostname = "hostname --long"
+endif
+alias scr 'screen -D -RR'
+alias .. 'cd ../'
+alias ... 'cd ../../'
+alias .... 'cd ../../../'
+alias ducks 'du -h -d 1'
+
+setenv LANG en_US.UTF-8
+setenv LC_ALL en_US.UTF-8
+if ("`uname`" == "FreeBSD") then
+  setenv LANG ja_JP.SJIS
+  setenv LC_ALL ja_JP.SJIS
+endif
+
+setenv PAGER less
+
+set autolist
+set autocorrect
+set savehist=10000
+
+# ls color
+if ( `uname` == "Linux" ) then
+    alias ls 'ls -NF --show-control-chars'
+    # if you use color ls, comment out above line and uncomment below 2 lines.
+    setenv LS_COLORS 'no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.i386.rpm=01;31:*.src.rpm=01;30:*.jpg=01;35:*.gif=01;35:*.bmp=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.png=01;35:'
+    alias ls 'ls --color=auto -NF --show-control-chars'
+else if ( `uname` == 'FreeBSD' ) then
+    setenv LSCOLORS gxfxcxdxbxegedabagacad
+    alias ls 'ls -G'
+endif
+
+setenv EDITOR 'vim'
+setenv SVN_SSH 'ssh -q'
+setenv EMAXV_SIML_PROJ_ROOT "$HOME/work/emaxv/nakashim/proj-arm64.cent"
+set path=(\
+  ${EMAXV_SIML_PROJ_ROOT}/bin \
+  $path \
+)
+
+
+# local bin
+if (`$sh_hostname` == arch.naist.jp ) then
+  set path=(\
+    ~/usr/bin \
+    $path \
+  )
+endif
+
+# reset LD_LIBRARY_PATH
+setenv LD_LIBRARY_PATH ""
+
+# cuda
+switch (`$sh_hostname`)
+case cad101.naist.jp:
+case cad102.naist.jp:
+case cad103.naist.jp:
+  if (`uname` == Linux && -e /usr/local/cuda-7.5 ) then
+    echo "==================================="
+    echo "======== cuda is available ========"
+    echo "==================================="
+    setenv CUDA_PATH "/usr/local/cuda-7.5"
+    setenv PATH "$CUDA_PATH/bin:$PATH"
+    setenv CFLAGS "-I$CUDA_PATH/include"
+    setenv LDFLAGS "-L$CUDA_PATH/lib64"
+    setenv LD_LIBRARY_PATH "$CUDA_PATH/lib64:$LD_LIBRARY_PATH"
+    nvcc -V # print cuda version
+  endif
+  breaksw
+case cad104.naist.jp:
+  if (`uname` == Linux && -e /usr/local/cuda-8.0 ) then
+    echo "==================================="
+    echo "======== cuda is available ========"
+    echo "==================================="
+    setenv CUDA_PATH "/usr/local/cuda-8.0"
+    setenv PATH "$CUDA_PATH/bin:$PATH"
+    setenv CFLAGS "-I$CUDA_PATH/include"
+    setenv LDFLAGS "-L$CUDA_PATH/lib64"
+    setenv LD_LIBRARY_PATH "$CUDA_PATH/lib64:$LD_LIBRARY_PATH"
+    nvcc -V # print cuda version
+  endif
+  breaksw
+case cad111.naist.jp:
+case cad112.naist.jp:
+case cad113.naist.jp:
+case cad114.naist.jp:
+case cad115.naist.jp:
+case cad116.naist.jp:
+case cad117.naist.jp:
+case cad118.naist.jp:
+  if (`uname` == Linux && -e /usr/local/cuda-7.0 ) then
+    echo "==================================="
+    echo "======== cuda is available ========"
+    echo "==================================="
+    setenv CUDA_PATH "/usr/local/cuda-7.0"
+    setenv PATH "$CUDA_PATH/bin:$PATH"
+    setenv CFLAGS "-I$CUDA_PATH/include"
+    setenv LDFLAGS "-L$CUDA_PATH/lib64"
+    setenv LD_LIBRARY_PATH "$CUDA_PATH/lib64:$LD_LIBRARY_PATH"
+    nvcc -V # print cuda version
+    if ( -e /usr/local/cuda/include/cudnn.h ) then
+      echo "cuDNN is available"
+    endif
+  endfi
+  breaksw
+endsw
+
+if ( -e $HOME/.pyenv/bin/pyenv) then
+  if ( `uname` == Linux ) then
+    setenv PYENV_ROOT "$HOME/.pyenv"
+    setenv PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
+    pyenv rehash
+  endif
+endif
+
+
+if (`uname` == Linux) then
+  setenv PATH $HOME/bin/centos:$PATH
+# setenv PATH $HOME/usr/bin:$PATH
+endif
+
+# machine specific .cshrc
+if ( -f .`hostname`/dot.cshrc.csh ) then
+  source .`hostname`/dot.cshrc.csh
+endif
+
+# ssh-agent
+setenv SSH_AGENT_FILE "${HOME}/.ssh/.ssh-agent.`hostname`"
+if ( -f ${SSH_AGENT_FILE} ) then
+    eval `cat ${SSH_AGENT_FILE}`
+    set ssh_agent_exist=0
+    foreach id (`ps ax|grep 'ssh-agent'|sed -e 's/\([0-9]\+\).*/\1/'`)
+        if ( ${SSH_AGENT_PID} == ${id} ) then
+            set ssh_agent_exist=1
+        endif
+    end
+    if ( $ssh_agent_exist == 0 ) then
+        rm -f ${SSH_AGENT_FILE}
+        ssh-agent > ${SSH_AGENT_FILE}
+        chmod 600 ${SSH_AGENT_FILE}
+        eval `cat ${SSH_AGENT_FILE}`
+        ssh-add
+    endif
+else
+    ssh-agent > ${SSH_AGENT_FILE}
+    chmod 600 ${SSH_AGENT_FILE}
+    eval `cat ${SSH_AGENT_FILE}`
+    ssh-add
+endif
+
+alias sshkey 'eval `cat ${SSH_AGENT_FILE}`'
+alias sshrm 'rm -f ${SSH_AGENT_FILE}'
+
+bindkey -v
+
+# vivado paths
+# source /opt/xilinx/Vivado/2015.4/settings64.csh
+# source /opt/xilinx/Vivado/2016.2/settings64.csh
+
+
+### Go lang
+setenv GOROOT $HOME/.go/versions/1.6
+setenv GOPATH $HOME/tmp/go
+setenv PATH   $GOPATH/bin:$PATH
+
+### Date env variable
+setenv DATE `date +%Y%m%d`
+alias update_date 'setenv DATE `date +%Y%m%d`'
+
+### Altera FPGA Board which can run a application with OpenCL
+# source /opt/altera/16.0/settings.csh          # for cadxxx
+# source /opt/altera/opencl/settings_opencl.csh # for wonder5{6..9}
+setenv AOCL_BOARD_PACKAGE_ROOT "/opt/altera/16.0/hld/board/de1soc/"
+
+# To compile bsim/emaxv programs
+setenv LD_LIBRARY_PATH "/home/hisakazu-fu/work/emaxv/nakashim/proj-arm64.cent/lib:$LD_LIBRARY_PATH"
+setenv LD_LIBRARY_PATH "/home/hisakazu-fu/works/nakashim/proj-arm64.cent/lib/asim64-lib:$LD_LIBRARY_PATH"
+
+switch (`$sh_hostname`)
+case cad110.naist.jp:
+  if (`uname` == Linux && -e /opt/xilinx/ise101/ISE/settings64.csh ) then
+    echo "=========================================="
+    echo "======== ISE101/GP8M is available ========"
+    echo "=========================================="
+    source /opt/xilinx/ise101/ISE/settings64.csh
+  endif
+  breaksw
+case cad101.naist.jp:
+case cad102.naist.jp:
+  if (`uname` == Linux && -e /opt/xilinx/ise123/settings64.csh ) then
+    source /opt/xilinx/ise123/settings64.csh
+    echo "=========================================="
+    echo "======== ISE123/GP5V is available ========"
+    echo "=========================================="
+  endif
+  breaksw
+case arch16.naist.jp:
+case arch17.naist.jp:
+  if (`uname` == Linux && -e /opt/xilinx/ise134/settings64.csh ) then
+    source /opt/xilinx/ise134/settings64.csh
+    echo "=========================================="
+    echo "======== ISE134/GP6V is available ========"
+    echo "=========================================="
+  endif
+  breaksw
+case cad111.naist.jp:
+case cad112.naist.jp:
+case cad113.naist.jp:
+case cad114.naist.jp:
+# if (`uname` == Linux && -e /opt/xilinx/ise134/settings64.csh ) then
+#   source /opt/vdec/setup/vdec_tools.2016.cshrc
+  if (`uname` == Linux && -e $HOME/work/emaxv/vdec_tools.2016.cshrc ) then
+    source $HOME/work/emaxv/vdec_tools.2016.cshrc
+    echo "=========================================="
+    echo "======== VDEC Tools are available ========"
+    echo "=========================================="
+  endif
+  breaksw
+endsw
+
+switch (`$sh_hostname`)
+case arch09.naist.jp:
+case cad101.naist.jp:
+case cad102.naist.jp:
+case cad103.naist.jp:
+case cad104.naist.jp:
+case cad115.naist.jp:
+case cad116.naist.jp:
+case cad117.naist.jp:
+case cad118.naist.jp:
+  if (`uname` == Linux && -e /opt/xilinx/Vivado/2016.2/settings64.csh ) then
+    source /opt/xilinx/Vivado/2016.2/settings64.csh
+    echo "=========================================="
+    echo "======== Vivado/ZYNQ is available ========"
+    echo "=========================================="
+    echo "Vivado: $XILINX_VIVADO"
+  endif
+  breaksw
+endsw
+
+# switch (`$sh_hostname`)
+# case cad101.naist.jp:
+# case cad102.naist.jp:
+# case cad106.naist.jp:
+# case cad107.naist.jp:
+#   if (`uname` == Linux && -e /opt/xilinx/PetaLinux/petalinux-v2016.4-final/settings.csh ) then
+#     source /opt/xilinx/PetaLinux/petalinux-v2016.4-final/settings.csh /opt/xilinx/PetaLinux/petalinux-v2016.4-final
+#     echo "========================================"
+#     echo "======== Petalinux is available ========"
+#     echo "========================================"
+#   endif
+#   breaksw
+# endsw
+
+# export PATH="/home/hisakazu-fu/.pyenv/plugins/pyenv-virtualenv/shims:${PATH}";
+# export PYENV_VIRTUALENV_INIT=1;
+# _pyenv_virtualenv_hook() {
+#   local ret=$?
+#   if [ -n "$VIRTUAL_ENV" ]; then
+#     eval "$(pyenv sh-activate --quiet || pyenv sh-deactivate --quiet || true)" || true
+#   else
+#     eval "$(pyenv sh-activate --quiet || true)" || true
+#   fi
+#   return $ret
+# };
