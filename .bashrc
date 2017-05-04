@@ -7,16 +7,20 @@ if [ -f /etc/bashrc ]; then
     source /etc/bashrc
 fi
 
+
 ### hostname (long style
 if [ `uname` != "FreeBSD" ] ; then
   cmd_hostname="hostname -f"
 else
   cmd_hostname="hostname"
 fi
+__uname=`uname`
+__hostname=`$cmd_hostname`
+
 
 stty sane
 stty -ixon -ixoff # ctrl+s, ctrl+qの無効化
-[ `uname` != 'Darwin' ] && [ -z "`stty | grep erase`" ] && \
+[ "$__uname" != 'Darwin' ] && [ -z "`stty | grep erase`" ] && \
   stty erase 
 [ -x "`which tabs`" ] && \
   tabs -2 # tab width
@@ -31,7 +35,7 @@ stty -ixon -ixoff # ctrl+s, ctrl+qの無効化
   source `brew --prefix`/etc/bash_completion.d/rails.bash
 
 ### language
-if [ `uname` = "FreeBSD" ] ; then
+if [ "$__uname" = "FreeBSD" ] ; then
   export LANG=ja_JP.SJIS
   export LC_ALL=ja_JP.SJIS
 else
@@ -99,7 +103,7 @@ alias update_date='export DATE=`date +%Y%m%d`' # year month day
 alias update_time='export TIME=`date +%s`'
 alias bash_keybind="bind -p | grep 'C-' | grep -v 'abort\|version\|accept' | less"
 alias ducks='du -h -d 1'
-if [ `uname` = 'Linux' ] && [ -x "`which xdg-open`" ] ; then
+if [ "$__uname" = 'Linux' ] && [ -x "`which xdg-open`" ] ; then
   alias open='xdg-open'
   # else if 'Darwin': `open` is supported in default
   # else if 'FreeBSD': NOT supported
@@ -148,7 +152,7 @@ export MEMO_PATH=${HOME}/Copy/Documents/.memo
 # export GTK_IM_MODULE=uim
 
 ### console style
-if [ `uname` = 'Darwin' ] ; then
+if [ "$__uname" = 'Darwin' ] ; then
   export PS1='\u@\h:\W 〆 '
   export PROMPT_COMMAND='share_history'
 elif [ "`echo $TERM | grep 'screen'`" != "" ]; then
@@ -193,12 +197,12 @@ export HISTSIZE=10000
 shopt -u histappend
 
 ### ls color
-if [ `uname` = "Linux" ]; then
+if [ "$__uname" = "Linux" ]; then
     alias ls='ls -NF --show-control-chars'
     # if you use color ls, comment out above line and uncomment below 2 lines.
     LS_COLORS='no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.i386.rpm=01;31:*.src.rpm=01;30:*.jpg=01;35:*.gif=01;35:*.bmp=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.png=01;35:' ; export LS_COLORS
     alias ls='ls --color=auto -NF --show-control-chars'
-elif [ `uname` = 'FreeBSD' ]; then
+elif [ "$__uname" = 'FreeBSD' ]; then
     export LSCOLORS=gxfxcxdxbxegedabagacad
     alias ls='ls -G'
 fi
@@ -211,11 +215,11 @@ export RUBYGEMS_GEMDEPS=
   eval "$(rbenv init -)"
 
 ### user commands (ubuntu
-[ `uname` = "Linux" ] && [ -d $HOME/.usr/bin ] && \
+[ "$__uname" = "Linux" ] && [ -d $HOME/.usr/bin ] && \
   export PATH=$HOME/.usr/bin:$PATH
-[ `uname` = "FreeBSD" ] && [ -d $HOME/usr/bin ] && \
+[ "$__uname" = "FreeBSD" ] && [ -d $HOME/usr/bin ] && \
   export PATH=$HOME/usr/bin:$PATH
-[ `uname` = "Linux" ] && [ -d $HOME/bin/centos ] && \
+[ "$__uname" = "Linux" ] && [ -d $HOME/bin/centos ] && \
   export PATH=$HOME/bin/centos:$PATH
 [ -f $HOME/.bin ] && \
   export PATH=$HOME/.bin:$PATH
@@ -229,12 +233,12 @@ export RUBYGEMS_GEMDEPS=
   export PATH=$HOME/tmp/kancolle/utils/macosx-x64-ex.2.3.4:$PATH
 
 ### machine specific .bashrc
-if [ -f .`hostname`/dot.bashrc.bash ] ; then
-    source .`hostname`/dot.bashrc.bash
+if [ -f ".$__hostname/dot.bashrc.bash" ] ; then
+    source ".$__hostname/dot.bashrc.bash"
 fi
 
 ### ssh-agent
-if [ `$cmd_hostname` = 'quark.local' ] ; then
+if [ "$__hostname" = 'quark.local' ] ; then
   # Refs: http://qiita.com/isaoshimizu/items/84ac5a0b1d42b9d355cf
   # eval $(ssh-agent)
   SSH_IDENTIFY_FILE="$HOME/.ssh/hisakazu_quark"
@@ -242,7 +246,7 @@ if [ `$cmd_hostname` = 'quark.local' ] ; then
     ssh-add $SSH_IDENTIFY_FILE
 fi
 if [ `uname` != 'Darwin' ] ; then
-  SSH_AGENT_FILE="${HOME}/.ssh/.ssh-agent.`$cmd_hostname`"
+  SSH_AGENT_FILE="${HOME}/.ssh/.ssh-agent.$__hostname"
   if [ -f ${SSH_AGENT_FILE} ]; then
       eval `cat ${SSH_AGENT_FILE}`
       ssh_agent_exist=0
@@ -286,7 +290,7 @@ export NVM_DIR="$HOME/.nvm"
 # eval $(docker-machine env default)
 
 ### kancolle logbook (check wheather process is running
-if [ `$cmd_hostname` = 'quark.local' ] ; then
+if [ "$__hostname" = 'quark.local' ] ; then
   logbook_pid=`ps aux| grep "logbook" | grep -v "grep" | awk '{ print $2; }'`
   if [ -z $logbook_pid ]; then
     echo "Kancolle Logbook is not started..."
@@ -300,17 +304,17 @@ fi
   export JAVA_HOME="`/usr/libexec/java_home`"
 
 ### pyenv
-if [ `$cmd_hostname` = "cad110.naist.jp" ] ||
-   [ `$cmd_hostname` = "cad111.naist.jp" ] ||
-   [ `$cmd_hostname` = "cad112.naist.jp" ] ||
-   [ `$cmd_hostname` = "cad113.naist.jp" ] ||
-   [ `$cmd_hostname` = "cad114.naist.jp" ] ||
-   [ `$cmd_hostname` = "cad115.naist.jp" ] ||
-   [ `$cmd_hostname` = "cad116.naist.jp" ] ||
-   [ `$cmd_hostname` = "cad117.naist.jp" ] ||
-   [ `$cmd_hostname` = "cad118.naist.jp" ] ; then
+if [ "$__hostname" = "cad110.naist.jp" ] ||
+   [ "$__hostname" = "cad111.naist.jp" ] ||
+   [ "$__hostname" = "cad112.naist.jp" ] ||
+   [ "$__hostname" = "cad113.naist.jp" ] ||
+   [ "$__hostname" = "cad114.naist.jp" ] ||
+   [ "$__hostname" = "cad115.naist.jp" ] ||
+   [ "$__hostname" = "cad116.naist.jp" ] ||
+   [ "$__hostname" = "cad117.naist.jp" ] ||
+   [ "$__hostname" = "cad118.naist.jp" ] ; then
   export PYENV_ROOT=$HOME/.pyenv/s1 # pyenv setting #1
-elif [ `$cmd_hostname` = 'quark.local' ] ; then
+elif [ "$__hostname" = 'quark.local' ] ; then
   export PYENV_ROOT=$HOME/.pyenv
 fi
 if [ "$PYENV_ROOT" ] ; then
@@ -349,7 +353,7 @@ fi
 # fi
 
 ### homebrew
-if [ `uname` = "Darwin" ] && [ -n `which brew` ] && [ -d $PYENV_ROOT ] ; then
+if [ "$__uname" = "Darwin" ] && [ "`which brew`" ] && [ -d $PYENV_ROOT ] ; then
   alias brew="env PATH=${PATH/${PYENV_ROOT}\/shims:/} brew"
 fi
 
@@ -364,7 +368,7 @@ fi
   export LD_LIBRARY_PATH="$HOME/works/nakashim/proj-arm64.cent/lib/asim64-lib:$LD_LIBRARY_PATH"
 
 ### cad tools
-case `$cmd_hostname` in
+case "$__hostname" in
   "cad110.naist.jp" )
     if [ `uname` = Linux ] && [ -s /opt/xilinx/ise101/ISE/settings64.sh ] ; then
       echo "=========================================="
@@ -399,7 +403,7 @@ case `$cmd_hostname` in
     ;;
 esac
 
-case `$cmd_hostname` in
+case "$__hostname" in
   "arch09.naist.jp" | "cad101.naist.jp" | "cad102.naist.jp" | \
   "cad103.naist.jp" | "cad104.naist.jp" | "cad115.naist.jp" | \
   "cad116.naist.jp" | "cad117.naist.jp" | "cad118.naist.jp" )
@@ -413,7 +417,7 @@ case `$cmd_hostname` in
     ;;
 esac
 
-# case `$cmd_hostname` in
+# case "$__hostname" in
 #   "cad101.naist.jp" | "cad102.naist.jp" | "cad106.naist.jp" | "cad107.naist.jp" )
 #     if [ `uname` = Linux ] && [ -s /opt/xilinx/PetaLinux/petalinux-v2016.4-final/settings.sh ] ; then
 #       source /opt/xilinx/PetaLinux/petalinux-v2016.4-final/settings.sh
@@ -451,3 +455,6 @@ __remove_duplicate() {
 }
 __remove_duplicate "PATH"
 __remove_duplicate "LD_LIBRARY_PATH"
+
+unset __uname
+unset __hostname
