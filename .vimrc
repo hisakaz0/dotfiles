@@ -99,8 +99,8 @@ endfunction
 " <TAB>: completion.
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 " <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+" inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+" inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 " Close popup by <Space>.
 "inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
 
@@ -446,7 +446,7 @@ autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.json set filetype=javascript
 
 " ============================================================
 " ShortShort
-autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.short set filetype=short
+autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.{ss,shortshort} set filetype=shortshort
 
 " ============================================================
 " Markdown
@@ -483,3 +483,5 @@ augroup END
 " Jq / Json Parser
 command! Jq %!jq '.'
 
+" 
+set runtimepath^=~/tmp/vim/shortshort

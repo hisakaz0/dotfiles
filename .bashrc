@@ -1,3 +1,23 @@
+__is_interface_active() {
+  is=`ifconfig -u $1 | grep "status: active"`
+  if [ -n "$is" ] ; then
+    return 0 # possible to access internet
+  else
+    return 1 # impossible to access internet
+  fi
+}
+__is_net() {
+  export IS_INTERNET_ACTIVE=1 # initialize impossible to access internet
+  for intf in `echo bridge0 en0`
+  do
+    __is_interface_active $intf
+    if [ "$?" -eq 0 ] ; then
+      export IS_INTERNET_ACTIVE=0
+    fi
+  done
+}
+__is_net
+
 ############
 ##  alias
 ############
@@ -123,10 +143,9 @@ eval "$(rbenv init -)"
 eval "$(hub alias -s)"
 
 ## Node Version Manager
-export NVM_DIR="/Users/hisakazu/.nvm"
+export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
-# nvm
 ~/.nvm/nvm.sh
 nvm use v5.9.0
 
@@ -160,3 +179,11 @@ export PATH=$PYENV_ROOT/bin:$PATH
 eval "$(pyenv init -)"
 # virtualenv
 eval "$(pyenv virtualenv-init -)"
+
+### perl (brew)
+if [ ! $INTERNET_IS_ACTIVE ] ; then
+  PERL_MM_OPT="INSTALL_BASE=$HOME/perl5" cpan local::lib
+  eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)"
+fi
+
+
