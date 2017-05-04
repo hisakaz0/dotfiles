@@ -211,8 +211,13 @@ fi
 export RUBYGEMS_GEMDEPS=
 [ -f $HOME/.rbenv ] &&
   export PATH=$HOME/.rbenv:$PATH
-[ "`which rbenv`" ] && \
+if [ -x "`which rbenv`" ] ; then
+  echo "##############################"
+  echo "## rbenv #####################"
+  export RBENV_ROOT=`rbenv root`
+  echo "RBENV_ROOT: $RBENV_ROOT"
   eval "$(rbenv init -)"
+fi
 
 ### user commands (ubuntu
 [ "$__uname" = "Linux" ] && [ -d $HOME/.usr/bin ] && \
