@@ -25,9 +25,9 @@ stty -ixon -ixoff # ctrl+s, ctrl+qの無効化
 ### completion
 [ -f /etc/bash_completion ] && \
   source /etc/bash_completion
-[ -x "`which brew`" ] && [ -f `brew --prefix`/etc/bash_completion ] && \
+[ -x "`which brew`" ] && [ -f "`brew --prefix`/etc/bash_completion" ] && \
   source `brew --prefix`/etc/bash_completion
-[ -x "`which brew`" ] && [ -f `brew --prefix`/etc/bash_completion.d/rails.bash ] && \
+[ -x "`which brew`" ] && [ -f "`brew --prefix`/etc/bash_completion.d/rails.bash" ] && \
   source `brew --prefix`/etc/bash_completion.d/rails.bash
 
 ### language
@@ -42,8 +42,8 @@ fi
 
 ### internet access
 __is_interface_active() {
-  is=`ifconfig -u $1 | grep "status: active"`
-  if [ -n "$is" ] ; then
+  is=`ifconfig -u "$1" | grep "status: active"`
+  if [ "$is" ] ; then
     return 0 # possible to access internet
   else
     return 1 # impossible to access internet
@@ -52,8 +52,8 @@ __is_interface_active() {
 __is_net() {
   while [ -n "$1" ]
   do
-    __is_interface_active $intf
-    if [ "$?" -eq 0 ] ; then
+    __is_interface_active "$1"
+    if [ $? -eq 0 ] ; then
       return 0 # possible
     fi
     shift
@@ -99,17 +99,17 @@ alias update_date='export DATE=`date +%Y%m%d`' # year month day
 alias update_time='export TIME=`date +%s`'
 alias bash_keybind="bind -p | grep 'C-' | grep -v 'abort\|version\|accept' | less"
 alias ducks='du -h -d 1'
-if [ `uname` = 'Linux' ] && [ -x `which xdg-open` ] ; then
+if [ `uname` = 'Linux' ] && [ -x "`which xdg-open`" ] ; then
   alias open='xdg-open'
   # else if 'Darwin': `open` is supported in default
   # else if 'FreeBSD': NOT supported
 fi
-if [ -x `which tmux` ] ; then
+if [ -x "`which tmux`" ] ; then
   alias tmux='tmux -2'
   alias ta='tmux a'
   alias tat='tmux a -t'
 fi
-if [ -x `which screen` ] ; then
+if [ -x "`which screen`" ] ; then
   alias scr='screen -D -RR'
 fi
 
@@ -127,11 +127,12 @@ fi
 [ -f $HOME/.go/versions/1.6 ] && \
   export GOROOT=$HOME/.go/versions/1.6
 [ -f $HOME/tmp/go ] && export GOPATH=$HOME/tmp/go # workspace dir
-[ -n $GOPATH ] && export PATH=$GOPATH/bin:$PATH
+[ "$GOPATH" ] && export PATH=$GOPATH/bin:$PATH
 
 ###  Completion
 # complete -W "vim study php html cake" cake # cakeの補完設定
-[ -x `which autoextract` ] && complete -d autoextract # ~/bin/autoextracの補完
+[ -x "`which autoextract`" ] && \
+  complete -d autoextract # ~/bin/autoextracの補完
 
 ###  Environments
 export EDITOR=vi
@@ -241,13 +242,13 @@ if [ `$cmd_hostname` = 'quark.local' ] ; then
     ssh-add $SSH_IDENTIFY_FILE
 fi
 if [ `uname` != 'Darwin' ] ; then
-  SSH_AGENT_FILE="${HOME}/.ssh/.ssh-agent.`hostname`"
+  SSH_AGENT_FILE="${HOME}/.ssh/.ssh-agent.`$cmd_hostname`"
   if [ -f ${SSH_AGENT_FILE} ]; then
       eval `cat ${SSH_AGENT_FILE}`
       ssh_agent_exist=0
       for id in `ps ax|grep 'ssh-agent'|sed -e 's/\([0-9]\+\).*/\1/'`
       do
-          if [ ${SSH_AGENT_PID} = ${id} ]
+          if [ "${SSH_AGENT_PID}" = "${id}" ]
           then
               ssh_agent_exist=1
           fi
@@ -429,7 +430,7 @@ __remove_duplicate() {
   _env=""
   _env_name="$1"
   _ENV="${!1}"
-  for _e in $(echo $_ENV | tr ':' ' '); do
+  for _e in `echo $_ENV | tr ':' ' '`; do
     case ":${_env}:" in
       *:"${_e}":* )
         ;;
