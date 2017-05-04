@@ -266,7 +266,6 @@ case cad114.naist.jp:
 endsw
 
 switch (`$sh_hostname`)
-case arch09
 case arch09.naist.jp:
 case cad101.naist.jp:
 case cad102.naist.jp:

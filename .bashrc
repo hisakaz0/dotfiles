@@ -9,10 +9,10 @@ if [ -f /etc/bashrc ]; then
     source /etc/bashrc
 fi
 
-### hostname (short style
-if [ `uname` = "FreeBSD" ] ; then
-  cmd_hostname="hostname -s"
-else # Darwin, Linux
+### hostname (long style
+if [ `uname` != "FreeBSD" ] ; then
+  cmd_hostname="hostname -f"
+else
   cmd_hostname="hostname"
 fi
 
@@ -97,6 +97,7 @@ alias rm='rm -i'
 alias CP='cp -f'
 alias cp='cp -i'
 alias today='date'
+export DATE=`date +%Y%m%d`
 alias update_date='export DATE=`date +%Y%m%d`' # year month day
 alias update_time='export TIME=`date +%s`'
 alias bash_keybind="bind -p | grep 'C-' | grep -v 'abort\|version\|accept' | less"
@@ -122,7 +123,12 @@ fi
 # source ${HOME}/tmp/kancolle/utils/kancolle_logbook.sh ## kancolle logbook
 
 ### go lang
-[ -f /usr/local/opt/go/libexec ] && export GOROOT=/usr/local/opt/go/libexec # go lang bin dir
+# macOS
+[ -f /usr/local/opt/go/libexec ] && \
+  export GOROOT=/usr/local/opt/go/libexec # go lang bin dir
+# linux
+[ -f $HOME/.go/versions/1.6 ] && \
+  export GOROOT=$HOME/.go/versions/1.6
 [ -f $HOME/tmp/go ] && export GOPATH=$HOME/tmp/go # workspace dir
 [ -n $GOPATH ] && export PATH=$GOPATH/bin:$PATH
 
@@ -222,9 +228,12 @@ if [ -x `which rbenv` ] ; then
 fi
 
 ### user commands (ubuntu
-if [ `uname` = "Linux" ] && [ -d $HOME/.usr/bin ] ; then
+[ `uname` = "Linux" ] && [ -d $HOME/.usr/bin ] && \
   export PATH=$HOME/.usr/bin:$PATH
-fi
+[ `uname` = "FreeBSD" ] && [ -d $HOME/usr/bin ] && \
+  export PATH=$HOME/usr/bin:$PATH
+[ `uname` = "Linux" ] && [ -d $HOME/bin/centos ] && \
+  export PATH=$HOME/bin/centos
 
 ### machine specific .bashrc
 if [ -f .`hostname`/dot.bashrc.bash ] ; then
@@ -299,15 +308,15 @@ fi
   export JAVA_HOME="`/usr/libexec/java_home`"
 
 ### pyenv
-if [ `$cmd_hostname` = "cad110" ] ||
-   [ `$cmd_hostname` = "cad111" ] ||
-   [ `$cmd_hostname` = "cad112" ] ||
-   [ `$cmd_hostname` = "cad113" ] ||
-   [ `$cmd_hostname` = "cad114" ] ||
-   [ `$cmd_hostname` = "cad115" ] ||
-   [ `$cmd_hostname` = "cad116" ] ||
-   [ `$cmd_hostname` = "cad117" ] ||
-   [ `$cmd_hostname` = "cad118" ] ; then
+if [ `$cmd_hostname` = "cad110.naist.jp" ] ||
+   [ `$cmd_hostname` = "cad111.naist.jp" ] ||
+   [ `$cmd_hostname` = "cad112.naist.jp" ] ||
+   [ `$cmd_hostname` = "cad113.naist.jp" ] ||
+   [ `$cmd_hostname` = "cad114.naist.jp" ] ||
+   [ `$cmd_hostname` = "cad115.naist.jp" ] ||
+   [ `$cmd_hostname` = "cad116.naist.jp" ] ||
+   [ `$cmd_hostname` = "cad117.naist.jp" ] ||
+   [ `$cmd_hostname` = "cad118.naist.jp" ] ; then
   export PYENV_ROOT=$HOME/.pyenv/s1 # pyenv setting #1
 elif [ `$cmd_hostname` = 'quark.local' ] ; then
   export PYENV_ROOT=$HOME/.pyenv
@@ -319,7 +328,12 @@ if [ -n $PYENV_ROOT ] ; then
   export PATH=$PYENV_ROOT/bin:$PATH
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
+  pyenv rehash
 fi
+
+### LD_LIBRARY_PATH
+[ -z $LD_LIBRARY_PATH ] && \
+  export LD_LIBRARY_PATH="" # reset
 
 ### cuda
 if [ -d /usr/local/cuda ] ; then
@@ -327,9 +341,12 @@ if [ -d /usr/local/cuda ] ; then
   echo "## cuda ######################"
   export CUDA_PATH="/usr/local/cuda"
   export PATH="$CUDA_PATH/bin:$PATH"
+  export CFLAGS="-I$CUDA_PATH/include"
+  export LDFLAGS="-L$CUDA_PATH/lib64"
+  export LD_LIBRARY_PATH="$CUDA_PATH/lib64:$LD_LIBRARY_PATH"
   nvcc -V
   if [ -f $CUDA_PATH/include/cudnn.h ] ; then
-    echo "cudnn is available"
+    echo ">> cudnn is available"
   fi
 fi
 
@@ -340,30 +357,108 @@ fi
 #   eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)"
 # fi
 
-### remove duplicate of PATH
-__pathctl() {
-  _path=""
-  for _p in $(echo $PATH | tr ':' ' '); do
-    case ":${_path}:" in
-      *:"${_p}":* )
-        ;;
-      * )
-        if [ "$_path" ]; then
-          _path="$_path:$_p"
-        else
-          _path=$_p
-        fi
-        ;;
-    esac
-  done
-  PATH=$_path
-  unset _p
-  unset _path
-}
-__pathctl
-
 ### homebrew
 if [ `uname` = "Darwin" ] && [ -n `which brew` ] && [ -d $PYENV_ROOT ] ; then
   alias brew="env PATH=${PATH/${PYENV_ROOT}\/shims:/} brew"
 fi
 
+### emax
+[ -d $HOME/work/emaxv/nakashim/proj-arm64.cent ] && \
+  export EMAXV_SIML_PROJ_ROOT="$HOME/work/emaxv/nakashim/proj-arm64.cent"
+[ -d $EMAXV_SIML_PROJ_ROOT/bin ] && \
+  export PATH=$EMAXV_SIML_PROJ_ROOT/bin:$PATH
+[ -d $EMAXV_SIML_PROJ_ROOT/lib ] && \
+  export LD_LIBRARY_PATH=$EMAXV_SIML_PROJ_ROOT/lib:$LD_LIBRARY_PATH
+[ -d "$HOME/works/nakashim/proj-arm64.cent/lib/asim64-lib" ] && \
+  export LD_LIBRARY_PATH="$HOME/works/nakashim/proj-arm64.cent/lib/asim64-lib:$LD_LIBRARY_PATH"
+
+### cad tools
+case `$cmd_hostname` in
+  "cad110.naist.jp" )
+    if [ `uname` = Linux ] && [ -s /opt/xilinx/ise101/ISE/settings64.csh ] ; then
+      echo "=========================================="
+      echo "======== ISE101/GP8M is available ========"
+      echo "=========================================="
+      source /opt/xilinx/ise101/ISE/settings64.csh
+    fi
+  ;;
+  "cad101.naist.jp" | "cad102.naist.jp" )
+    if [ `uname` = Linux ] && [ -s /opt/xilinx/ise123/settings64.csh ] ; then
+      source /opt/xilinx/ise123/settings64.csh
+      echo "=========================================="
+      echo "======== ISE123/GP5V is available ========"
+      echo "=========================================="
+    fi
+    ;;
+  "arch16.naist.jp" | "arch17.naist.jp" )
+    if [ `uname` = Linux ] && [ -s /opt/xilinx/ise134/settings64.csh ] ; then
+      source /opt/xilinx/ise134/settings64.csh
+      echo "=========================================="
+      echo "======== ISE134/GP6V is available ========"
+      echo "=========================================="
+    fi
+    ;;
+  "cad111.naist.jp" | "cad112.naist.jp" | "cad113.naist.jp" | "cad114.naist.jp" )
+    # if [ `uname` = Linux ] && [ -s /opt/xilinx/ise134/settings64.csh ] ; then
+    #   source /opt/vdec/setup/vdec_tools.2016.cshrc
+    if [ `uname` = Linux ] && [ -s $HOME/work/emaxv/vdec_tools.2016.cshrc ] ; then
+      source $HOME/work/emaxv/vdec_tools.2016.cshrc
+      echo "=========================================="
+      echo "======== VDEC Tools are available ========"
+      echo "=========================================="
+    fi
+    ;;
+esac
+
+case `$cmd_hostname` in
+  "arch09.naist.jp" | "cad101.naist.jp" | "cad102.naist.jp" | \
+  "cad103.naist.jp" | "cad104.naist.jp" | "cad115.naist.jp" | \
+  "cad116.naist.jp" | "cad117.naist.jp" | "cad118.naist.jp" )
+    if [ `uname` = Linux ] && [ -s /opt/xilinx/Vivado/2016.2/settings64.csh ] ; then
+      source /opt/xilinx/Vivado/2016.2/settings64.csh
+      echo "=========================================="
+      echo "======== Vivado/ZYNQ is available ========"
+      echo "=========================================="
+      echo "Vivado: $XILINX_VIVADO"
+    fi
+    ;;
+esac
+
+# case `$cmd_hostname` in
+#   "cad101.naist.jp" | "cad102.naist.jp" | "cad106.naist.jp" | "cad107.naist.jp" )
+#     if [ `uname` = Linux ] && [ -s /opt/xilinx/PetaLinux/petalinux-v2016.4-final/settings.csh ] ; then
+#       source /opt/xilinx/PetaLinux/petalinux-v2016.4-final/settings.csh /opt/xilinx/PetaLinux/petalinux-v2016.4-final
+#       echo "========================================"
+#       echo "======== Petalinux is available ========"
+#       echo "========================================"
+#     fi
+#     ;;
+#  esac
+
+
+### remove duplicate of PATH
+__remove_duplicate() {
+  _env=""
+  _env_name="$1"
+  _ENV="${!1}"
+  for _e in $(echo $_ENV | tr ':' ' '); do
+    case ":${_env}:" in
+      *:"${_e}":* )
+        ;;
+      * )
+        if [ "$_env" ]; then
+          _env="$_env:$_e"
+        else
+          _env=$_e
+        fi
+        ;;
+    esac
+  done
+  eval "$_env_name=$_env"
+  unset _e
+  unset _env
+  unset _env_name
+  unset _ENV
+}
+__remove_duplicate "PATH"
+__remove_duplicate "LD_LIBRARY_PATH"
