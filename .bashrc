@@ -1,8 +1,6 @@
 ### If bash does not exist, return
-[ "$BASH" = "" ] &&  return
-if [ -z "$PS1" ]; then
-    return
-fi
+[ -z "$BASH" ] &&  return
+[ -z "$PS1" ] && return
 
 ### source system wide aliases
 if [ -f /etc/bashrc ]; then
@@ -18,21 +16,19 @@ fi
 
 stty sane
 stty -ixon -ixoff # ctrl+s, ctrl+qの無効化
-if [ `uname` != 'Darwin' ] && [ "`stty | grep erase`" = "" ] ; then
-    stty erase 
-fi
-tabs -2 # tab width
+[ `uname` != 'Darwin' ] && [ -z "`stty | grep erase`" ] && \
+  stty erase 
+[ -x "`which tabs`" ] && \
+  tabs -2 # tab width
+
 
 ### completion
-if [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-fi
-if [ -f $(brew --prefix)/etc/bash_completion ]; then
-  . $(brew --prefix)/etc/bash_completion
-fi
-if [ -f `brew --prefix`/etc/bash_completion.d/rails.bash ]; then
+[ -f /etc/bash_completion ] && \
+  source /etc/bash_completion
+[ -x "`which brew`" ] && [ -f `brew --prefix`/etc/bash_completion ] && \
+  source `brew --prefix`/etc/bash_completion
+[ -x "`which brew`" ] && [ -f `brew --prefix`/etc/bash_completion.d/rails.bash ] && \
   source `brew --prefix`/etc/bash_completion.d/rails.bash
-fi
 
 ### language
 if [ `uname` = "FreeBSD" ] ; then
@@ -77,6 +73,7 @@ else
   export IS_INTERNET_ACTIVE=0 # possible to access internet in SERVER
 fi
 
+
 ### alias
 alias ls='ls -G'
 alias ll='ls -hlF'
@@ -102,7 +99,7 @@ alias update_date='export DATE=`date +%Y%m%d`' # year month day
 alias update_time='export TIME=`date +%s`'
 alias bash_keybind="bind -p | grep 'C-' | grep -v 'abort\|version\|accept' | less"
 alias ducks='du -h -d 1'
-if [ `uname` == 'Linux' ] && [ -x `which xdg-open` ] ; then
+if [ `uname` = 'Linux' ] && [ -x `which xdg-open` ] ; then
   alias open='xdg-open'
   # else if 'Darwin': `open` is supported in default
   # else if 'FreeBSD': NOT supported
@@ -132,31 +129,19 @@ fi
 [ -f $HOME/tmp/go ] && export GOPATH=$HOME/tmp/go # workspace dir
 [ -n $GOPATH ] && export PATH=$GOPATH/bin:$PATH
 
-### path
-[ -f $HOME/.bin ] && export PATH=$HOME/.bin:$PATH
-[ -f /usr/local/texlive/2015/bin/x86_64-darwin ] && \
-  export PATH=/usr/local/texlive/2015/bin/x86_64-darwin:$PATH
-[ -f /usr/local/wine/bin ] && \
-  export PATH=/usr/local/wine/bin:$PATH
-[ -f $HOME/tmp/utils/bin ] && \
-  export PATH=$HOME/tmp/utils/bin:$PATH
-[ -f $HOME/tmp/kancolle/utils/macosx-x64-ex.2.3.4 ] && \
-  export PATH=$HOME/tmp/kancolle/utils/macosx-x64-ex.2.3.4:$PATH
-
 ###  Completion
 # complete -W "vim study php html cake" cake # cakeの補完設定
 [ -x `which autoextract` ] && complete -d autoextract # ~/bin/autoextracの補完
 
 ###  Environments
-export EDITOR=vi ; [ -x `which vim` ] && export EDITOR=vim
+export EDITOR=vi
+[ -x `which vim` ] && export EDITOR=vim
 export PAGER='less'
 export SVN_SSH='ssh -q'
 export DAY=`date +%d` # month day
 export MONTH=`date +%B` # month in literal
 export YEAR=`date +%Y` # year
 export MEMO_PATH=${HOME}/Copy/Documents/.memo
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8 # non error for perl
 # export PAGER="col -b -x | vim -"
 # export XMODIFIERS=@im=uim
 # export GTK_IM_MODULE=uim
@@ -193,7 +178,6 @@ update_time
 # shopt -s histreedit
 # shopt -s no_empty_cmd_completion
 
-
 ### shell history
 share_history() {
   history -a
@@ -220,12 +204,10 @@ fi
 
 ### rbenv
 export RUBYGEMS_GEMDEPS=
-if [ -f $HOME/.rbenv ] ; then
-  export PATH=$PATH:$HOME/.rbenv
-fi
-if [ -x `which rbenv` ] ; then
+[ -f $HOME/.rbenv ] &&
+  export PATH=$HOME/.rbenv:$PATH
+[ "`which rbenv`" ] && \
   eval "$(rbenv init -)"
-fi
 
 ### user commands (ubuntu
 [ `uname` = "Linux" ] && [ -d $HOME/.usr/bin ] && \
@@ -233,7 +215,17 @@ fi
 [ `uname` = "FreeBSD" ] && [ -d $HOME/usr/bin ] && \
   export PATH=$HOME/usr/bin:$PATH
 [ `uname` = "Linux" ] && [ -d $HOME/bin/centos ] && \
-  export PATH=$HOME/bin/centos
+  export PATH=$HOME/bin/centos:$PATH
+[ -f $HOME/.bin ] && \
+  export PATH=$HOME/.bin:$PATH
+[ -f /usr/local/texlive/2015/bin/x86_64-darwin ] && \
+  export PATH=/usr/local/texlive/2015/bin/x86_64-darwin:$PATH
+[ -f /usr/local/wine/bin ] && \
+  export PATH=/usr/local/wine/bin:$PATH
+[ -f $HOME/tmp/utils/bin ] && \
+  export PATH=$HOME/tmp/utils/bin:$PATH
+[ -f $HOME/tmp/kancolle/utils/macosx-x64-ex.2.3.4 ] && \
+  export PATH=$HOME/tmp/kancolle/utils/macosx-x64-ex.2.3.4:$PATH
 
 ### machine specific .bashrc
 if [ -f .`hostname`/dot.bashrc.bash ] ; then
@@ -279,9 +271,8 @@ if [ `uname` != 'Darwin' ] ; then
 fi
 
 ### hub
-if [ -x `which hub` ] ; then
+[ "`which hub`" ] && \
   eval "$(hub alias -s)"
-fi
 
 ### nvm (Node Version Manager
 export NVM_DIR="$HOME/.nvm"
@@ -304,7 +295,7 @@ if [ `$cmd_hostname` = 'quark.local' ] ; then
 fi
 
 # java
-[ -n "`/usr/libexec/java_home`" ] && \
+[ -x "/usr/libexec/java_home" ] && \
   export JAVA_HOME="`/usr/libexec/java_home`"
 
 ### pyenv
@@ -321,14 +312,13 @@ if [ `$cmd_hostname` = "cad110.naist.jp" ] ||
 elif [ `$cmd_hostname` = 'quark.local' ] ; then
   export PYENV_ROOT=$HOME/.pyenv
 fi
-if [ -n $PYENV_ROOT ] ; then
+if [ "$PYENV_ROOT" ] ; then
   echo "##############################"
   echo "## pyenv #####################"
   echo "PYENV_ROOT: $PYENV_ROOT"
   export PATH=$PYENV_ROOT/bin:$PATH
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
-  pyenv rehash
 fi
 
 ### LD_LIBRARY_PATH
@@ -375,37 +365,35 @@ fi
 ### cad tools
 case `$cmd_hostname` in
   "cad110.naist.jp" )
-    if [ `uname` = Linux ] && [ -s /opt/xilinx/ise101/ISE/settings64.csh ] ; then
+    if [ `uname` = Linux ] && [ -s /opt/xilinx/ise101/ISE/settings64.sh ] ; then
       echo "=========================================="
       echo "======== ISE101/GP8M is available ========"
       echo "=========================================="
-      source /opt/xilinx/ise101/ISE/settings64.csh
+      source /opt/xilinx/ise101/ISE/settings64.sh
     fi
   ;;
   "cad101.naist.jp" | "cad102.naist.jp" )
-    if [ `uname` = Linux ] && [ -s /opt/xilinx/ise123/settings64.csh ] ; then
-      source /opt/xilinx/ise123/settings64.csh
+    if [ `uname` = Linux ] && [ -s /opt/xilinx/ise123/settings64.sh ] ; then
       echo "=========================================="
       echo "======== ISE123/GP5V is available ========"
       echo "=========================================="
+      source /opt/xilinx/ise123/settings64.sh
     fi
     ;;
   "arch16.naist.jp" | "arch17.naist.jp" )
-    if [ `uname` = Linux ] && [ -s /opt/xilinx/ise134/settings64.csh ] ; then
-      source /opt/xilinx/ise134/settings64.csh
+    if [ `uname` = Linux ] && [ -s /opt/xilinx/ise134/settings64.sh ] ; then
       echo "=========================================="
       echo "======== ISE134/GP6V is available ========"
       echo "=========================================="
+      source /opt/xilinx/ise134/settings64.sh
     fi
     ;;
   "cad111.naist.jp" | "cad112.naist.jp" | "cad113.naist.jp" | "cad114.naist.jp" )
-    # if [ `uname` = Linux ] && [ -s /opt/xilinx/ise134/settings64.csh ] ; then
-    #   source /opt/vdec/setup/vdec_tools.2016.cshrc
-    if [ `uname` = Linux ] && [ -s $HOME/work/emaxv/vdec_tools.2016.cshrc ] ; then
-      source $HOME/work/emaxv/vdec_tools.2016.cshrc
+    if [ `uname` = Linux ] && [ -s /opt/vdec/setup/vdec_tools.2016.sh ] ; then
       echo "=========================================="
       echo "======== VDEC Tools are available ========"
       echo "=========================================="
+      source /opt/vdec/setup/vdec_tools.2016.sh
     fi
     ;;
 esac
@@ -414,8 +402,8 @@ case `$cmd_hostname` in
   "arch09.naist.jp" | "cad101.naist.jp" | "cad102.naist.jp" | \
   "cad103.naist.jp" | "cad104.naist.jp" | "cad115.naist.jp" | \
   "cad116.naist.jp" | "cad117.naist.jp" | "cad118.naist.jp" )
-    if [ `uname` = Linux ] && [ -s /opt/xilinx/Vivado/2016.2/settings64.csh ] ; then
-      source /opt/xilinx/Vivado/2016.2/settings64.csh
+    if [ `uname` = Linux ] && [ -s /opt/xilinx/Vivado/2016.2/settings64.sh ] ; then
+      source /opt/xilinx/Vivado/2016.2/settings64.sh
       echo "=========================================="
       echo "======== Vivado/ZYNQ is available ========"
       echo "=========================================="
@@ -426,8 +414,8 @@ esac
 
 # case `$cmd_hostname` in
 #   "cad101.naist.jp" | "cad102.naist.jp" | "cad106.naist.jp" | "cad107.naist.jp" )
-#     if [ `uname` = Linux ] && [ -s /opt/xilinx/PetaLinux/petalinux-v2016.4-final/settings.csh ] ; then
-#       source /opt/xilinx/PetaLinux/petalinux-v2016.4-final/settings.csh /opt/xilinx/PetaLinux/petalinux-v2016.4-final
+#     if [ `uname` = Linux ] && [ -s /opt/xilinx/PetaLinux/petalinux-v2016.4-final/settings.sh ] ; then
+#       source /opt/xilinx/PetaLinux/petalinux-v2016.4-final/settings.sh
 #       echo "========================================"
 #       echo "======== Petalinux is available ========"
 #       echo "========================================"
