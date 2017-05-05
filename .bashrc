@@ -1,22 +1,24 @@
-### If bash does not exist, return
+### If bash does not exist, return{{{
 [ -z "$BASH" ] &&  return
 [ -z "$PS1" ] && return
-
-### source system wide aliases
+#}}}
+### source system wide aliases{{{
 if [ -f /etc/bashrc ]; then
     source /etc/bashrc
 fi
-
-### hostname (long style
+#}}}
+### hostname (long style{{{
 if [ `uname` != "FreeBSD" ] ; then
   cmd_hostname="hostname -f"
 else
   cmd_hostname="hostname"
 fi
-__uname=`uname`
+#}}}
+### variables for ONLY .bashrc{{{
 __hostname=`$cmd_hostname`
-
-### internet access
+__uname=`uname`
+#}}}
+### internet access{{{
 {
   __is_interface_active() {
     local is="`ifconfig -u "$1" | grep 'status: active'`"
@@ -53,25 +55,24 @@ __hostname=`$cmd_hostname`
   fi
   unset -f __is_interface_active
   unset -f __is_net
-}
-
+}#}}}
+### stty{{{
 stty sane
 stty -ixon -ixoff # ctrl+s, ctrl+qの無効化
 [ "$__uname" != 'Darwin' ] && [ -z "`stty | grep erase`" ] && \
   stty erase 
 [ -x "`which tabs`" ] && \
   tabs -2 # tab width
-
-
-### completion
+#}}}
+### completion{{{
 [ -f /etc/bash_completion ] && \
   source /etc/bash_completion
 [ -x "`which brew`" ] && [ -f "`brew --prefix`/etc/bash_completion" ] && \
   source `brew --prefix`/etc/bash_completion
 [ -x "`which brew`" ] && [ -f "`brew --prefix`/etc/bash_completion.d/rails.bash" ] && \
   source `brew --prefix`/etc/bash_completion.d/rails.bash
-
-### language
+#}}}
+### language{{{
 if [ "$__uname" = "FreeBSD" ] ; then
   # export LANG=ja_JP.SJIS
   # export LC_ALL=ja_JP.SJIS
@@ -82,9 +83,8 @@ else
   export LANG=en_US.UTF-8
   export LC_ALL=en_US.UTF-8
 fi
-
-
-### alias
+#}}}
+### alias{{{
 alias ls='ls -G'
 alias ll='ls -hlF'
 alias la='ls -aF'
@@ -122,14 +122,18 @@ fi
 if [ -x "`which screen`" ] ; then
   alias scr='screen -D -RR'
 fi
-
-### source
-# source ${HOME}/tmp/bash/fpath.sh ## get full path func
-# source ${HOME}/tmp/bash/prand.sh ## print random charactors
-# source ${HOME}/tmp/bash/makeMakefile.sh ## create template files for c lang
-# source ${HOME}/tmp/kancolle/utils/kancolle_logbook.sh ## kancolle logbook
-
-### go lang
+#}}}
+### utiles{{{
+[ -s ${HOME}/tmp/bash/fpath.sh ] && \
+  . $HOME/tmp/bash/fpath.sh ## get full path func
+[ -s ${HOME}/tmp/bash/prand.sh ] && \
+  . $HOME/tmp/bash/prand.sh ## print random charactors
+[ -s ${HOME}/tmp/bash/makeMakefile.sh ] && \
+  . $HOME/tmp/bash/makeMakefile.sh ## create template files for c lang
+[ -s ${HOME}/tmp/kancolle/utils/kancolle_logbook.sh ] && \
+  . $HOME/tmp/kancolle/utils/kancolle_logbook.sh ## kancolle logbook
+#}}}
+### go lang{{{
 # macOS
 [ -f /usr/local/opt/go/libexec ] && \
   export GOROOT=/usr/local/opt/go/libexec # go lang bin dir
@@ -138,13 +142,13 @@ fi
   export GOROOT=$HOME/.go/versions/1.6
 [ -f $HOME/tmp/go ] && export GOPATH=$HOME/tmp/go # workspace dir
 [ "$GOPATH" ] && export PATH=$GOPATH/bin:$PATH
-
-###  Completion
+#}}}
+### completion{{{
 # complete -W "vim study php html cake" cake # cakeの補完設定
 [ -x "`which autoextract`" ] && \
   complete -d autoextract # ~/bin/autoextracの補完
-
-###  Environments
+#}}}
+### environments{{{
 export EDITOR=vi
 [ -x `which vim` ] && export EDITOR=vim
 export PAGER='less'
@@ -156,8 +160,8 @@ export MEMO_PATH=${HOME}/Copy/Documents/.memo
 # export PAGER="col -b -x | vim -"
 # export XMODIFIERS=@im=uim
 # export GTK_IM_MODULE=uim
-
-### console style
+#}}}
+### console style{{{
 if [ "$__uname" = 'Darwin' ] ; then
   export PS1='\u@\h:\W 〆 '
   export PROMPT_COMMAND='share_history'
@@ -179,17 +183,14 @@ else
   ## With a shared history among all terminals
   export PROMPT_COMMAND='share_history'
 fi
-
-update_date
-update_time
-
-###  shopt
+#}}}
+### shopt{{{
 # shopt -s cdspell
 # shopt -s extglob
 # shopt -s histreedit
 # shopt -s no_empty_cmd_completion
-
-### shell history
+#}}}
+### history{{{
 share_history() {
   history -a
   history -c
@@ -201,8 +202,8 @@ export HISTCONTROL=ignoredups
 export HISTIGNORE="cd*:pwd*:fg*:bg*"
 export HISTSIZE=10000
 shopt -u histappend
-
-### ls color
+#}}}
+### ls color{{{
 if [ "$__uname" = "Linux" ]; then
     alias ls='ls -NF --show-control-chars'
     # if you use color ls, comment out above line and uncomment below 2 lines.
@@ -212,8 +213,8 @@ elif [ "$__uname" = 'FreeBSD' ]; then
     export LSCOLORS=gxfxcxdxbxegedabagacad
     alias ls='ls -G'
 fi
-
-### rbenv
+#}}}
+### rbenv{{{
 export RUBYGEMS_GEMDEPS=
 [ -f $HOME/.rbenv ] &&
   export PATH=$HOME/.rbenv:$PATH
@@ -224,8 +225,8 @@ if [ -x "`which rbenv`" ] ; then
   echo "RBENV_ROOT: $RBENV_ROOT"
   eval "$(rbenv init -)"
 fi
-
-### user commands (ubuntu
+#}}}
+### user commands (ubuntu{{{
 [ "$__uname" = "Linux" ] && [ "`uname -a | grep 'x86_64'`" ] && \
   [ -d $HOME/.usr/local/linux_x64/bin ] && \
   export PATH=$HOME/.usr/local/linux_x64/bin:$PATH
@@ -248,17 +249,20 @@ fi
   export PATH=$HOME/tmp/utils/bin:$PATH
 [ -f $HOME/tmp/kancolle/utils/macosx-x64-ex.2.3.4 ] && \
   export PATH=$HOME/tmp/kancolle/utils/macosx-x64-ex.2.3.4:$PATH
-
-### machine specific .bashrc
+#}}}
+### machine specific .bashrc{{{
 if [ -f ".$__hostname/dot.bashrc.bash" ] ; then
     source ".$__hostname/dot.bashrc.bash"
 fi
-
-### ssh-agent
+#}}}
+### ssh-agent{{{
 if [ "$__hostname" = 'quark.local' ] ; then
   # Refs: http://qiita.com/isaoshimizu/items/84ac5a0b1d42b9d355cf
   # eval $(ssh-agent)
   SSH_IDENTIFY_FILE="$HOME/.ssh/hisakazu_quark"
+  [ -z "`ssh-add -l | grep $SSH_IDENTIFY_FILE`" ] && \
+    ssh-add $SSH_IDENTIFY_FILE
+  SSH_IDENTIFY_FILE="$HOME/.ssh/hisakazu_quark_bitbucket"
   [ -z "`ssh-add -l | grep $SSH_IDENTIFY_FILE`" ] && \
     ssh-add $SSH_IDENTIFY_FILE
 fi
@@ -291,22 +295,19 @@ if [ `uname` != 'Darwin' ] ; then
   alias sshkey='eval `cat ${SSH_AGENT_FILE}`'
   alias sshrm='rm -f ${SSH_AGENT_FILE}'
 fi
-
-### hub
+#}}}
+### hub (github{{{
 [ "`which hub`" ] && \
   eval "$(hub alias -s)"
-
-### nvm (Node Version Manager
+#}}}
+### nvm (Node Version Manager{{{
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-
-### key
-# ssh-add ~/.ssh/hisakazu_quark_bitbucket
-
-### docker
+#}}}
+### docker{{{
 # eval $(docker-machine env default)
-
-### kancolle logbook (check wheather process is running
+#}}}
+### kancolle logbook (check wheather process is running{{{
 if [ "$__hostname" = 'quark.local' ] ; then
   logbook_pid=`ps aux| grep "logbook" | grep -v "grep" | awk '{ print $2; }'`
   if [ -z $logbook_pid ]; then
@@ -315,12 +316,12 @@ if [ "$__hostname" = 'quark.local' ] ; then
     echo "Kancolle Logbook is already run!"
   fi
 fi
-
-# java
+#}}}
+### java{{{
 [ -x "/usr/libexec/java_home" ] && \
   export JAVA_HOME="`/usr/libexec/java_home`"
-
-### pyenv
+#}}}
+### pyenv{{{
 if [ "$__hostname" = "cad110.naist.jp" ] ||
    [ "$__hostname" = "cad111.naist.jp" ] ||
    [ "$__hostname" = "cad112.naist.jp" ] ||
@@ -342,12 +343,12 @@ if [ "$PYENV_ROOT" ] ; then
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
 fi
-
-### LD_LIBRARY_PATH
+#}}}
+### LD_LIBRARY_PATH{{{
 [ -z "$LD_LIBRARY_PATH" ] && \
   export LD_LIBRARY_PATH="" # reset
-
-### cuda
+#}}}
+### cuda{{{
 if [ -d /usr/local/cuda ] ; then
   echo "##############################"
   echo "## cuda ######################"
@@ -361,20 +362,20 @@ if [ -d /usr/local/cuda ] ; then
     echo ">> cudnn is available"
   fi
 fi
-
-### perl (brew)
+#}}}
+### perl (brew){{{
 # TODO: fix error (see log
 # if [ ! $INTERNET_IS_ACTIVE ] ; then
 #   PERL_MM_OPT="INSTALL_BASE=$HOME/perl5" cpan local::lib
 #   eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)"
 # fi
-
-### homebrew
+#}}}
+### homebrew{{{
 if [ "$__uname" = "Darwin" ] && [ "`which brew`" ] && [ -d $PYENV_ROOT ] ; then
   alias brew="env PATH=${PATH/${PYENV_ROOT}\/shims:/} brew"
 fi
-
-### emax
+#}}}
+### emax{{{
 [ -d $HOME/work/emaxv/nakashim/proj-arm64.cent ] && \
   export EMAXV_SIML_PROJ_ROOT="$HOME/work/emaxv/nakashim/proj-arm64.cent"
 [ -d $EMAXV_SIML_PROJ_ROOT/bin ] && \
@@ -383,8 +384,9 @@ fi
   export LD_LIBRARY_PATH=$EMAXV_SIML_PROJ_ROOT/lib:$LD_LIBRARY_PATH
 [ -d "$HOME/works/nakashim/proj-arm64.cent/lib/asim64-lib" ] && \
   export LD_LIBRARY_PATH="$HOME/works/nakashim/proj-arm64.cent/lib/asim64-lib:$LD_LIBRARY_PATH"
-
-### cad tools
+#}}}
+### cad tools{{{
+# vdec (synopsys, cadence{{{
 case "$__hostname" in
   "cad110.naist.jp" )
     if [ `uname` = Linux ] && [ -s /opt/xilinx/ise101/ISE/settings64.sh ] ; then
@@ -419,7 +421,8 @@ case "$__hostname" in
     fi
     ;;
 esac
-
+#}}}
+# vivado{{{
 case "$__hostname" in
   "arch09.naist.jp" | "cad101.naist.jp" | "cad102.naist.jp" | \
   "cad103.naist.jp" | "cad104.naist.jp" | "cad115.naist.jp" | \
@@ -433,7 +436,8 @@ case "$__hostname" in
     fi
     ;;
 esac
-
+#}}}
+# petalinux{{{
 # case "$__hostname" in
 #   "cad101.naist.jp" | "cad102.naist.jp" | "cad106.naist.jp" | "cad107.naist.jp" )
 #     if [ `uname` = Linux ] && [ -s /opt/xilinx/PetaLinux/petalinux-v2016.4-final/settings.sh ] ; then
@@ -444,8 +448,9 @@ esac
 #     fi
 #     ;;
 #  esac
-
-### local functions, variables
+#}}}
+#}}}
+### remove duplicate ENVs{{{
 {
   __remove_duplicate() {
     local _env=""
@@ -474,10 +479,13 @@ esac
   __remove_duplicate "LD_LIBRARY_PATH"
   unset -f __remove_duplicate
 }
-
+#}}}
 unset -v __uname
 unset -v __hostname
 
 ### command line editting
 set -o vi
+
+update_date
+update_time
 
