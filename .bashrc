@@ -7,51 +7,42 @@ if [ -f /etc/bashrc ]; then
     source /etc/bashrc
 fi
 
-### local functions, variables
-__remove_duplicate() {
-  local _env=""
-  local _env_name="$1"
-  local _ENV="${!1}"
-  for _e in `echo $_ENV | tr ':' ' '`; do
-    case ":${_env}:" in
-      *:"${_e}":* )
-        ;;
-      * )
-        if [ "$_env" ]; then
-          _env="$_env:$_e"
-        else
-          _env=$_e
-        fi
-        ;;
-    esac
-  done
-  eval "export $_env_name=$_env"
-  unset _e
-  unset _env
-  unset _env_name
-  unset _ENV
-}
-
-__is_interface_active() {
-  local is=`ifconfig -u "$1" | grep "status: active"`
-  if [ "$is" ] ; then
-    return 0 # possible to access internet
-  else
-    return 1 # impossible to access internet
-  fi
-  unset -v $is
-}
-__is_net() {
-  while [ -n "$1" ]
-  do
-    __is_interface_active "$1"
-    if [ $? -eq 0 ] ; then
-      return 0 # possible
+### internet access
+(
+  is_interface_active() {
+    local is=`ifconfig -u "$1" | grep "status: active"`
+    if [ "$is" ] ; then
+      return 0 # possible to access internet
+    else
+      return 1 # impossible to access internet
     fi
-    shift
-  done
-  return 1 # impossible
-}
+    unset -v $is
+  }
+  is_net() {
+    while [ -n "$1" ]
+    do
+      is_interface_active "$1"
+      if [ $? -eq 0 ] ; then
+        return 0 # possible
+      fi
+      shift
+    done
+    return 1 # impossible
+  }
+
+  if [ `$cmd_hostname` = 'quark.local' ] ; then
+    echo "checking to access to internet..."
+    is_net 'en0' 'bridge 0'
+    export IS_INTERNET_ACTIVE=$?
+    if [ $IS_INTERNET_ACTIVE -eq 0 ] ; then
+      echo ">> possible to access to internet!!"
+    else
+      echo ">> impossible to access to internet :("
+    fi
+  else
+    export IS_INTERNET_ACTIVE=0 # possible to access internet in SERVER
+  fi
+)
 
 ### hostname (long style
 if [ `uname` != "FreeBSD" ] ; then
@@ -88,19 +79,6 @@ else
   export LC_ALL=en_US.UTF-8
 fi
 
-### internet access
-if [ `$cmd_hostname` = 'quark.local' ] ; then
-  echo "checking to access to internet..."
-  __is_net 'en0' 'bridge 0'
-  export IS_INTERNET_ACTIVE=$?
-  if [ $IS_INTERNET_ACTIVE -eq 0 ] ; then
-    echo ">> possible to access to internet!!"
-  else
-    echo ">> impossible to access to internet :("
-  fi
-else
-  export IS_INTERNET_ACTIVE=0 # possible to access internet in SERVER
-fi
 
 ### alias
 alias ls='ls -G'
@@ -457,12 +435,35 @@ esac
 #     ;;
 #  esac
 
-__remove_duplicate "PATH"
-__remove_duplicate "LD_LIBRARY_PATH"
+### local functions, variables
+(
+  remove_duplicate() {
+    local _env=""
+    local _env_name="$1"
+    local _ENV="${!1}"
+    for _e in `echo $_ENV | tr ':' ' '`; do
+      case ":${_env}:" in
+        *:"${_e}":* )
+          ;;
+        * )
+          if [ "$_env" ]; then
+            _env="$_env:$_e"
+          else
+            _env=$_e
+          fi
+          ;;
+      esac
+    done
+    eval "export $_env_name=$_env"
+    unset _e
+    unset _env
+    unset _env_name
+    unset _ENV
+  }
+  __remove_duplicate "PATH"
+  __remove_duplicate "LD_LIBRARY_PATH"
+)
 
 unset -v __uname
 unset -v __hostname
 
-unset -f __remove_duplicate
-unset -f __is_interface_active
-unset -f __is_net
