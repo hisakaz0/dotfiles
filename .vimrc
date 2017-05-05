@@ -1,11 +1,10 @@
 
+" %% PLUGINS SETTIGNS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"{{{1
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" %% PLUGINS SETTIGNS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-" ============================================================
-" dein
+" dein " ============================================================"{{{2
 if &compatible
   set nocompatible " Be iMproved
 endif
@@ -41,6 +40,7 @@ if dein#load_state('~/.vim/bundle')
     \ 'type__depth': 1,
     \ })
   " call dein#add('Valloric/YouCompleteMe')
+  call dein#add('LeafCage/foldCC.vim')
 
   " Let dein manage dein
   " Required:
@@ -62,9 +62,8 @@ filetype plugin indent on
 
 " deoplete
 let g:deoplete#enable_at_startup = 1
-
-" ============================================================
-" Neocomplete
+"}}}
+" Neocomplete " ============================================================"{{{2
 " Disable AutoComplPop.
 let g:acp_enableAtStartup = 0
 " Use neocomplete.
@@ -138,15 +137,13 @@ endif
 " For perlomni.vim setting.
 " https://github.com/c9s/perlomni.vim
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-
-" ============================================================
-" Previm
+"}}}
+" Previm " ============================================================"{{{2
 if has('mac')
   let g:previm_open_cmd = 'open -a "/Applications/Google Chrome.app/"'
 endif
-
-" ============================================================
-" MemoList
+"}}}
+" MemoList " ============================================================"{{{2
 let g:memolist_path = "~/tmp/MemoList"
 if has('win32') || has('win64')
   let g:memolist_path = "/d/Users/hisakazu/tmp/MemoList"
@@ -154,9 +151,8 @@ endif
 nnoremap <Leader>mn  :MemoNew<CR>
 nnoremap <Leader>ml  :MemoList<CR>
 nnoremap <Leader>mg  :MemoGrep<CR>
-
-" ============================================================
-" Syntastic
+"}}}
+" Syntastic " ============================================================"{{{2
 " let g:syntastic_javascript_checker = "jshint" "JavaScriptのSyntaxチェックはjshintで
 let g:syntastic_check_on_open = 0 "ファイルオープン時にはチェックをしない
 let g:syntastic_check_on_save = 0 "ファイル保存時にはチェックを実施
@@ -164,33 +160,28 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_mode_map = {
   \ "mode": "passive", "active_filetypes": [], "passive_filetypes": [] }
 " if you want to active save-on-check, change "passive" to "active"
-
-" ============================================================
-" VIM Table Mode
+"}}}
+" VIM Table Mode " ============================================================"{{{2
 let g:table_mode_corner_corner = "|"
 let g:table_mode_corner        = "|"
-
-" ============================================================
-" Go lang
+"}}}
+" Go lang " ============================================================"{{{2
 let g:go_fmt_autosave = 0
 let g:go_play_open_browser = 0
-
-" ============================================================
-" Autodirmak.vim
+"}}}
+" Autodirmak.vim " ============================================================"{{{2
 let g:autodirmake#is_confirm = 0 " No confirmation
-
-" ============================================================
-" Openrcnt(plugin)
+"}}}
+" Openrcnt(plugin) " ============================================================"{{{2
 nnoremap <Leader>rcnt :RecentList<CR>
-
-
+"}}}
+"}}}
+" %% VIM SETTINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"{{{1
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" %% VIM SETTINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-" ============================================================
-" common options
+" common options " ============================================================"{{{2
 set showmatch
 set mouse=a
 set nf=alpha
@@ -230,14 +221,17 @@ set <BS>=
 set ambiwidth=double
 set virtualedit=all
 au BufRead,BufEnter,BufNewFile * set formatoptions-=ro
-
-" ============================================================
-" fold
-" set foldmethod=marker
-  set foldmethod=indent
-
-" ============================================================
-" common map
+"}}}
+" fold " ============================================================"{{{2
+  set foldmethod=marker
+" set foldmethod=indent
+  set foldtext=FoldCCtext()
+  set foldcolumn=5
+  set fillchars=vert:\|
+  let g:foldCCtext_tail = 'printf("   %s[%4d lines  Lv%-2d]%s",
+        \ v:folddashes, v:foldend-v:foldstart+1, v:foldlevel, v:folddashes)'
+"}}}
+" common map " ============================================================"{{{2
 let mapleader=','
 nnoremap <F1> <Nop>
 inoremap <F1> <Nop>
@@ -284,35 +278,30 @@ function! RightShiftOneTab()
   call setline('.', s:line)
   call setpos('.', s:pos)
 endfunction
-
-" ============================================================
-" toggle highlight search
+"}}}
+" toggle highlight search " ============================================================ "{{{2
 nnoremap <silent> <Leader>hls :set invhlsearch<CR>
 " nnoremap <silent> <F5>        :set invhlsearch<CR>
-
-" ============================================================
-" abbreviatio
+"}}}
+" abbreviatio " ============================================================"{{{2
 iabbrev lenght length
 iabbrev assing assign
 iabbrev bse base
-
-" ============================================================
-" tabpage
+"}}}
+" tabpage " ============================================================"{{{2
 if has('unix')
   set <k0>=n " alt + n
   set <k1>=p " alt + p
 endif
 nnoremap <k0> :tabn<CR>
 nnoremap <k1> :tabp<CR>
-
-" ============================================================
-" colorsheme
+"}}}
+" colorsheme " ============================================================"{{{2
 " NOTE: This setting has to be defined before 'cursorhighlight' settings.
 colorscheme inkpot
 syntax enable
-
-" ============================================================
-" cursorhighlight
+"}}}
+" cursorhighlight " ============================================================"{{{2
 " NOTE: This settings has to be defined after 'colorscheme' settings.
 function! MyCursorHighlight()
   highlight CursorLine ctermbg=235 guibg=DarkRed cterm=bold
@@ -323,37 +312,32 @@ augroup my_highlight
   autocmd!
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre * call MyCursorHighlight()
 augroup END
-
-" ============================================================
-" quickfix
+"}}}
+" quickfix " ============================================================"{{{2
 nnoremap <silent> <Leader>cn :cn<CR>
 nnoremap <silent> <Leader>cp :cp<CR>
 nnoremap <silent> <Leader>cc :cc<CR>
 nnoremap <silent> <Leader>tab :tab split<CR>
-
-" ============================================================
-" help documents
+"}}}
+" help documents " ============================================================"{{{
 set helplang=ja
 " If you want to read english  vim  documents,  then  you  type  :help  @en.
 " 2017/01/10: version of vim japanese documents is 7.4
-
-" ============================================================
-" text align
+"}}}
+" text align " ============================================================"{{{
 " type :help 25.2
-
-
+"}}}
+"}}}
+" %% UTILITY COMMANDS AND FUNCTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%"{{{1
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" %% UTILITY COMMANDS AND FUNCTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-" ============================================================
-" data
+" data " ============================================================"{{{2
 command! Date echo substitute(system('date'), "\n", "", "g")
 command! -nargs=+ -complete=shellcmd Shell echo system(<f-args>)
-
-" ============================================================
-" Revise Indent(CorrectCode)
+"}}}
+" Revise Indent(CorrectCode) " ============================================================"{{{
 "inoremap <C-K> <Esc>:call CorrectCode()<CR>a
 "nnoremap <C-K> :call CorrectCode()<CR>
 "function! CorrectCode()
@@ -361,48 +345,8 @@ command! -nargs=+ -complete=shellcmd Shell echo system(<f-args>)
 "  execute ":normal gg=G"
 "  execute ":loadview"
 "endfunction
-
-" ============================================================
-" dictionary (ONLY MacOS)
-if has('mac')
-  "let g:open_dictionary_window_cmd = 'new'
-  " command! -nargs=1 Dict  call OpendictSearch(<f-args>)
-  " nnoremap <Leader>dict :call OpendictSearchwordcursor()<CR>
-
-  "function! OpendictSearchwordcursor()
-  "  let s:line = getline('.')
-  "  let s:wstart = getpos('.')[2] - 1
-  "  let s:wend = s:wstart
-  "  while(matchstr(s:line[s:wstart], "[A-Za-z]") != "")
-  "    let s:wstart -= 1
-  "  endwhile
-  "  let s:wstart += 1
-  "  while(matchstr(s:line[s:wend], "[A-Za-z]" ) != "")
-  "    let s:wend += 1
-  "  endwhile
-  "  let s:wend -= 1
-  "  let s:word =  s:line[s:wstart:s:wend]
-  "  call OpendictSearch(s:word)
-  "endfunction
-
-  "function! OpendictSearch(word)
-  "  let s:mean = system("dict " . a:word)
-  "  if (matchstr(s:mean, "null") == "null" )
-  "    echoerr "Error: No meaning in dictionary."
-  "    return
-  "  endif
-  "  execute g:open_dictionary_window_cmd .
-  "        \ " DICT:" . a:word . " | put =s:mean"
-  "  execute "1,2delete"
-  "  setlocal buftype=nofile
-  "  setlocal bufhidden=delete
-  "  setlocal nomodifiable
-  "  setlocal noswapfile
-  "endfunction
-end
-
-" ============================================================
-" Insert header line (for h1)
+"}}}
+" Insert header line (for h1) " ============================================================"{{{
 nnoremap <silent> <Leader>hl :call InsertHeaderLine()<CR>
 
 function! InsertHeaderLine()
@@ -417,19 +361,19 @@ function! InsertHeaderLine()
   echo s:dash
   execute s:line . "put =s:dash"
 endfunction
-
-" ============================================================
-" Chomp
+"}}}
+" Chomp " ============================================================"{{{2
 function! Chomp(str)
   return substitute(a:str, '\n$', '', "")
 endfunction
-
+"}}}
+" Count chars"{{{2
 " ============================================================
-" Count chars
 " help g_CTRL-G
-
+"}}}
+"}}}
+" %% DOMAIN-SPECIFIC SETTINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"{{{1
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" %% DOMAIN-SPECIFIC SETTINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -486,6 +430,8 @@ augroup END
 " ============================================================
 " Jq / Json Parser
 command! Jq %!jq '.'
+"}}}
+"
+" experimental
+" set runtimepath^=~/tmp/vim/shortshort
 
-" 
-set runtimepath^=~/tmp/vim/shortshort
