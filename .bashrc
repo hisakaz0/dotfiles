@@ -7,6 +7,51 @@ if [ -f /etc/bashrc ]; then
     source /etc/bashrc
 fi
 
+### local functions, variables
+__remove_duplicate() {
+  local _env=""
+  local _env_name="$1"
+  local _ENV="${!1}"
+  for _e in `echo $_ENV | tr ':' ' '`; do
+    case ":${_env}:" in
+      *:"${_e}":* )
+        ;;
+      * )
+        if [ "$_env" ]; then
+          _env="$_env:$_e"
+        else
+          _env=$_e
+        fi
+        ;;
+    esac
+  done
+  eval "export $_env_name=$_env"
+  unset _e
+  unset _env
+  unset _env_name
+  unset _ENV
+}
+
+__is_interface_active() {
+  local is=`ifconfig -u "$1" | grep "status: active"`
+  if [ "$is" ] ; then
+    return 0 # possible to access internet
+  else
+    return 1 # impossible to access internet
+  fi
+  unset -v $is
+}
+__is_net() {
+  while [ -n "$1" ]
+  do
+    __is_interface_active "$1"
+    if [ $? -eq 0 ] ; then
+      return 0 # possible
+    fi
+    shift
+  done
+  return 1 # impossible
+}
 
 ### hostname (long style
 if [ `uname` != "FreeBSD" ] ; then
@@ -16,7 +61,6 @@ else
 fi
 __uname=`uname`
 __hostname=`$cmd_hostname`
-
 
 stty sane
 stty -ixon -ixoff # ctrl+s, ctrl+qの無効化
@@ -45,25 +89,6 @@ else
 fi
 
 ### internet access
-__is_interface_active() {
-  is=`ifconfig -u "$1" | grep "status: active"`
-  if [ "$is" ] ; then
-    return 0 # possible to access internet
-  else
-    return 1 # impossible to access internet
-  fi
-}
-__is_net() {
-  while [ -n "$1" ]
-  do
-    __is_interface_active "$1"
-    if [ $? -eq 0 ] ; then
-      return 0 # possible
-    fi
-    shift
-  done
-  return 1 # impossible
-}
 if [ `$cmd_hostname` = 'quark.local' ] ; then
   echo "checking to access to internet..."
   __is_net 'en0' 'bridge 0'
@@ -76,7 +101,6 @@ if [ `$cmd_hostname` = 'quark.local' ] ; then
 else
   export IS_INTERNET_ACTIVE=0 # possible to access internet in SERVER
 fi
-
 
 ### alias
 alias ls='ls -G'
@@ -433,33 +457,12 @@ esac
 #     ;;
 #  esac
 
-
-### remove duplicate of PATH
-__remove_duplicate() {
-  _env=""
-  _env_name="$1"
-  _ENV="${!1}"
-  for _e in `echo $_ENV | tr ':' ' '`; do
-    case ":${_env}:" in
-      *:"${_e}":* )
-        ;;
-      * )
-        if [ "$_env" ]; then
-          _env="$_env:$_e"
-        else
-          _env=$_e
-        fi
-        ;;
-    esac
-  done
-  eval "$_env_name=$_env"
-  unset _e
-  unset _env
-  unset _env_name
-  unset _ENV
-}
 __remove_duplicate "PATH"
 __remove_duplicate "LD_LIBRARY_PATH"
 
-unset __uname
-unset __hostname
+unset -v __uname
+unset -v __hostname
+
+unset -f __remove_duplicate
+unset -f __is_interface_active
+unset -f __is_net
