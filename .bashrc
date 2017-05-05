@@ -7,10 +7,19 @@ if [ -f /etc/bashrc ]; then
     source /etc/bashrc
 fi
 
+### hostname (long style
+if [ `uname` != "FreeBSD" ] ; then
+  cmd_hostname="hostname -f"
+else
+  cmd_hostname="hostname"
+fi
+__uname=`uname`
+__hostname=`$cmd_hostname`
+
 ### internet access
-(
-  is_interface_active() {
-    local is=`ifconfig -u "$1" | grep "status: active"`
+{
+  __is_interface_active() {
+    local is="`ifconfig -u "$1" | grep 'status: active'`"
     if [ "$is" ] ; then
       return 0 # possible to access internet
     else
@@ -18,10 +27,10 @@ fi
     fi
     unset -v $is
   }
-  is_net() {
+  __is_net() {
     while [ -n "$1" ]
     do
-      is_interface_active "$1"
+      __is_interface_active "$1"
       if [ $? -eq 0 ] ; then
         return 0 # possible
       fi
@@ -30,9 +39,9 @@ fi
     return 1 # impossible
   }
 
-  if [ `$cmd_hostname` = 'quark.local' ] ; then
+  if [ "$__hostname" = 'quark.local' ] ; then
     echo "checking to access to internet..."
-    is_net 'en0' 'bridge 0'
+    __is_net 'en0' 'bridge 0'
     export IS_INTERNET_ACTIVE=$?
     if [ $IS_INTERNET_ACTIVE -eq 0 ] ; then
       echo ">> possible to access to internet!!"
@@ -42,16 +51,9 @@ fi
   else
     export IS_INTERNET_ACTIVE=0 # possible to access internet in SERVER
   fi
-)
-
-### hostname (long style
-if [ `uname` != "FreeBSD" ] ; then
-  cmd_hostname="hostname -f"
-else
-  cmd_hostname="hostname"
-fi
-__uname=`uname`
-__hostname=`$cmd_hostname`
+  unset -f __is_interface_active
+  unset -f __is_net
+}
 
 stty sane
 stty -ixon -ixoff # ctrl+s, ctrl+qの無効化
@@ -224,6 +226,12 @@ if [ -x "`which rbenv`" ] ; then
 fi
 
 ### user commands (ubuntu
+[ "$__uname" = "Linux" ] && [ "`uname -a | grep 'x86_64'`" ] && \
+  [ -d $HOME/.usr/local/linux_x64/bin ] && \
+  export PATH=$HOME/.usr/local/linux_x64/bin:$PATH
+[ "$__uname" = "FreeBSD" ] && [ -z "`uname -a | grep 'x86_64'`" ] && \
+  [ -d $HOME/.usr/local/freebsd_386 ] && \
+  export PATH=$HOME/.usr/local/freebsd_386/bin:$PATH
 [ "$__uname" = "Linux" ] && [ -d $HOME/.usr/bin ] && \
   export PATH=$HOME/.usr/bin:$PATH
 [ "$__uname" = "FreeBSD" ] && [ -d $HOME/usr/bin ] && \
@@ -336,7 +344,7 @@ if [ "$PYENV_ROOT" ] ; then
 fi
 
 ### LD_LIBRARY_PATH
-[ -z $LD_LIBRARY_PATH ] && \
+[ -z "$LD_LIBRARY_PATH" ] && \
   export LD_LIBRARY_PATH="" # reset
 
 ### cuda
@@ -438,8 +446,8 @@ esac
 #  esac
 
 ### local functions, variables
-(
-  remove_duplicate() {
+{
+  __remove_duplicate() {
     local _env=""
     local _env_name="$1"
     local _ENV="${!1}"
@@ -462,10 +470,14 @@ esac
     unset _env_name
     unset _ENV
   }
-  remove_duplicate "PATH"
-  remove_duplicate "LD_LIBRARY_PATH"
-)
+  __remove_duplicate "PATH"
+  __remove_duplicate "LD_LIBRARY_PATH"
+  unset -f __remove_duplicate
+}
 
 unset -v __uname
 unset -v __hostname
+
+### command line editting
+set -o vi
 
