@@ -135,12 +135,12 @@ fi
 #}}}
 ### go lang{{{
 # macOS
-[ -f /usr/local/opt/go/libexec ] && \
+[ -d /usr/local/opt/go/libexec ] && \
   export GOROOT=/usr/local/opt/go/libexec # go lang bin dir
 # linux
-[ -f $HOME/.go/versions/1.6 ] && \
+[ -d $HOME/.go/versions/1.6 ] && \
   export GOROOT=$HOME/.go/versions/1.6
-[ -f $HOME/tmp/go ] && export GOPATH=$HOME/tmp/go # workspace dir
+[ -d $HOME/tmp/go ] && export GOPATH=$HOME/tmp/go # workspace dir
 [ "$GOPATH" ] && export PATH=$GOPATH/bin:$PATH
 #}}}
 ### completion{{{
