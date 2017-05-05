@@ -55,7 +55,8 @@ __uname=`uname`
   fi
   unset -f __is_interface_active
   unset -f __is_net
-}#}}}
+}
+#}}}
 ### stty{{{
 stty sane
 stty -ixon -ixoff # ctrl+s, ctrl+qの無効化
