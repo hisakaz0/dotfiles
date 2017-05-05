@@ -462,8 +462,8 @@ esac
     unset _env_name
     unset _ENV
   }
-  __remove_duplicate "PATH"
-  __remove_duplicate "LD_LIBRARY_PATH"
+  remove_duplicate "PATH"
+  remove_duplicate "LD_LIBRARY_PATH"
 )
 
 unset -v __uname
