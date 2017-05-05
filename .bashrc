@@ -65,11 +65,11 @@ stty -ixon -ixoff # ctrl+s, ctrl+qの無効化
   tabs -2 # tab width
 #}}}
 ### completion{{{
-[ -f /etc/bash_completion ] && \
+[ -s /etc/bash_completion ] && \
   source /etc/bash_completion
-[ -x "`which brew`" ] && [ -f "`brew --prefix`/etc/bash_completion" ] && \
+[ -x "`which brew`" ] && [ -s "`brew --prefix`/etc/bash_completion" ] && \
   source `brew --prefix`/etc/bash_completion
-[ -x "`which brew`" ] && [ -f "`brew --prefix`/etc/bash_completion.d/rails.bash" ] && \
+[ -x "`which brew`" ] && [ -s "`brew --prefix`/etc/bash_completion.d/rails.bash" ] && \
   source `brew --prefix`/etc/bash_completion.d/rails.bash
 #}}}
 ### language{{{
@@ -216,7 +216,7 @@ fi
 #}}}
 ### rbenv{{{
 export RUBYGEMS_GEMDEPS=
-[ -f $HOME/.rbenv ] &&
+[ -d $HOME/.rbenv ] &&
   export PATH=$HOME/.rbenv:$PATH
 if [ -x "`which rbenv`" ] ; then
   echo "##############################"
@@ -251,7 +251,7 @@ fi
   export PATH=$HOME/tmp/kancolle/utils/macosx-x64-ex.2.3.4:$PATH
 #}}}
 ### machine specific .bashrc{{{
-if [ -f ".$__hostname/dot.bashrc.bash" ] ; then
+if [ -s ".$__hostname/dot.bashrc.bash" ] ; then
     source ".$__hostname/dot.bashrc.bash"
 fi
 #}}}
