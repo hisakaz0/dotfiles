@@ -226,7 +226,7 @@ if [ -x "`which rbenv`" ] ; then
   eval "$(rbenv init -)"
 fi
 #}}}
-### user commands (ubuntu{{{
+### user commands {{{
 [ "$__uname" = "Linux" ] && [ "`uname -a | grep 'x86_64'`" ] && \
   [ -d $HOME/.usr/local/linux_x64/bin ] && \
   export PATH=$HOME/.usr/local/linux_x64/bin:$PATH
@@ -239,15 +239,15 @@ fi
   export PATH=$HOME/usr/bin:$PATH
 [ "$__uname" = "Linux" ] && [ -d $HOME/bin/centos ] && \
   export PATH=$HOME/bin/centos:$PATH
-[ -f $HOME/.bin ] && \
+[ -d $HOME/.bin ] && \
   export PATH=$HOME/.bin:$PATH
-[ -f /usr/local/texlive/2015/bin/x86_64-darwin ] && \
+[ -d /usr/local/texlive/2015/bin/x86_64-darwin ] && \
   export PATH=/usr/local/texlive/2015/bin/x86_64-darwin:$PATH
-[ -f /usr/local/wine/bin ] && \
+[ -d /usr/local/wine/bin ] && \
   export PATH=/usr/local/wine/bin:$PATH
-[ -f $HOME/tmp/utils/bin ] && \
+[ -d $HOME/tmp/utils/bin ] && \
   export PATH=$HOME/tmp/utils/bin:$PATH
-[ -f $HOME/tmp/kancolle/utils/macosx-x64-ex.2.3.4 ] && \
+[ -d $HOME/tmp/kancolle/utils/macosx-x64-ex.2.3.4 ] && \
   export PATH=$HOME/tmp/kancolle/utils/macosx-x64-ex.2.3.4:$PATH
 #}}}
 ### machine specific .bashrc{{{
