@@ -71,8 +71,10 @@ stty -ixon -ixoff # ctrl+s, ctrl+qの無効化
 
 ### language
 if [ "$__uname" = "FreeBSD" ] ; then
-  export LANG=ja_JP.SJIS
-  export LC_ALL=ja_JP.SJIS
+  # export LANG=ja_JP.SJIS
+  # export LC_ALL=ja_JP.SJIS
+  export LANG=ja_JP.eucJP
+  export LC_ALL=ja_JP.eucJP
 else
   # ubuntu/centos
   export LANG=en_US.UTF-8
