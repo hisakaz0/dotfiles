@@ -8,16 +8,19 @@ if [ -f /etc/bashrc ]; then
 fi
 #}}}
 ### hostname (long style{{{
-if [ `uname` != "FreeBSD" ] ; then
-  cmd_hostname="hostname -f"
-else
-  cmd_hostname="hostname"
-fi
-#}}}
-### variables for ONLY .bashrc{{{
-__hostname=`$cmd_hostname`
 __uname=`uname`
-#}}}
+if [ "$__uname" = 'Darwin' ] ; then
+  cmd_hostname="scutil --get LocalHostName"
+elif [ "$__uname" = "FreeBSD" ] ; then
+  cmd_hostname="hostname"
+else
+  cmd_hostname="hostname -f" # linux stle
+fi
+__hostname=`$cmd_hostname`
+if [ -z "$__hostname" ] ; then
+  echo ">> error: hostname is not set!!!" 1>&2
+  return
+fi
 ### internet access{{{
 {
   __is_interface_active() {
@@ -41,8 +44,7 @@ __uname=`uname`
     return 1 # impossible
   }
 
-  if [ "$__hostname" = 'quark.local' ] || \
-     [ "$__hostname" = 'quark' ] ; then
+  if [ "$__hostname" = 'quark' ] ; then
     echo "checking to access to internet..."
     __is_net 'en0' 'bridge 0'
     export IS_INTERNET_ACTIVE=$?
@@ -258,8 +260,7 @@ if [ -s ".$__hostname/dot.bashrc.bash" ] ; then
 fi
 #}}}
 ### ssh-agent{{{
-if [ "$__hostname" = 'quark.local' ] || \
-   [ "$__hostname" = 'auark' ] ; then
+if [ "$__hostname" = 'auark' ] ; then
   # Refs: http://qiita.com/isaoshimizu/items/84ac5a0b1d42b9d355cf
   # eval $(ssh-agent)
   SSH_IDENTIFY_FILE="$HOME/.ssh/hisakazu_quark"
@@ -303,6 +304,24 @@ fi
 [ "`which hub`" ] && \
   eval "$(hub alias -s)"
 #}}}
+### autoupdate dotfiles{{{
+if [ "$__hostname" = 'quark' ] ; then
+  __dotfiles_dir="$HOME/work/github/pinkienort/dotfiles"
+else
+  __dotfiles_dir="$HOME/work/github/dotfiles"
+fi
+if [ "$__dotfiles_dir" ] ; then
+  __return_dir=$(pwd)
+  cd $__dotfiles_dir
+  if [ -z "$(git status -s)" ] ; then
+    echo "dotfiles are autoupdate..."
+    git fetch && git pull origin master
+  fi
+  cd $__return_dir
+  unset -v __return_dir
+fi
+unset -v __dotfiles_dir
+#}}}
 ### nvm (Node Version Manager{{{
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -311,8 +330,7 @@ export NVM_DIR="$HOME/.nvm"
 # eval $(docker-machine env default)
 #}}}
 ### kancolle logbook (check wheather process is running{{{
-if [ "$__hostname" = 'quark.local' ] || \
-   [ "$__hostname" = 'quark' ] ; then
+if [ "$__hostname" = 'quark' ] ; then
   logbook_pid=`ps aux| grep "logbook" | grep -v "grep" | awk '{ print $2; }'`
   if [ -z $logbook_pid ]; then
     echo "Kancolle Logbook is not started..."
@@ -336,8 +354,7 @@ if [ "$__hostname" = "cad110.naist.jp" ] ||
    [ "$__hostname" = "cad117.naist.jp" ] ||
    [ "$__hostname" = "cad118.naist.jp" ] ; then
   export PYENV_ROOT=$HOME/.pyenv/s1 # pyenv setting #1
-elif [ "$__hostname" = 'quark.local' ] || \
-     [ "$__hostname" = 'quark' ] ; then
+elif [ "$__hostname" = 'quark' ] ; then
   export PYENV_ROOT=$HOME/.pyenv
 fi
 if [ "$PYENV_ROOT" ] ; then
