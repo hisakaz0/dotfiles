@@ -153,8 +153,6 @@ fi
   complete -d autoextract # ~/bin/autoextracの補完
 #}}}
 ### environments{{{
-export EDITOR=vi
-[ -x `which vim` ] && export EDITOR=vim
 export PAGER='less'
 export SVN_SSH='ssh -q'
 export DAY=`date +%d` # month day
@@ -385,12 +383,16 @@ if [ -d /usr/local/cuda ] ; then
   fi
 fi
 #}}}
-### perl (brew){{{
+### perl {{{
 # TODO: fix error (see log
 # if [ ! $INTERNET_IS_ACTIVE ] ; then
 #   PERL_MM_OPT="INSTALL_BASE=$HOME/perl5" cpan local::lib
 #   eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)"
 # fi
+[ -d $HOME/.usr/local/perl/modules/lib/perl5 ] && \
+  export PERL5LIB=$HOME/.usr/local/perl/modules/lib/perl5
+[ -d $HOME/.usr/local/perl/modules/lib64/perl5 ] && \
+  export PERL5LIB=$HOME/.usr/local/perl/modules/lib64/perl5:$PERL5LIB
 #}}}
 ### homebrew{{{
 if [ "$__uname" = "Darwin" ] && [ "`which brew`" ] && [ -d $PYENV_ROOT ] ; then
@@ -472,6 +474,28 @@ esac
 #  esac
 #}}}
 #}}}
+### vim settings
+# NOTE: make executable file without dynamic link lib.
+alias vim 1>/dev/null 2>&1  # reset vim alias
+if [ $? -eq 0 ] ; then
+  unalias vim
+fi
+
+__vim_lib_error="$(ldd $(which vim) 2>&1 1>/dev/null)"
+if [ -z "$__vim_lib_error" ] ; then
+  alias vim=`which vim`
+elif [ -x /usr/bin/vim ] ; then
+  alias vim=/usr/bin/vim
+else
+  echo "there are no vim to execute..."
+fi
+unset -v __vim_lib_error
+
+if [ "$(alias vim)" ] ; then
+  export EDITOR=vim
+else
+  export EDITOR=vi
+fi
 ### remove duplicate ENVs{{{
 {
   __remove_duplicate() {
@@ -510,4 +534,8 @@ set -o vi
 
 update_date
 update_time
+
+# added by Anaconda3 4.3.1 installer
+[ -d $HOME/anaconda3/bin ] && \
+  export PATH="$HOME/anaconda3/bin:$PATH"
 
