@@ -435,3 +435,14 @@ command! Jq %!jq '.'
 " experimental
 " set runtimepath^=~/tmp/vim/shortshort
 
+
+" ============================================================
+" Python
+augroup my_python
+  autocmd!
+  autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.py call MyPythonSetting()
+augroup END
+
+function! MyPythonSetting()
+  set makeprg=python\ \%
+endfunction
