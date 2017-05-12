@@ -41,7 +41,7 @@ __uname=`uname`
     return 1 # impossible
   }
 
-  if [ "$__hostname" = 'quark.local' ] ||
+  if [ "$__hostname" = 'quark.local' ] || \
      [ "$__hostname" = 'quark' ] ; then
     echo "checking to access to internet..."
     __is_net 'en0' 'bridge 0'
@@ -258,7 +258,7 @@ if [ -s ".$__hostname/dot.bashrc.bash" ] ; then
 fi
 #}}}
 ### ssh-agent{{{
-if [ "$__hostname" = 'quark.local' ] ||
+if [ "$__hostname" = 'quark.local' ] || \
    [ "$__hostname" = 'auark' ] ; then
   # Refs: http://qiita.com/isaoshimizu/items/84ac5a0b1d42b9d355cf
   # eval $(ssh-agent)
@@ -311,7 +311,7 @@ export NVM_DIR="$HOME/.nvm"
 # eval $(docker-machine env default)
 #}}}
 ### kancolle logbook (check wheather process is running{{{
-if [ "$__hostname" = 'quark.local' ] ||
+if [ "$__hostname" = 'quark.local' ] || \
    [ "$__hostname" = 'quark' ] ; then
   logbook_pid=`ps aux| grep "logbook" | grep -v "grep" | awk '{ print $2; }'`
   if [ -z $logbook_pid ]; then
@@ -336,7 +336,7 @@ if [ "$__hostname" = "cad110.naist.jp" ] ||
    [ "$__hostname" = "cad117.naist.jp" ] ||
    [ "$__hostname" = "cad118.naist.jp" ] ; then
   export PYENV_ROOT=$HOME/.pyenv/s1 # pyenv setting #1
-elif [ "$__hostname" = 'quark.local' ] ||
+elif [ "$__hostname" = 'quark.local' ] || \
      [ "$__hostname" = 'quark' ] ; then
   export PYENV_ROOT=$HOME/.pyenv
 fi
