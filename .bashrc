@@ -303,22 +303,24 @@ fi
   eval "$(hub alias -s)"
 #}}}
 ### autoupdate dotfiles{{{
-if [ "$__hostname" = 'quark' ] ; then
-  __dotfiles_dir="$HOME/work/github/pinkienort/dotfiles"
-else
-  __dotfiles_dir="$HOME/work/github/dotfiles"
-fi
-if [ "$__dotfiles_dir" ] ; then
-  __return_dir=$(pwd)
-  cd $__dotfiles_dir
-  if [ -z "$(git status -s)" ] ; then
-    echo "dotfiles are autoupdate..."
-    git fetch && git pull origin master
+if [ $IS_INTERNET_ACTIVE -eq 0 ] ; then
+  if [ "$__hostname" = 'quark' ] ; then
+    __dotfiles_dir="$HOME/work/github/pinkienort/dotfiles"
+  else
+    __dotfiles_dir="$HOME/work/github/dotfiles"
   fi
-  cd $__return_dir
-  unset -v __return_dir
+  if [ "$__dotfiles_dir" ] ; then
+    __return_dir=$(pwd)
+    cd $__dotfiles_dir
+    if [ -z "$(git status -s)" ] ; then
+      echo "dotfiles are autoupdate..."
+      git fetch && git pull origin master
+    fi
+    cd $__return_dir
+    unset -v __return_dir
+  fi
+  unset -v __dotfiles_dir
 fi
-unset -v __dotfiles_dir
 #}}}
 ### nvm (Node Version Manager{{{
 export NVM_DIR="$HOME/.nvm"
@@ -385,7 +387,7 @@ fi
 #}}}
 ### perl {{{
 # TODO: fix error (see log
-# if [ ! $INTERNET_IS_ACTIVE ] ; then
+# if [ ! $IS_INTERNET_ACTIVE ] ; then
 #   PERL_MM_OPT="INSTALL_BASE=$HOME/perl5" cpan local::lib
 #   eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)"
 # fi
@@ -481,13 +483,21 @@ if [ $? -eq 0 ] ; then
   unalias vim
 fi
 
-__vim_lib_error="$(ldd $(which vim) 2>&1 1>/dev/null)"
+if [ "$(which ldd)" ] ; then
+  __vim_lib_error="$(ldd $(which vim) 2>&1 1>/dev/null)"
+else
+  __vim_lib_error=""
+fi
 if [ -z "$__vim_lib_error" ] ; then
-  alias vim=`which vim`
+  echo "vim > use package installed"
+  __vim_path=$(which vim)
+  alias vim=$__vim_path
+  unset -v __vim_path
 elif [ -x /usr/bin/vim ] ; then
+  echo "vim > use system"
   alias vim=/usr/bin/vim
 else
-  echo "there are no vim to execute..."
+  echo "vim > there are no vim to execute..."
 fi
 unset -v __vim_lib_error
 
