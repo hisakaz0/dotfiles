@@ -233,6 +233,9 @@ au BufRead,BufEnter,BufNewFile * set formatoptions-=ro
 "}}}
 " common map " ============================================================"{{{2
 let mapleader=','
+" alias of escape
+inoremap <C-j> <ESC>
+nnoremap <C-j> <ESC>
 nnoremap <F1> <Nop>
 inoremap <F1> <Nop>
 nnoremap ; :
@@ -248,6 +251,7 @@ nnoremap <C-s> <Esc>:w<CR>
 " search in magic mode
 nnoremap / /\v
 nnoremap ? ?\v
+
 
 " moving
 inoremap <C-E> <C-X><C-E>
