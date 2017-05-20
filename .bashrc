@@ -107,6 +107,7 @@ alias RM='rm -f'
 alias rm='rm -i'
 alias CP='cp -f'
 alias cp='cp -i'
+alias mv='mv -i'
 alias today='date'
 export DATE=`date +%Y%m%d`
 alias update_date='export DATE=`date +%Y%m%d`' # year month day
@@ -395,6 +396,7 @@ fi
   export PERL5LIB=$HOME/.usr/local/perl/modules/lib/perl5
 [ -d $HOME/.usr/local/perl/modules/lib64/perl5 ] && \
   export PERL5LIB=$HOME/.usr/local/perl/modules/lib64/perl5:$PERL5LIB
+alias iperl="perl -de 0"
 #}}}
 ### homebrew{{{
 if [ "$__uname" = "Darwin" ] && [ "`which brew`" ] && [ -d $PYENV_ROOT ] ; then
@@ -492,20 +494,18 @@ if [ -z "$__vim_lib_error" ] ; then
   echo "vim > use package installed"
   __vim_path=$(which vim)
   alias vim=$__vim_path
+  export EDITOR=$__vim_path
   unset -v __vim_path
 elif [ -x /usr/bin/vim ] ; then
   echo "vim > use system"
   alias vim=/usr/bin/vim
+  export EDITOR=/usr/bin/vim
 else
   echo "vim > there are no vim to execute..."
+  export EDITOR=vi
 fi
 unset -v __vim_lib_error
 
-if [ "$(alias vim)" ] ; then
-  export EDITOR=vim
-else
-  export EDITOR=vi
-fi
 ### remove duplicate ENVs{{{
 {
   __remove_duplicate() {
