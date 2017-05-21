@@ -21,6 +21,7 @@ if [ -z "$__hostname" ] ; then
   echo ">> error: hostname is not set!!!" 1>&2
   return
 fi
+# }}}
 ### internet access{{{
 {
   __is_interface_active() {
@@ -478,7 +479,7 @@ esac
 #  esac
 #}}}
 #}}}
-### vim settings
+### vim settings{{{
 # NOTE: make executable file without dynamic link lib.
 alias vim 1>/dev/null 2>&1  # reset vim alias
 if [ $? -eq 0 ] ; then
@@ -505,7 +506,7 @@ else
   export EDITOR=vi
 fi
 unset -v __vim_lib_error
-
+#}}}
 ### remove duplicate ENVs{{{
 {
   __remove_duplicate() {
@@ -545,7 +546,7 @@ set -o vi
 update_date
 update_time
 
-# added by Anaconda3 4.3.1 installer
+# added by Anaconda3 4.3.1 installer{{{
 [ -d $HOME/anaconda3/bin ] && \
   export PATH="$HOME/anaconda3/bin:$PATH"
-
+#}}}
