@@ -138,6 +138,17 @@ fi
   . $HOME/tmp/bash/makeMakefile.sh ## create template files for c lang
 [ -s ${HOME}/tmp/kancolle/utils/kancolle_logbook.sh ] && \
   . $HOME/tmp/kancolle/utils/kancolle_logbook.sh ## kancolle logbook
+
+if [ "$(which find)" ] && [ "$(which xargs)" ] && [ "$(which egrep)" ] ; then
+  fgx() {
+    __search_path=$1 && shift
+    __filetype=$1 && shift
+    __filename=$1 && shift
+    __regex=$1
+    find $__search_path -type $__filetype -name "$__filename" | \
+      xargs -I% egrep -H "$__regex" %
+  }
+fi
 #}}}
 ### go lang{{{
 # macOS
