@@ -127,24 +127,6 @@ if has('unix')
 endif
 nnoremap <k0> :tabn<CR>
 nnoremap <k1> :tabp<CR>
-"}}}
-" colorsheme " ============================================================"{{{2
-" NOTE: This setting has to be defined before 'cursorhighlight' settings.
-colorscheme inkpot
-syntax enable
-"}}}
-" cursorhighlight " ============================================================"{{{2
-" NOTE: This settings has to be defined after 'colorscheme' settings.
-function! MyCursorHighlight()
-  highlight CursorLine ctermbg=235 guibg=DarkRed cterm=bold
-endfunction
-call MyCursorHighlight()
-
-augroup my_highlight
-  autocmd!
-  autocmd BufRead,BufEnter,BufNewFile,BufReadPre * call MyCursorHighlight()
-augroup END
-"}}}
 " quickfix " ============================================================"{{{2
 nnoremap <silent> <Leader>cn :cn<CR>
 nnoremap <silent> <Leader>cp :cp<CR>
@@ -227,6 +209,10 @@ endif
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 " " dein " ============================================================"{{{2
+"
+" debugging information
+" - plugins list: g:dein#_plugins
+"
  if &compatible
    set nocompatible " Be iMproved
  endif
@@ -472,4 +458,25 @@ function! MyPythonSetting()
   set shiftwidth=4
   set tabstop=4
 endfunction
+"}}}
+
+" colorsheme & cursorhighlight " ==============================================={{{
+" NOTE: DO NOT CHANGE ORDER of COMMANDS.
+"       'dein.vim' ---> 'colorscheme' ---> 'highlight'
+" colorsheme 'inkpot' is get from github.com, and this vim file is
+" download by 'dein.vim' plugin. 'inkpot' shouled be loaded after 'dein.vim'.
+"
+" And, curorhighlight setting of 'inkpot' is not good. I don't like it.
+" After inkpot settings, my cursorhighlight setting is loaded to overwrite.
+colorscheme inkpot
+syntax enable
+function! MyCursorHighlight()
+  highlight CursorLine ctermbg=235 guibg=DarkRed cterm=bold
+endfunction
+call MyCursorHighlight()
+
+augroup my_highlight
+  autocmd!
+  autocmd BufRead,BufEnter,BufNewFile,BufReadPre * call MyCursorHighlight()
+augroup END
 "}}}
