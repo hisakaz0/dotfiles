@@ -51,8 +51,16 @@ set virtualedit=all
 au BufRead,BufEnter,BufNewFile * set formatoptions-=ro
 "}}}
 " fold " ============================================================"{{{2
-  set foldmethod=marker
-" set foldmethod=indent
+" NOTE: vim option 'foldmethod' is automatically set by function,
+" 'SetFoldMethod'. This function are called at the event 'BufEnter'.
+  autocmd BufEnter * call SetFoldMethod()
+  function! SetFoldMethod()
+    if (search(split(&foldmarker, ',')[0]))
+      set foldmethod=marker
+    else
+      set foldmethod=indent
+    endif
+  endfunction
   set foldtext=FoldCCtext()
   set foldcolumn=5
   set fillchars=vert:\|
