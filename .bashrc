@@ -45,17 +45,13 @@ fi
     return 1 # impossible
   }
 
-  if [ "$__hostname" = 'quark' ] ; then
-    echo "checking to access to internet..."
-    __is_net 'en0' 'bridge 0'
-    export IS_INTERNET_ACTIVE=$?
-    if [ $IS_INTERNET_ACTIVE -eq 0 ] ; then
-      echo ">> possible to access to internet!!"
-    else
-      echo ">> impossible to access to internet :("
-    fi
+  echo "checking to access to internet..."
+  __is_net 'en0' 'bridge 0' 'eth0'
+  export IS_INTERNET_ACTIVE=$?
+  if [ $IS_INTERNET_ACTIVE -eq 0 ] ; then
+    echo ">> possible to access to internet!!"
   else
-    export IS_INTERNET_ACTIVE=0 # possible to access internet in SERVER
+    echo ">> impossible to access to internet :("
   fi
   unset -f __is_interface_active
   unset -f __is_net
@@ -322,12 +318,14 @@ if [ $IS_INTERNET_ACTIVE -eq 0 ] ; then
   else
     __dotfiles_dir="$HOME/work/github/dotfiles"
   fi
-  if [ "$__dotfiles_dir" ] ; then
+  if [ -d $__dotfiles_dir ] ; then
     __return_dir=$(pwd)
     cd $__dotfiles_dir
     if [ -z "$(git status -s)" ] ; then
       echo "dotfiles are autoupdate..."
       git fetch && git pull origin master
+    else
+      echo "dotfiles are up-to-date!!"
     fi
     cd $__return_dir
     unset -v __return_dir
