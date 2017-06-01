@@ -5,7 +5,7 @@ cd $HOME
 for file in ${list[*]}
 do
   src="$dotfiles_root/$file"
-  dict="$HOME/$file"
+  dict="$HOME/${file%\/*}"
   cmd="ln -sf $src $dict"
 
   echo $cmd ; $cmd
