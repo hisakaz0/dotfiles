@@ -171,17 +171,16 @@ command! -nargs=+ -complete=shellcmd Shell echo system(<f-args>)
 " Insert header line (for h1) " ============================================================"{{{
 nnoremap <silent> <Leader>hl :call InsertHeaderLine()<CR>
 
-function! InsertHeaderLine()
-  let s:virtcol = virtcol('$') - 1
-  let s:line = line('.')
-  let s:i = 0
-  let s:dash = ""
-  while s:i < s:virtcol
-    let s:dash .= "="
-    let s:i += 1
-  endwhile
-  echo s:dash
-  execute s:line . "put =s:dash"
+function! InsertHeaderLine(...)
+  " input args:
+  "   1. ch <STRING>
+  if (&textwidth) | let l:leng = &textwidth
+  else            | let l:leng = getcurpos()[2] | endif
+  if (a:0) | let l:ch = type(a:1) == type('') ? a:1 : string(a:1)
+  else     | let l:ch = '=' | endif
+  let l:header_line = ConcatString(l:ch, l:leng)
+  if (mode() == 'n') | put =l:header_line
+  else               | return l:header_line | endif
 endfunction
 "}}}
 " Chomp  " ============================================================"{{{2
