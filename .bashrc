@@ -316,29 +316,29 @@ fi
   eval "$(hub alias -s)"
 #}}}
 ### autoupdate dotfiles{{{
-if [ $IS_INTERNET_ACTIVE -eq 0 ] ; then
-  if [ "$__hostname" = 'quark' ] ; then
-    __dotfiles_dir="$HOME/work/github/pinkienort/dotfiles"
-  else
-    __dotfiles_dir="$HOME/work/github/dotfiles"
-  fi
-  if [ -d $__dotfiles_dir ] ; then
-    __return_dir=$(pwd)
-    cd $__dotfiles_dir
-    __git_status=$(git status -s)
-    if [ -z "$__git_status" ] ; then
-      echo "dotfiles >> autoupdating..."
-      git fetch && git pull origin master
+(
+  if [ $IS_INTERNET_ACTIVE -eq 0 ] ; then
+    if [ "$__hostname" = 'quark' ] ; then
+      __dotfiles_dir="$HOME/work/github/pinkienort/dotfiles"
     else
-      echo "dotfiles >> following files are remained..."
-      echo $__git_status
+      __dotfiles_dir="$HOME/work/github/dotfiles"
     fi
-    cd $__return_dir
-    unset -v __return_dir
-    unset -v __git_status
+    if [ -d $__dotfiles_dir ] ; then
+      cd $__dotfiles_dir
+      __git_status=$(git status -s)
+      if [ -z "$__git_status" ] ; then
+        echo "dotfiles >> autoupdating..."
+        __git_update () {
+          git fetch && git pull origin master
+        }
+        __git_update &
+      else
+        echo "dotfiles >> following files are remained..."
+        echo $__git_status
+      fi
+    fi
   fi
-  unset -v __dotfiles_dir
-fi
+)
 #}}}
 ### nvm (Node Version Manager{{{
 export NVM_DIR="$HOME/.nvm"
