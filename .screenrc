@@ -10,7 +10,7 @@ defscrollback 10000
 # 別画面サポート。Vimやless使うときに便利
 altscreen on
 # コマンドキーをCtrl+Zにする
-escape ^Zz
+escape ^Z^Z
 # ビジュアルベル（画面全体が点滅する）を切る
 vbell off
 # ベルの時はメッセージ（＋音）を出す(^GはvimでC-v C-gで入力する)
