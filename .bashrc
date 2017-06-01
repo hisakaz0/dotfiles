@@ -361,16 +361,26 @@ fi
 [ -x "/usr/libexec/java_home" ] && \
   export JAVA_HOME="`/usr/libexec/java_home`"
 #}}}
+# added by Anaconda3 4.3.1 installer{{{
+[ -d $HOME/anaconda3/bin ] && \
+  export PATH="$HOME/anaconda3/bin:$PATH"
+#}}}
 ### pyenv{{{
-if [ "$__hostname" = "cad110.naist.jp" ] ||
-   [ "$__hostname" = "cad111.naist.jp" ] ||
-   [ "$__hostname" = "cad112.naist.jp" ] ||
-   [ "$__hostname" = "cad113.naist.jp" ] ||
-   [ "$__hostname" = "cad114.naist.jp" ] ||
-   [ "$__hostname" = "cad115.naist.jp" ] ||
-   [ "$__hostname" = "cad116.naist.jp" ] ||
-   [ "$__hostname" = "cad117.naist.jp" ] ||
-   [ "$__hostname" = "cad118.naist.jp" ] ; then
+if \
+  [ "$__hostname" = "cad101.naist.jp" ] ||
+  [ "$__hostname" = "cad102.naist.jp" ] ||
+  [ "$__hostname" = "cad103.naist.jp" ] ||
+  [ "$__hostname" = "cad104.naist.jp" ] ||
+
+  [ "$__hostname" = "cad110.naist.jp" ] ||
+  [ "$__hostname" = "cad111.naist.jp" ] ||
+  [ "$__hostname" = "cad112.naist.jp" ] ||
+  [ "$__hostname" = "cad113.naist.jp" ] ||
+  [ "$__hostname" = "cad114.naist.jp" ] ||
+  [ "$__hostname" = "cad115.naist.jp" ] ||
+  [ "$__hostname" = "cad116.naist.jp" ] ||
+  [ "$__hostname" = "cad117.naist.jp" ] ||
+  [ "$__hostname" = "cad118.naist.jp" ] ; then
   export PYENV_ROOT=$HOME/.pyenv/s1 # pyenv setting #1
 elif [ "$__hostname" = 'quark' ] ; then
   export PYENV_ROOT=$HOME/.pyenv
@@ -561,8 +571,3 @@ set -o vi
 
 update_date
 update_time
-
-# added by Anaconda3 4.3.1 installer{{{
-[ -d $HOME/anaconda3/bin ] && \
-  export PATH="$HOME/anaconda3/bin:$PATH"
-#}}}
