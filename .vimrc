@@ -391,6 +391,27 @@ let g:autodirmake#is_confirm = 0 " No confirmation
 " Openrcnt(plugin) " ============================================================"{{{2
 nnoremap <Leader>rcnt :RecentList<CR>
 "}}}
+" Dictionary ========================================{{{
+" buftype=nofile
+" buflisted=nobuflisted
+" bufhidden=hide
+autocmd Filetype dictionary call MyDictionarySetting()
+autocmd BufLeave,WinLeave * call ReloadMyMapping()
+
+function! MyDictionarySetting()
+  let l:imap_ctrl_s = maparg('<C-S>', 'i')
+  if (l:imap_ctrl_s != '')
+    iunmap <C-S>
+  endif
+  inoremap <silent> <C-S> <ESC>S
+endfunction
+
+function! ReloadMyMapping()
+  iunmap <C-S>
+  inoremap <C-s> <Esc>:w<CR>
+endfunction
+
+
 function! ConcatString(str, num)
   " input args:
   "   str <STRING>: str be concatenated
@@ -405,6 +426,7 @@ function! ConcatString(str, num)
     return ''
   endif
 endfunction
+
 "}}}
 "}}}
 " %% DOMAIN-SPECIFIC SETTINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"{{{1
