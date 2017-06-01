@@ -25,7 +25,11 @@ fi
 ### internet access{{{
 {
   __is_interface_active() {
-    local is="`ifconfig -u "$1" | grep 'status: active'`"
+    if [ "$__uname" = 'Darwin' ] ; then
+      local is="`ifconfig -u $1 | grep 'status: active'`"
+    else
+      local is="`ifconfig $1 2>/dev/null `"
+    fi
     if [ "$is" ] ; then
       return 0 # possible to access internet
     else
