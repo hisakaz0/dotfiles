@@ -325,14 +325,17 @@ if [ $IS_INTERNET_ACTIVE -eq 0 ] ; then
   if [ -d $__dotfiles_dir ] ; then
     __return_dir=$(pwd)
     cd $__dotfiles_dir
-    if [ -z "$(git status -s)" ] ; then
-      echo "dotfiles are autoupdate..."
+    __git_status=$(git status -s)
+    if [ -z "$__git_status" ] ; then
+      echo "dotfiles >> autoupdating..."
       git fetch && git pull origin master
     else
-      echo "dotfiles are up-to-date!!"
+      echo "dotfiles >> following files are remained..."
+      echo $__git_status
     fi
     cd $__return_dir
     unset -v __return_dir
+    unset -v __git_status
   fi
   unset -v __dotfiles_dir
 fi
