@@ -53,19 +53,19 @@ au BufRead,BufEnter,BufNewFile * set formatoptions-=ro
 " fold " ============================================================"{{{2
 " NOTE: vim option 'foldmethod' is automatically set by function,
 " 'SetFoldMethod'. This function are called at the event 'BufEnter'.
-  autocmd BufEnter * call SetFoldMethod()
-  function! SetFoldMethod()
-    if (search(split(&foldmarker, ',')[0]))
-      set foldmethod=marker
-    else
-      set foldmethod=indent
-    endif
-  endfunction
-  set foldtext=FoldCCtext()
-  set foldcolumn=5
-  set fillchars=vert:\|
-  let g:foldCCtext_tail = 'printf("   %s[%4d lines  Lv%-2d]%s",
-        \ v:folddashes, v:foldend-v:foldstart+1, v:foldlevel, v:folddashes)'
+autocmd BufEnter * call SetFoldMethod()
+function! SetFoldMethod()
+  if (search(split(&foldmarker, ',')[0]))
+    set foldmethod=marker
+  else
+    set foldmethod=indent
+  endif
+endfunction
+set foldtext=FoldCCtext()
+set foldcolumn=5
+set fillchars=vert:\|
+let g:foldCCtext_tail = 'printf("   %s[%4d lines  Lv%-2d]%s",
+      \ v:folddashes, v:foldend-v:foldstart+1, v:foldlevel, v:folddashes)'
 "}}}
 " common map " ============================================================"{{{2
 let mapleader=','
@@ -155,7 +155,7 @@ set helplang=ja
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-" data " ============================================================"{{{2
+" date " ============================================================"{{{2
 command! Date echo substitute(system('date'), "\n", "", "g")
 command! -nargs=+ -complete=shellcmd Shell echo system(<f-args>)
 "}}}
@@ -420,13 +420,21 @@ function! ConcatString(str, num)
   "   <STRING>: concatenated string
   if (type(a:num) != type(0))  | return | endif
   if (type(a:str) != type("")) | return | endif
+  if (a:num > &maxfuncdepth)
+    let l:num = &maxfuncdepth - 2
+  else
+    let l:num = a:num
+  endif
+  return ConcatStringBody(a:str, l:num)
+endfunction
+
+function! ConcatStringBody(str, num)
   if (0 < a:num)
-    return a:str . eval("ConcatString(a:str, (a:num-1))")
+    return a:str . ConcatStringBody(a:str, (a:num-1))
   else
     return ''
   endif
 endfunction
-
 "}}}
 "}}}
 " %% DOMAIN-SPECIFIC SETTINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"{{{1
