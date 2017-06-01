@@ -383,6 +383,21 @@ let g:autodirmake#is_confirm = 0 " No confirmation
 " Openrcnt(plugin) " ============================================================"{{{2
 nnoremap <Leader>rcnt :RecentList<CR>
 "}}}
+function! ConcatString(str, num)
+  " input args:
+  "   str <STRING>: str be concatenated
+  "   num <INT>: how many concat 'str'
+  " return val:
+  "   <STRING>: concatenated string
+  if (type(a:num) != type(0))  | return | endif
+  if (type(a:str) != type("")) | return | endif
+  if (0 < a:num)
+    return a:str . eval("ConcatString(a:str, (a:num-1))")
+  else
+    return ''
+  endif
+endfunction
+"}}}
 "}}}
 " %% DOMAIN-SPECIFIC SETTINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"{{{1
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
