@@ -326,8 +326,14 @@ fi
         echo "dotfiles >> autoupdating..."
         __git_update () {
           __git_autoupdate_logfile="$__dotfiles_dir/.autoupdate.log"
-          git fetch              > $__git_autoupdate_logfile && \
-          git pull origin master > $__git_autoupdate_logfile
+          echo "Date: $(date)" > $__git_autoupdate_logfile
+          __is_update=$(git fetch)
+          if [ "$__is_update" ] ; then
+            echo ">> Pull new updates." >> $__git_autoupdate_logfile
+            git pull origin master >> $__git_autoupdate_logfile 2>&1
+          else
+            echo ">> No new updates." >> $__git_autoupdate_logfile
+          fi
         }
         __git_update &
       else
