@@ -325,7 +325,9 @@ fi
       if [ -z "$__git_status" ] ; then
         echo "dotfiles >> autoupdating..."
         __git_update () {
-          git fetch && git pull origin master
+          __git_autoupdate_logfile="$__dotfiles_dir/.autoupdate.log"
+          git fetch              > $__git_autoupdate_logfile && \
+          git pull origin master > $__git_autoupdate_logfile
         }
         __git_update &
       else
