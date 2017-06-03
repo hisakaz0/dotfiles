@@ -177,10 +177,7 @@ export MEMO_PATH=${HOME}/Copy/Documents/.memo
 # export GTK_IM_MODULE=uim
 #}}}
 ### console style{{{
-if [ "$__uname" = 'Darwin' ] ; then
-  export PS1='\u@\h:\W 〆 '
-  export PROMPT_COMMAND='share_history'
-elif [ "`echo $TERM | grep 'screen'`" != "" ]; then
+if [ "`echo $TERM | grep 'screen'`" != "" ]; then
   ## Current command name as window name
   #export PS1='\[\033k\033\\\][\u@\h \W]\$ '
   #export PS1='\[\033k\033\\\]\u@\h:\W\$ '
@@ -195,7 +192,6 @@ elif [ "`echo $TERM | grep 'screen'`" != "" ]; then
   export PROMPT_COMMAND='echo -ne "\033k\033\0134\033k$(basename $(pwd))\033\\";share_history'
 else
   export PS1='\u@\h:\W\$ '
-  ## With a shared history among all terminals
   export PROMPT_COMMAND='share_history'
 fi
 #}}}
