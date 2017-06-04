@@ -338,7 +338,7 @@ fi
         __git_update &
       else
         echo "dotfiles >> following files are remained..."
-        echo $__git_status
+        git status -s
       fi
     fi
   fi
