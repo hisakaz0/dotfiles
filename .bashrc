@@ -141,7 +141,7 @@ fi
 [ -s ${HOME}/tmp/kancolle/utils/kancolle_logbook.sh ] && \
   . $HOME/tmp/kancolle/utils/kancolle_logbook.sh ## kancolle logbook
 
-if [ "$(which find)" ] && [ "$(which xargs)" ] && [ "$(which egrep)" ] ; then
+if [ "`which find`" ] && [ "`which xargs`" ] && [ "`which egrep`" ] ; then
   fgx() {
     __search_path=$1 && shift
     __filetype=$1 && shift
@@ -191,7 +191,7 @@ if [ "`echo $TERM | grep 'screen'`" != "" ]; then
   #export PROMPT_COMMAND='echo -ne "\033k\033\0134\033k$(basename $(pwd))\033\\"'
   ## Above with a shared history among all terminals
   export PS1='\u@\h:\W\$ '
-  export PROMPT_COMMAND='echo -ne "\033k\033\0134\033k$(basename $(pwd))\033\\";share_history'
+  export PROMPT_COMMAND='pwd=`pwd`; echo -ne "\033k\033\0134\033k`basename $pwd`\033\\";share_history'
 else
   export PS1='\u@\h:\W\$ '
   export PROMPT_COMMAND='share_history'
@@ -236,7 +236,7 @@ if [ -x "`which rbenv`" ] ; then
   echo "## rbenv #####################"
   export RBENV_ROOT=`rbenv root`
   echo "RBENV_ROOT: $RBENV_ROOT"
-  eval "$(rbenv init -)"
+  eval "`rbenv init -`"
 fi
 #}}}
 ### user commands {{{
@@ -271,7 +271,7 @@ fi
 ### ssh-agent{{{
 if [ "$__hostname" = 'auark' ] ; then
   # Refs: http://qiita.com/isaoshimizu/items/84ac5a0b1d42b9d355cf
-  # eval $(ssh-agent)
+  # eval `ssh-agent`
   SSH_IDENTIFY_FILE="$HOME/.ssh/hisakazu_quark"
   [ -z "`ssh-add -l | grep $SSH_IDENTIFY_FILE`" ] && \
     ssh-add $SSH_IDENTIFY_FILE
@@ -279,7 +279,7 @@ if [ "$__hostname" = 'auark' ] ; then
   [ -z "`ssh-add -l | grep $SSH_IDENTIFY_FILE`" ] && \
     ssh-add $SSH_IDENTIFY_FILE
 fi
-if [ `uname` != 'Darwin' ] ; then
+if [ "$__uname" != 'Darwin' ] ; then
   SSH_AGENT_FILE="${HOME}/.ssh/.ssh-agent.$__hostname"
   if [ -f ${SSH_AGENT_FILE} ]; then
       eval `cat ${SSH_AGENT_FILE}`
@@ -311,7 +311,7 @@ fi
 #}}}
 ### hub (github{{{
 [ "`which hub`" ] && \
-  eval "$(hub alias -s)"
+  eval "`hub alias -s`"
 #}}}
 ### autoupdate dotfiles{{{
 (
@@ -323,13 +323,13 @@ fi
     fi
     if [ -d $__dotfiles_dir ] ; then
       cd $__dotfiles_dir
-      __git_status=$(git status -s)
+      __git_status=`git status -s`
       if [ -z "$__git_status" ] ; then
         echo "dotfiles >> autoupdating..."
         __git_update () {
           __git_autoupdate_logfile="$__dotfiles_dir/.autoupdate.log"
-          echo "Date: $(date)" > $__git_autoupdate_logfile
-          __is_update=$(git fetch)
+          echo "Date: `date`" > $__git_autoupdate_logfile
+          __is_update=`git fetch`
           if [ "$__is_update" ] ; then
             echo ">> Pull new updates." >> $__git_autoupdate_logfile
             git pull origin master >> $__git_autoupdate_logfile 2>&1
@@ -351,7 +351,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 #}}}
 ### docker{{{
-# eval $(docker-machine env default)
+# eval `docker-machine env default`
 #}}}
 ### kancolle logbook (check wheather process is running{{{
 if [ "$__hostname" = 'quark' ] ; then
@@ -396,8 +396,8 @@ if [ "$PYENV_ROOT" ] ; then
   echo "## pyenv #####################"
   echo "PYENV_ROOT: $PYENV_ROOT"
   export PATH=$PYENV_ROOT/bin:$PATH
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
+  eval "`pyenv init -`"
+  eval "`pyenv virtualenv-init -`"
 fi
 #}}}
 ### LD_LIBRARY_PATH{{{
@@ -423,7 +423,7 @@ fi
 # TODO: fix error (see log
 # if [ ! $IS_INTERNET_ACTIVE ] ; then
 #   PERL_MM_OPT="INSTALL_BASE=$HOME/perl5" cpan local::lib
-#   eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)"
+#   eval "`perl -I$HOME/perl5/lib/perl5 -Mlocal::lib`"
 # fi
 [ -d $HOME/.usr/local/perl/modules/lib/perl5 ] && \
   export PERL5LIB=$HOME/.usr/local/perl/modules/lib/perl5
@@ -518,14 +518,14 @@ if [ $? -eq 0 ] ; then
   unalias vim
 fi
 
-if [ "$(which ldd)" ] ; then
-  __vim_lib_error="$(ldd $(which vim) 2>&1 1>/dev/null)"
+if [ "`which ldd`" ] ; then
+  __vim_lib_error="wvim=`which vim`; `ldd $wvim 2>&1 1>/dev/null`"
 else
   __vim_lib_error=""
 fi
 if [ -z "$__vim_lib_error" ] ; then
   echo "vim > use package installed"
-  __vim_path=$(which vim)
+  __vim_path=`which vim`
   alias vim=$__vim_path
   export EDITOR=$__vim_path
   unset -v __vim_path
