@@ -78,6 +78,8 @@ stty -ixon -ixoff # ctrl+s, ctrl+qの無効化
   source `brew --prefix`/etc/bash_completion.d/rails.bash
 #}}}
 ### language{{{
+# If you want to check avaliable list,
+# you type `local -a | grep "ja"`
 if [ "$__uname" = "FreeBSD" ] ; then
   # export LANG=ja_JP.SJIS
   # export LC_ALL=ja_JP.SJIS
