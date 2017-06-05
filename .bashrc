@@ -50,7 +50,7 @@ fi
   }
 
   echo "checking to access to internet..."
-  __is_net 'en0' 'bridge 0' 'eth0'
+  __is_net 'en0' 'bridge 0' 'eth0' 'bce0' 'eno1'
   export IS_INTERNET_ACTIVE=$?
   if [ $IS_INTERNET_ACTIVE -eq 0 ] ; then
     echo ">> possible to access to internet!!"
