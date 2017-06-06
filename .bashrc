@@ -375,8 +375,6 @@ fi
 if \
   [ "$__hostname" = "cad101.naist.jp" ] ||
   [ "$__hostname" = "cad102.naist.jp" ] ||
-  [ "$__hostname" = "cad103.naist.jp" ] ||
-  [ "$__hostname" = "cad104.naist.jp" ] ||
   [ "$__hostname" = "cad105.naist.jp" ] ||
   [ "$__hostname" = "cad106.naist.jp" ] ||
 
@@ -390,6 +388,13 @@ if \
   [ "$__hostname" = "cad117.naist.jp" ] ||
   [ "$__hostname" = "cad118.naist.jp" ] ; then
   export PYENV_ROOT=$HOME/.pyenv/s1 # pyenv setting #1
+elif \
+  # NOTE: #2 has chainer, version 2.0.0
+  # But current program of train_imagenet is worked
+  # in version 1.23.0. And #3 is has 1.23.0
+  [ "$__hostname" = "cad103.naist.jp" ] ||
+  [ "$__hostname" = "cad104.naist.jp" ] ; then
+  export PYENV_ROOT=$HOME/.pyenv/s3 # pyenv setting #3
 elif [ "$__hostname" = 'quark' ] ; then
   export PYENV_ROOT=$HOME/.pyenv
 fi
@@ -409,14 +414,14 @@ fi
   export DYLD_LIBRARY_PATH=""
 #}}}
 ### cuda{{{
-if   [ -d /usr/local/cuda ] ; then
-  __cuda_dir='/usr/local/cuda'
-elif [ -d /usr/local/cuda-8.0 ] ; then
+if   [ -d /usr/local/cuda-8.0 ] ; then
   __cuda_dir='/usr/local/cuda-8.0'
 elif [ -d /usr/local/cuda-7.5 ] ; then
   __cuda_dir='/usr/local/cuda-7.5'
 elif [ -d /usr/local/cuda-7.0 ] ; then
   __cuda_dir='/usr/local/cuda-7.0'
+elif [ -d /usr/local/cuda ] ; then
+  __cuda_dir='/usr/local/cuda'
 fi
 if [ -d "$__cuda_dir" ] ; then
   echo "##############################"
@@ -583,6 +588,7 @@ unset -v __vim_lib_error
   }
   __remove_duplicate "PATH"
   __remove_duplicate "LD_LIBRARY_PATH"
+  __remove_duplicate "DYLD_LIBRARY_PATH"
   unset -f __remove_duplicate
 }
 #}}}
