@@ -5,8 +5,9 @@
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 " runtimepath
-if isdirectory($VIM . '/vim80')
-  set runtimepath^=$VIM/vim80
+let s:runtimepath = $HOME . "/.usr/local/share/vim/vim80"
+if isdirectory(s:runtimepath) && (match(v:version, "80[0-9]") >= 0)
+  set runtimepath^=s:runtimepath
 endif
 
 " common options " ============================================================"{{{2
