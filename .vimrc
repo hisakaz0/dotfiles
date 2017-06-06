@@ -192,7 +192,7 @@ function! Chomp(str)
   return substitute(a:str, '\n$', '', "")
 endfunction
 "}}}
-" Count chars" ============================================================"{{{2 
+" Count chars" ============================================================"{{{2
 " help g_CTRL-G
 "}}}
 " ClearUndoHistory{{{
@@ -227,12 +227,11 @@ endif
  if &compatible
    set nocompatible " Be iMproved
  endif
- 
+
  set runtimepath^=$HOME/.vim/bundle/repos/github.com/Shougo/dein.vim
  if dein#load_state('$HOME/.vim/bundle')
    " Required:
    call dein#begin('$HOME/.vim/bundle')
-
    call dein#add('dhruvasagar/vim-table-mode')
    call dein#add('ciaranm/inkpot')
    call dein#add('tomtom/tcomment_vim')
@@ -252,33 +251,42 @@ endif
    call dein#add('vim-jp/vimdoc-ja')
    call dein#add('Shougo/NeoComplete.vim')
    call dein#add('itchyny/dictionary.vim')
-   call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
+   call dein#add('Shougo/vimproc.vim',
+         \ {'build' : 'make', 'type__depth': 1})
    call dein#add('apple/swift',
-     \ {
-     \ 'rtp': 'utils/vim',
-     \ 'type__depth': 1,
-     \ })
+         \ {'rtp': 'utils/vim', 'type__depth': 1})
    " call dein#add('Valloric/YouCompleteMe')
    call dein#add('LeafCage/foldCC.vim')
- 
+
+   call dein#config( [
+         \ 'vim-table-mode', 'inkpot',
+         \ 'tcomment_vim', 'vim-buftabline',
+         \ 'vim-coffee-script', 'memolist.vim',
+         \ 'vim-markdown-quote-syntax', 'tabular',
+         \ 'tabular', 'previm', 'vim-markdown',
+         \ 'AnsiEsc.vim', 'vim-go', 'vim-trailing-whitespace',
+         \ 'lightline.vim', 'vim-css3-syntax',
+         \ 'syntastic', 'vimdoc-ja', 'NeoComplete.vim',
+         \ 'dictionary.vim', 'foldCC.vim' ],
+         \ { 'type__depth': 1 })
    " Let dein manage dein
    " Required:
    call dein#add('Shougo/dein.vim')
- 
+
    " Required:
    call dein#end()
    call dein#save_state()
  endif
- 
- 
+
+
  " Required:
  filetype plugin indent on
- 
+
  " If you want to install not installed plugins on startup.
  if dein#check_install()
    call dein#install()
  endif
- 
+
  " deoplete
  " let g:deoplete#enable_at_startup = 1
 " "}}}
