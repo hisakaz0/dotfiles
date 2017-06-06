@@ -435,6 +435,19 @@ function! ConcatStringBody(str, num)
   endif
 endfunction
 "}}}
+
+" Make directory automatically "{{{
+" ref: http://tyru.hatenablog.com/entry/20140518/vimhacks_mkdir_hack_without_vimrc
+augroup vimrc-auto-mkdir
+  autocmd!
+  autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'))
+  function! s:auto_mkdir(dir)
+    if !isdirectory(a:dir)
+      call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
+    endif
+  endfunction
+augroup END
+"}}}
 "}}}
 " %% DOMAIN-SPECIFIC SETTINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"{{{1
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -532,3 +545,4 @@ augroup my_highlight
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre * call MyCursorHighlight()
 augroup END
 "}}}
+
