@@ -377,6 +377,8 @@ if \
   [ "$__hostname" = "cad102.naist.jp" ] ||
   [ "$__hostname" = "cad103.naist.jp" ] ||
   [ "$__hostname" = "cad104.naist.jp" ] ||
+  [ "$__hostname" = "cad105.naist.jp" ] ||
+  [ "$__hostname" = "cad106.naist.jp" ] ||
 
   [ "$__hostname" = "cad110.naist.jp" ] ||
   [ "$__hostname" = "cad111.naist.jp" ] ||
@@ -403,21 +405,34 @@ fi
 ### LD_LIBRARY_PATH{{{
 [ -z "$LD_LIBRARY_PATH" ] && \
   export LD_LIBRARY_PATH="" # reset
+[ -z "$DYLD_LIBRARY_PATH" ] && \
+  export DYLD_LIBRARY_PATH=""
 #}}}
 ### cuda{{{
-if [ -d /usr/local/cuda ] ; then
+if   [ -d /usr/local/cuda ] ; then
+  __cuda_dir='/usr/local/cuda'
+elif [ -d /usr/local/cuda-8.0 ] ; then
+  __cuda_dir='/usr/local/cuda-8.0'
+elif [ -d /usr/local/cuda-7.5 ] ; then
+  __cuda_dir='/usr/local/cuda-7.5'
+elif [ -d /usr/local/cuda-7.0 ] ; then
+  __cuda_dir='/usr/local/cuda-7.0'
+fi
+if [ -d "$__cuda_dir" ] ; then
   echo "##############################"
   echo "## cuda ######################"
-  export CUDA_PATH="/usr/local/cuda"
+  export CUDA_PATH="$__cuda_dir"
   export PATH="$CUDA_PATH/bin:$PATH"
   export CFLAGS="-I$CUDA_PATH/include"
   export LDFLAGS="-L$CUDA_PATH/lib64"
   export LD_LIBRARY_PATH="$CUDA_PATH/lib64:$LD_LIBRARY_PATH"
+  export DYLD_LIBRARY_PATH="$CUDA_PATH/lib64:$DYLD_LIBRARY_PATH"
   nvcc -V
   if [ -f $CUDA_PATH/include/cudnn.h ] ; then
     echo ">> cudnn is available"
   fi
 fi
+unset -v __cuda_dir
 #}}}
 ### perl {{{
 # TODO: fix error (see log
@@ -519,7 +534,9 @@ if [ $? -eq 0 ] ; then
 fi
 
 if [ "`which ldd`" ] ; then
-  __vim_lib_error="wvim=`which vim`; `ldd $wvim 2>&1 1>/dev/null`"
+  __which_vim=`which vim`
+  __vim_lib_error="`ldd $__which_vim 2>&1 1>/dev/null`"
+  unset -v __which_vim
 else
   __vim_lib_error=""
 fi
