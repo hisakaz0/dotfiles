@@ -5,9 +5,12 @@
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 " runtimepath
-let s:runtimepath = $HOME . "/.usr/local/share/vim/vim80"
-if isdirectory(s:runtimepath) && (match(v:version, "80[0-9]") >= 0)
-  set runtimepath^=s:runtimepath
+if isdirectory($HOME. "/.vim")
+  execute "set runtimepath^=" .$HOME. "/.vim"
+endif
+if isdirectory($HOME. "/.usr/local/share/vim/vim80")
+      \ && (match(v:version, "80[0-9]") >= 0)
+  execute "set runtimepath^=" .$HOME. "/.usr/local/share/vim/vim80"
 endif
 
 " common options " ============================================================"{{{2
@@ -229,7 +232,7 @@ endif
  if dein#load_state('$HOME/.vim/bundle')
    " Required:
    call dein#begin('$HOME/.vim/bundle')
- 
+
    call dein#add('dhruvasagar/vim-table-mode')
    call dein#add('ciaranm/inkpot')
    call dein#add('tomtom/tcomment_vim')
@@ -272,9 +275,9 @@ endif
  filetype plugin indent on
  
  " If you want to install not installed plugins on startup.
- "if dein#check_install()
- "  call dein#install()
- "endif
+ if dein#check_install()
+   call dein#install()
+ endif
  
  " deoplete
  " let g:deoplete#enable_at_startup = 1
