@@ -16,7 +16,7 @@ endif
 " common options " ============================================================"{{{2
 set showmatch
 set mouse=a
-set nf=alpha
+set nrformats=alpha
 set backspace=indent,eol,start
 set noswapfile
 set confirm
@@ -52,6 +52,7 @@ set <BS>=
 " for multibyte character
 set ambiwidth=double
 set virtualedit=all
+set whichwrap=b,s,<,>,[,],
 au BufRead,BufEnter,BufNewFile * set formatoptions-=ro
 "}}}
 " fold " ============================================================"{{{2
