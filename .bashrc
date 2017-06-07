@@ -212,9 +212,10 @@ share_history() {
 }
 export HISTCONTROL=ignoreboth
 export HISTCONTROL=ignoredups
+export HISTFILE=$HOME/.bash_history
 export HISTIGNORE="cd*:pwd*:fg*:bg*"
-export HISTSIZE=10000
 shopt -u histappend
+export HISTSIZE=10000
 #}}}
 ### ls color{{{
 if [ "$__uname" = "Linux" ]; then
