@@ -60,11 +60,13 @@ au BufRead,BufEnter,BufNewFile * set formatoptions-=ro
 " 'SetFoldMethod'. This function are called at the event 'BufEnter'.
 autocmd BufEnter * call SetFoldMethod()
 function! SetFoldMethod()
+  let l:pos = getpos('.')
   if (search(split(&foldmarker, ',')[0]))
     set foldmethod=marker
   else
     set foldmethod=indent
   endif
+  call setpos('.', l:pos)
 endfunction
 set foldtext=FoldCCtext()
 set foldcolumn=5
