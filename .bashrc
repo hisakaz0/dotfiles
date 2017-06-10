@@ -166,8 +166,8 @@ export GOPATH=$HOME/tmp/go # workspace dir
   if [ ! -x "$GOPATH/bin/ringot" ] && [ "`which go`" ] ; then
     logfile="$GOPATH/.install.log"
     echo ">> install ringot... | logfile: $logfile"
-    go get     github.com/tSU-RooT/ringot > $logfile 2>&1
-    go install github.com/tSU-RooT/ringot > $logfile 2>&1
+    go get     github.com/tSU-RooT/ringot 1> $logfile 2>&1 &
+    go install github.com/tSU-RooT/ringot 1> $logfile 2>&1 &
   fi
 )
 #}}}
@@ -377,7 +377,7 @@ fi
 [ -x "/usr/libexec/java_home" ] && \
   export JAVA_HOME="`/usr/libexec/java_home`"
 #}}}
-# added by Anaconda3 4.3.1 installer{{{
+### added by Anaconda3 4.3.1 installer{{{
 [ -d $HOME/anaconda3/bin ] && \
   export PATH="$HOME/anaconda3/bin:$PATH"
 #}}}
