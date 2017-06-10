@@ -159,8 +159,17 @@ fi
 # linux
 [ -d $HOME/.go/versions/1.6 ] && \
   export GOROOT=$HOME/.go/versions/1.6
-[ -d $HOME/tmp/go ] && export GOPATH=$HOME/tmp/go # workspace dir
-[ "$GOPATH" ] && export PATH=$GOPATH/bin:$PATH
+export GOPATH=$HOME/tmp/go # workspace dir
+[ ! -d "$GOPATH" ] && mkdir -p $GOPATH
+[   -d "$GOPATH" ] && export PATH=$GOPATH/bin:$PATH
+(
+  if [ ! -x "$GOPATH/bin/ringot" ] && [ "`which go`" ] ; then
+    logfile="$GOPATH/.install.log"
+    echo ">> install ringot... | logfile: $logfile"
+    go get     github.com/tSU-RooT/ringot > $logfile 2>&1
+    go install github.com/tSU-RooT/ringot > $logfile 2>&1
+  fi
+)
 #}}}
 ### completion{{{
 # complete -W "vim study php html cake" cake # cakeの補完設定
