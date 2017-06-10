@@ -227,11 +227,18 @@ endif
 " debugging information
 " - plugins list: g:dein#_plugins
 "
+
  if &compatible
    set nocompatible " Be iMproved
  endif
 
- set runtimepath^=$HOME/.vim/bundle/repos/github.com/Shougo/dein.vim
+ let s:dein_path = $HOME."/.vim/bundle/repos/github.com/Shougo/dein.vim"
+ if ! isdirectory(s:dein_path)
+   echo "Installing dein.vim"
+   call system('curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > ~/.dein-installer.sh && sh ~/.dein-installer.sh ~/.vim/bundle')
+ endif
+
+ execute "set runtimepath^=" . s:dein_path
  if dein#load_state('$HOME/.vim/bundle')
    " Required:
    call dein#begin('$HOME/.vim/bundle')
