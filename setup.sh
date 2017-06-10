@@ -5,8 +5,12 @@ cd $HOME
 for file in ${list[*]}
 do
   src="$dotfiles_root/$file"
-  dict="$HOME/${file%\/*}"
-  cmd="ln -sf $src $dict"
+  dist="$HOME/${file%\/*}"
+  if [ "${file%\/*}" != "$file" ] && [ ! -d "$dist" ] ; then
+    echo "Make directory: $dist"
+    mkdir -p "$dist"
+  fi
+  cmd="ln -sf $src $dist"
 
   echo $cmd ; $cmd
 done
