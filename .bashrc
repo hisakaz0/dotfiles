@@ -356,35 +356,55 @@ fi
   }
   dotfiles_update
 )
-### github install
-(
-  github_install () {
-    if [ -z "`which git`" ] ; then
-      return
-    fi
-    url="$1"
-    user="${url##*:}" ; user="${user%%\/*}"
-    repo="${url##*\/}"; repo="${repo%%.*}"
-    user_dir="$HOME/work/github/$user"
-    repo_dir="$user_dir/$repo"
-    log="$HOME/work/github/.install.log"
-    if [ -f "$user_dir" ] ; then
-      return # exception
-    fi
-    if [ ! -d "$user_dir" ] ; then
-      mkdir -p "$user_dir"
-    fi
-    cd "$user_dir"
-    if [ -d "$repo_dir" ] ; then
-      return
-    fi
-    echo "Install $user/$repo"
-    git clone $url >> $log 2>&1 &
-  }
-  github_install "git@github.com:pinkienort/dotfiles.git"
-  github_install "git@github.com:usp-engineers-community/Open-usp-Tukubai.git"
-  github_install "git@github.com:huyng/bashmarks.git"
-)
+#}}}
+### github install#{{{
+__github_info () {
+  # args:
+  #   github_url
+  # return value:
+  #   "$user $repo"
+  user="${1##*:}" ; user="${user%%\/*}"
+  repo="${1##*\/}"; repo="${repo%%.*}"
+  echo "$user $repo"
+}
+__github_install () {
+  if [ -z "`which git`" ] ; then
+    return
+  fi
+  url="$1"
+  arr=( $(__github_info "$url") )
+  user_dir="$HOME/work/github/$user"
+  repo_dir="$user_dir/$repo"
+  log="$HOME/work/github/.install.log"
+  if [ -f "$user_dir" ] ; then
+    return # exception
+  fi
+  if [ ! -d "$user_dir" ] ; then
+    mkdir -p "$user_dir"
+  fi
+  cd "$user_dir"
+  if [ -d "$repo_dir" ] ; then
+    return
+  fi
+  echo "Install $user/$repo"
+  git clone $url >> $log 2>&1 &
+}
+repo_arr=( "git@github.com:pinkienort/dotfiles.git" "git@github.com:usp-engineers-community/Open-usp-Tukubai.git" "git@github.com:huyng/bashmarks.git" )
+for url in ${repo_arr[*]}
+do
+  __github_install "$url"
+done
+### tukubai#{{{
+__tukubai_inf=( $(__github_info "git@github.com:usp-engineers-community/Open-usp-Tukubai.git") )
+__tukubai_dir="$HOME/work/github/${__tukubai_inf[0]}/${__tukubai_inf[1]}"
+if [ -d "$__tukubai_dir" ] ; then
+  export PATH="$__tukubai_dir/COMMANDS:$PATH"
+fi
+unset -v __tukubai_info
+unset -v __tukubai_dir
+#}}}
+unset -f __github_install
+unset -f __github_info
 #}}}
 ### nvm (Node Version Manager{{{
 export NVM_DIR="$HOME/.nvm"
