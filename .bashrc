@@ -325,35 +325,65 @@ fi
 #}}}
 ### autoupdate dotfiles{{{
 (
-  if [ $IS_INTERNET_ACTIVE -eq 0 ] ; then
+  dotfiles_update () {
+    [ $IS_INTERNET_ACTIVE -ne 0 ] && return
     if [ "$__hostname" = 'quark' ] ; then
-      __dotfiles_dir="$HOME/work/github/pinkienort/dotfiles"
+      dotfiles_dir="$HOME/work/github/pinkienort/dotfiles"
     else
-      __dotfiles_dir="$HOME/work/github/dotfiles"
+      dotfiles_dir="$HOME/work/github/dotfiles"
     fi
-    if [ -d $__dotfiles_dir ] ; then
-      cd $__dotfiles_dir
-      __git_status=`git status -s`
-      if [ -z "$__git_status" ] ; then
-        echo "dotfiles >> autoupdating..."
-        __git_update () {
-          __git_autoupdate_logfile="$__dotfiles_dir/.autoupdate.log"
-          echo "Date: `date`" > $__git_autoupdate_logfile
-          __is_update=`git fetch`
-          if [ "$__is_update" ] ; then
-            echo ">> Pull new updates." >> $__git_autoupdate_logfile
-            git pull origin master >> $__git_autoupdate_logfile 2>&1
-          else
-            echo ">> No new updates." >> $__git_autoupdate_logfile
-          fi
-        }
-        __git_update &
-      else
-        echo "dotfiles >> following files are remained..."
-        git status -s
-      fi
+    [ ! -d $dotfiles_dir ] && return
+    cd $dotfiles_dir
+    git_status=`git status -s`
+    if [ -z "$git_status" ] ; then
+      echo "dotfiles >> autoupdating..."
+      git_update () {
+        git_autoupdate_logfile="$dotfiles_dir/.autoupdate.log"
+        echo "Date: `date`" > $git_autoupdate_logfile
+        is_update=`git fetch`
+        if [ "$is_update" ] ; then
+          echo ">> Pull new updates." >> $git_autoupdate_logfile
+          git pull origin master >> $git_autoupdate_logfile 2>&1
+        else
+          echo ">> No new updates." >> $git_autoupdate_logfile
+        fi
+      }
+      git_update &
+    else
+      echo "dotfiles >> following files are remained..."
+      git status -s
     fi
-  fi
+  }
+  dotfiles_update
+)
+### github install
+(
+  github_install () {
+    if [ -z "`which git`" ] ; then
+      return
+    fi
+    url="$1"
+    user="${url##*:}" ; user="${user%%\/*}"
+    repo="${url##*\/}"; repo="${repo%%.*}"
+    user_dir="$HOME/work/github/$user"
+    repo_dir="$user_dir/$repo"
+    log="$HOME/work/github/.install.log"
+    if [ -f "$user_dir" ] ; then
+      return # exception
+    fi
+    if [ ! -d "$user_dir" ] ; then
+      mkdir -p "$user_dir"
+    fi
+    cd "$user_dir"
+    if [ -d "$repo_dir" ] ; then
+      return
+    fi
+    echo "Install $user/$repo"
+    git clone $url >> $log 2>&1 &
+  }
+  github_install "git@github.com:pinkienort/dotfiles.git"
+  github_install "git@github.com:usp-engineers-community/Open-usp-Tukubai.git"
+  github_install "git@github.com:huyng/bashmarks.git"
 )
 #}}}
 ### nvm (Node Version Manager{{{
