@@ -429,11 +429,34 @@ fi
 [ -x "/usr/libexec/java_home" ] && \
   export JAVA_HOME="`/usr/libexec/java_home`"
 #}}}
-### added by Anaconda3 4.3.1 installer{{{
-[ -d $HOME/anaconda3/bin ] && \
-  export PATH="$HOME/anaconda3/bin:$PATH"
-#}}}
 ### pyenv{{{
+#
+# NOTE: pyenv is PYthon ENVironment manager...maybe.
+# pyenv can install official python distributions, and also
+# can install 'anaconda distributions.
+# In anaconda distribution, virtual environments are created by
+# 'conda' command(Usually, in officail python distributions,
+# you should use 'pyenv virtualenv' command.
+#
+# How to manage python environments on Anaconda python distribution.
+# reference: http://qiita.com/y__sama/items/5b62d31cb7e6ed50f02c
+#          : http://qiita.com/y__sama/items/f732bb7bec2bff355b69
+# - Create new env.
+#   >> conda -n <env name>
+# - Enable a env. DO NOT USE 'source activate/diactivate' commands 
+#   which are introduced in official. Above commands are conflicts
+#   with 'source' command of 'bash'.
+#   >> pyenv activate <env name>
+#   Disable a env.
+#   >> pyenv deactivate <env name>
+# - Install python of anaconda distribution
+#   >> pyenv installpython ver. or distribution>
+# - Show env list.
+#   >> conda env list
+# - Remove a env.
+#   >> conda remove -n <env name> --all
+
+#
 if \
   [ "$__hostname" = "cad101.naist.jp" ] ||
   [ "$__hostname" = "cad102.naist.jp" ] ||
