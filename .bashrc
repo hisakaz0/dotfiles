@@ -380,14 +380,14 @@ __github_install () {
     return # exception
   fi
   if [ ! -d "$user_dir" ] ; then
-    { echo "Make directory: $user_dir" ; } >> $log
+    echo "Make directory: $user_dir" |& tee $log
     mkdir -p "$user_dir"
   fi
   cd "$user_dir"
   if [ -d "$repo_dir" ] ; then
     return
   fi
-  { echo "Install $user/$repo" ; } >> $log
+  cho "Install $user/$repo" |& tee $log
   git clone $url >> $log 2>&1 &
 }
 __repo_arr=( "git@github.com:pinkienort/dotfiles.git" "git@github.com:usp-engineers-community/Open-usp-Tukubai.git" "git@github.com:huyng/bashmarks.git" )
