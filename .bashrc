@@ -373,24 +373,25 @@ __github_install () {
   fi
   url="$1"
   arr=( $(__github_info "$url") )
-  user_dir="$HOME/work/github/$user"
-  repo_dir="$user_dir/$repo"
+  user_dir="$HOME/work/github/${arr[0]}"
+  repo_dir="$user_dir/${arr[1]}"
   log="$HOME/work/github/.install.log"
   if [ -f "$user_dir" ] ; then
     return # exception
   fi
   if [ ! -d "$user_dir" ] ; then
+    { echo "Make directory: $user_dir" ; } >> $log
     mkdir -p "$user_dir"
   fi
   cd "$user_dir"
   if [ -d "$repo_dir" ] ; then
     return
   fi
-  echo "Install $user/$repo"
+  { echo "Install $user/$repo" ; } >> $log
   git clone $url >> $log 2>&1 &
 }
-repo_arr=( "git@github.com:pinkienort/dotfiles.git" "git@github.com:usp-engineers-community/Open-usp-Tukubai.git" "git@github.com:huyng/bashmarks.git" )
-for url in ${repo_arr[*]}
+__repo_arr=( "git@github.com:pinkienort/dotfiles.git" "git@github.com:usp-engineers-community/Open-usp-Tukubai.git" "git@github.com:huyng/bashmarks.git" )
+for url in ${__repo_arr[*]}
 do
   __github_install "$url"
 done
@@ -405,6 +406,7 @@ unset -v __tukubai_dir
 #}}}
 unset -f __github_install
 unset -f __github_info
+unset -v __repo_arr
 #}}}
 ### nvm (Node Version Manager{{{
 export NVM_DIR="$HOME/.nvm"
