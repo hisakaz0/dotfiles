@@ -25,7 +25,6 @@ set cindent
 set expandtab
 set shiftwidth=2
 set tabstop=2
-set wildmode=longest,list
 set number
 set title
 set list
@@ -53,6 +52,20 @@ set <BS>=
 set ambiwidth=double
 set virtualedit=all
 set whichwrap=b,s,<,>,[,],
+set autoread
+set colorcolumn=+1
+set wildmenu
+set wildmode=longest,full
+" If you edit or read binary file,
+" you should set following option, 'set binary'.
+" set binary
+
+" If you view diff of some files,
+" you should open with 'vim -d <file> ...', or
+" set option 'set scrollbind', 'set cursorbind'
+" set scrollbind
+" set cursorbind
+
 au BufRead,BufEnter,BufNewFile * set formatoptions-=ro
 "}}}
 " fold " ============================================================"{{{2
@@ -163,7 +176,10 @@ set helplang=ja
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 " date " ============================================================"{{{2
-command! Date echo substitute(system('date'), "\n", "", "g")
+command! Date call Date()
+function! Date()
+   return substitute(system('date'), "\n", "", "g")
+endfunction
 command! -nargs=+ -complete=shellcmd Shell echo system(<f-args>)
 "}}}
 " Revise Indent(CorrectCode) " ============================================================"{{{
@@ -176,7 +192,7 @@ command! -nargs=+ -complete=shellcmd Shell echo system(<f-args>)
 "endfunction
 "}}}
 " Insert header line (for h1) " ============================================================"{{{
-nnoremap <silent> <Leader>hl :call InsertHeaderLine()<CR>
+nnoremap <silent> <Leader>hl :put =InsertHeaderLine()<CR>
 
 function! InsertHeaderLine(...)
   " input args:
@@ -186,8 +202,7 @@ function! InsertHeaderLine(...)
   if (a:0) | let l:ch = type(a:1) == type('') ? a:1 : string(a:1)
   else     | let l:ch = '=' | endif
   let l:header_line = ConcatString(l:ch, l:leng)
-  if (mode() == 'n') | put =l:header_line
-  else               | return l:header_line | endif
+  return l:header_line
 endfunction
 "}}}
 " Chomp  " ============================================================"{{{2
@@ -301,10 +316,10 @@ endif
  " let g:deoplete#enable_at_startup = 1
 " "}}}
 " Neocomplete " ============================================================"{{{2
-" Disable AutoComplPop.
+" Disable AutoComplPop. 0: disable | 1: enable
 let g:acp_enableAtStartup = 0
 " Use neocomplete.
-let g:neocomplete#enable_at_startup = 0
+let g:neocomplete#enable_at_startup = 1
 " Use smartcase.
 let g:neocomplete#enable_smart_case = 1
 " Set minimum syntax keyword length.
@@ -339,8 +354,8 @@ endfunction
 " <TAB>: completion.
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 " <C-h>, <BS>: close popup and delete backword char.
-" inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-" inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 " Close popup by <Space>.
 "inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
 
@@ -367,6 +382,9 @@ augroup END
 if !exists('g:neocomplete#sources#omni#input_patterns')
   let g:neocomplete#sources#omni#input_patterns = {}
 endif
+if !exists('g:neocomplete#force_omni_input_patterns')
+  let g:neocomplete#force_omni_input_patterns = {}
+endif
 "let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
 "let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
 "let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
@@ -374,6 +392,15 @@ endif
 " For perlomni.vim setting.
 " https://github.com/c9s/perlomni.vim
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+
+" For smart TAB completion.
+"inoremap <expr><TAB>  pumvisible() ? "\<C-n>" :
+"        \ <SID>check_back_space() ? "\<TAB>" :
+"        \ neocomplete#start_manual_complete()
+"  function! s:check_back_space() "{{{
+"    let col = col('.') - 1
+"    return !col || getline('.')[col - 1]  =~ '\s'
+"  endfunction"}}}
 "}}}
 " Previm " ============================================================"{{{2
 if has('mac')
