@@ -95,7 +95,7 @@ fi
 alias ls='ls -G'
 alias ll='ls -hlF'
 alias la='ls -aF'
-alias l='ls -CF'
+# alias l='ls -CF'
 alias li='ls -1F'
 alias his='history'
 alias where='which'
@@ -380,14 +380,14 @@ __github_install () {
     return # exception
   fi
   if [ ! -d "$user_dir" ] ; then
-    echo "Make directory: $user_dir" |& tee $log
+    echo "Make directory: $user_dir" | tee $log
     mkdir -p "$user_dir"
   fi
   cd "$user_dir"
   if [ -d "$repo_dir" ] ; then
     return
   fi
-  cho "Install $user/$repo" |& tee $log
+  echo "Install $user/$repo" | tee $log
   git clone $url >> $log 2>&1 &
 }
 __repo_arr=( "git@github.com:pinkienort/dotfiles.git" "git@github.com:usp-engineers-community/Open-usp-Tukubai.git" "git@github.com:huyng/bashmarks.git" )
@@ -395,6 +395,7 @@ for url in ${__repo_arr[*]}
 do
   __github_install "$url"
 done
+#}}}
 ### tukubai#{{{
 __tukubai_inf=( $(__github_info "git@github.com:usp-engineers-community/Open-usp-Tukubai.git") )
 __tukubai_dir="$HOME/work/github/${__tukubai_inf[0]}/${__tukubai_inf[1]}"
@@ -403,10 +404,14 @@ if [ -d "$__tukubai_dir" ] ; then
 fi
 unset -v __tukubai_info
 unset -v __tukubai_dir
-#}}}
 unset -f __github_install
 unset -f __github_info
 unset -v __repo_arr
+#}}}
+### bashmarks{{{
+if [ -r $HOME/.local/bin/bashmarks.sh ] ; then
+  source $HOME/.local/bin/bashmarks.sh
+fi
 #}}}
 ### nvm (Node Version Manager{{{
 export NVM_DIR="$HOME/.nvm"
