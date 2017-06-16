@@ -368,27 +368,29 @@ __github_info () {
   echo "$user $repo"
 }
 __github_install () {
-  if [ -z "`which git`" ] ; then
-    return
-  fi
-  url="$1"
-  arr=( $(__github_info "$url") )
-  user_dir="$HOME/work/github/${arr[0]}"
-  repo_dir="$user_dir/${arr[1]}"
-  log="$HOME/work/github/.install.log"
-  if [ -f "$user_dir" ] ; then
-    return # exception
-  fi
-  if [ ! -d "$user_dir" ] ; then
-    echo "Make directory: $user_dir" | tee $log
-    mkdir -p "$user_dir"
-  fi
-  cd "$user_dir"
-  if [ -d "$repo_dir" ] ; then
-    return
-  fi
-  echo "Install $user/$repo" | tee $log
-  git clone $url >> $log 2>&1 &
+  (
+    if [ -z "`which git`" ] ; then
+      return
+    fi
+    url="$1"
+    arr=( $(__github_info "$url") )
+    user_dir="$HOME/work/github/${arr[0]}"
+    repo_dir="$user_dir/${arr[1]}"
+    log="$HOME/work/github/.install.log"
+    if [ -f "$user_dir" ] ; then
+      return # exception
+    fi
+    if [ ! -d "$user_dir" ] ; then
+      echo "Make directory: $user_dir" | tee $log
+      mkdir -p "$user_dir"
+    fi
+    cd "$user_dir"
+    if [ -d "$repo_dir" ] ; then
+      return
+    fi
+    echo "Install $user/$repo" | tee $log
+    git clone $url >> $log 2>&1 &
+  )
 }
 __repo_arr=( "git@github.com:pinkienort/dotfiles.git" "git@github.com:usp-engineers-community/Open-usp-Tukubai.git" "git@github.com:huyng/bashmarks.git" )
 for url in ${__repo_arr[*]}
