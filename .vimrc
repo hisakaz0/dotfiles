@@ -125,7 +125,7 @@ function! RightShiftOneTab()
   let s:space = ' '
   let s:volume = &tabstop
   if (!(&expandtab))
-    let s:space = "	"
+    let s:space = " "
     let s:volume = 1
   endif
   while (s:i < s:volume)
@@ -276,7 +276,14 @@ endif
    call dein#add('hail2u/vim-css3-syntax')
    call dein#add('scrooloose/syntastic')
    call dein#add('vim-jp/vimdoc-ja')
-   call dein#add('Shougo/NeoComplete.vim')
+   call dein#add('Shougo/NeoComplete.vim',
+         \ {'depends': ['neoinclude.vim', 'context_filetype.vim'],
+         \  'on_source': ['neoinclude.vim', 'context_filetype.vim'],
+         \  'lazy':1,
+         \  'type__depth': 1})
+   call dein#add('justmao945/vim-clang',
+         \ {'on_ft': ['c', 'cpp'],
+         \  'type__depth': 1 })
    call dein#add('itchyny/dictionary.vim')
    call dein#add('Shougo/vimproc.vim',
          \ {'build' : 'make', 'type__depth': 1})
@@ -292,6 +299,7 @@ endif
          \  'lazy': 1,
          \  'on_ft': ['python', 'python3'] })
 
+   " install with only depth-1
    call dein#config( [
          \ 'vim-table-mode', 'inkpot',
          \ 'tcomment_vim', 'vim-buftabline',
@@ -300,7 +308,7 @@ endif
          \ 'tabular', 'previm', 'vim-markdown',
          \ 'AnsiEsc.vim', 'vim-go', 'vim-trailing-whitespace',
          \ 'lightline.vim', 'vim-css3-syntax',
-         \ 'syntastic', 'vimdoc-ja', 'NeoComplete.vim',
+         \ 'syntastic', 'vimdoc-ja',
          \ 'dictionary.vim', 'foldCC.vim' ],
          \ { 'type__depth': 1 })
    " Let dein manage dein
@@ -321,8 +329,8 @@ endif
    call dein#install()
  endif
 
- " deoplete
- " let g:deoplete#enable_at_startup = 1
+" deoplete
+" let g:deoplete#enable_at_startup = 0
 " "}}}
 " Neocomplete " ============================================================"{{{2
 " Disable AutoComplPop. 0: disable | 1: enable
@@ -395,9 +403,16 @@ endif
 if !exists('g:neocomplete#force_omni_input_patterns')
   let g:neocomplete#force_omni_input_patterns = {}
 endif
-"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+
+" Use vim-clang instead of neocomplete
+let g:neocomplete#force_overwrite_completefunc = 1
+let g:neocomplete#force_omni_input_patterns.c =
+      \ '[^. *\t]\.\w*\|\h\w*::'
+let g:neocomplete#force_omni_input_patterns.cpp =
+      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+
+"let g:neocomplete#sources#omni#input_patterns.php =
+"      \'[^. \t]->\h\w*\|\h\w*::'
 
 " For perlomni.vim setting.
 " https://github.com/c9s/perlomni.vim
@@ -593,7 +608,7 @@ if has('python3')
   let g:jedi#force_py_version = 3
 endif
 " after showing preview window of doc, do not close
-" 1: auto close / 0: dont clos
+" 1: auto close / 0: dont close
 let g:jedi#auto_close_doc = 0
 
 "}}}
