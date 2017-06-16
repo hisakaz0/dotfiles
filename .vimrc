@@ -4,7 +4,7 @@
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-" runtimepath
+" runtimepath{{{
 if isdirectory($HOME. "/.vim")
   execute "set runtimepath^=" .$HOME. "/.vim"
 endif
@@ -12,6 +12,8 @@ if isdirectory($HOME. "/.usr/local/share/vim/vim80")
       \ && (match(v:version, "80[0-9]") >= 0)
   execute "set runtimepath^=" .$HOME. "/.usr/local/share/vim/vim80"
 endif
+"}}}
+
 
 " common options " ============================================================"{{{2
 set showmatch
@@ -55,7 +57,7 @@ set whichwrap=b,s,<,>,[,],
 set autoread
 set colorcolumn=+1
 set wildmenu
-set wildmode=longest,full
+set wildmode=list:longest
 " If you edit or read binary file,
 " you should set following option, 'set binary'.
 " set binary
@@ -161,12 +163,12 @@ nnoremap <silent> <Leader>cp :cp<CR>
 nnoremap <silent> <Leader>cc :cc<CR>
 nnoremap <silent> <Leader>tab :tab split<CR>
 "}}}
-" help documents " ============================================================"{{{
+" help documents " ======================================================="{{{
 set helplang=ja
 " If you want to read english  vim  documents,  then  you  type  :help  @en.
 " 2017/01/10: version of vim japanese documents is 7.4
 "}}}
-" text align " ============================================================"{{{
+" text align " ==========================================================="{{{
 " type :help 25.2
 "}}}
 "}}}
@@ -175,14 +177,14 @@ set helplang=ja
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-" date " ============================================================"{{{2
+" date " ================================================================"{{{2
 command! Date call Date()
 function! Date()
    return substitute(system('date'), "\n", "", "g")
 endfunction
 command! -nargs=+ -complete=shellcmd Shell echo system(<f-args>)
 "}}}
-" Revise Indent(CorrectCode) " ============================================================"{{{
+" Revise Indent(CorrectCode) " ==========================================="{{{
 "inoremap <C-K> <Esc>:call CorrectCode()<CR>a
 "nnoremap <C-K> :call CorrectCode()<CR>
 "function! CorrectCode()
@@ -282,6 +284,13 @@ endif
          \ {'rtp': 'utils/vim', 'type__depth': 1})
    " call dein#add('Valloric/YouCompleteMe')
    call dein#add('LeafCage/foldCC.vim')
+   call dein#add('davidhalter/jedi-vim',
+         \ {'on_ft': 'python', 'type__depth': 1})
+   call dein#add('lambdalisue/vim-pyenv',
+         \ {'depends': ['jedi-vim'],
+         \  'on_source': ['jedi-vim'],
+         \  'lazy': 1,
+         \  'on_ft': ['python', 'python3'] })
 
    call dein#config( [
          \ 'vim-table-mode', 'inkpot',
@@ -561,7 +570,7 @@ command! Jq %!jq '.'
 " set runtimepath^=~/tmp/vim/shortshort
 
 " ============================================================
-" Python
+" Python / jedi-vim
 augroup my_python
   autocmd!
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.py call MyPythonSetting()
@@ -572,9 +581,21 @@ function! MyPythonSetting()
   set shiftwidth=4
   set tabstop=4
 endfunction
+
+""" jedi-vim setting
+" mapping to start completion
+let g:jedi#completions_command = "<C-N>"
+" mapping to open document
+let g:jedi#documentation_command = '<leader>k'
+" use version 3 of python
+let g:jedi#force_py_version = 3
+" after showing preview window of doc, do not close
+" 1: auto close / 0: dont clos
+let g:jedi#auto_close_doc = 0
+
 "}}}
 
-" colorsheme & cursorhighlight " ==============================================={{{
+" colorsheme & cursorhighlight " =========================================={{{
 " NOTE: DO NOT CHANGE ORDER of COMMANDS.
 "       'dein.vim' ---> 'colorscheme' ---> 'highlight'
 " colorsheme 'inkpot' is get from github.com, and this vim file is
