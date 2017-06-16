@@ -589,7 +589,9 @@ let g:jedi#completions_command = "<C-N>"
 " mapping to open document
 let g:jedi#documentation_command = '<leader>k'
 " use version 3 of python
-let g:jedi#force_py_version = 3
+if has('python3')
+  let g:jedi#force_py_version = 3
+endif
 " after showing preview window of doc, do not close
 " 1: auto close / 0: dont clos
 let g:jedi#auto_close_doc = 0
