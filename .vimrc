@@ -38,7 +38,7 @@ set laststatus=2
 set t_Co=256
 set encoding=utf-8
 set fileencodings=iso-2022-jp,cp932,sjis,euc-jp,utf-8
-set clipboard+=autoselect
+" set clipboard+=autoselect
 set clipboard+=unnamed
 set incsearch
 set nohlsearch
@@ -249,6 +249,7 @@ endif
    set nocompatible " Be iMproved
  endif
 
+ let s:bundle_path = $HOME ."/.vim/bundle"
  let s:dein_path = $HOME."/.vim/bundle/repos/github.com/Shougo/dein.vim"
  if ! isdirectory(s:dein_path)
    echo "Installing dein.vim"
@@ -276,44 +277,39 @@ endif
    call dein#add('hail2u/vim-css3-syntax')
    call dein#add('scrooloose/syntastic')
    call dein#add('vim-jp/vimdoc-ja')
-   call dein#add('Shougo/NeoComplete.vim',
-         \ {'depends': ['neoinclude.vim', 'context_filetype.vim'],
-         \  'on_source': ['neoinclude.vim', 'context_filetype.vim'],
-         \  'lazy':1,
-         \  'type__depth': 1})
-   call dein#add('justmao945/vim-clang',
-         \ {'on_ft': ['c', 'cpp'],
-         \  'type__depth': 1 })
    call dein#add('itchyny/dictionary.vim')
-   call dein#add('Shougo/vimproc.vim',
-         \ {'build' : 'make', 'type__depth': 1})
    call dein#add('apple/swift',
-         \ {'rtp': 'utils/vim', 'type__depth': 1})
-   " call dein#add('Valloric/YouCompleteMe')
+         \ {'rtp': 'utils/vim' })
    call dein#add('LeafCage/foldCC.vim')
+   call dein#add('Shougo/vimproc.vim',
+         \ {'build' : 'make' })
+   call dein#add('cespare/vim-toml')
+
+   " Completion plugins
+   call dein#add('Shougo/NeoComplete.vim',
+         \ {'lazy': 1, 'on_i': 1 })
+   call dein#add('Shougo/neoinclude.vim',
+         \ {'on_source': ['NeoComplete.vim'] })
+   call dein#add('Shougo/context_filetype.vim',
+         \ {'on_source': ['NeoComplete.vim'] })
+   call dein#add('justmao945/vim-clang',
+         \ {'on_ft': ['c', 'cpp'] })
+
+   " Python plugins
    call dein#add('davidhalter/jedi-vim',
-         \ {'on_ft': 'python', 'type__depth': 1})
+         \ {'on_ft': 'python' })
    call dein#add('lambdalisue/vim-pyenv',
          \ {'depends': ['jedi-vim'],
          \  'on_source': ['jedi-vim'],
          \  'lazy': 1,
          \  'on_ft': ['python', 'python3'] })
 
-   " install with only depth-1
-   call dein#config( [
-         \ 'vim-table-mode', 'inkpot',
-         \ 'tcomment_vim', 'vim-buftabline',
-         \ 'vim-coffee-script', 'memolist.vim',
-         \ 'vim-markdown-quote-syntax', 'tabular',
-         \ 'tabular', 'previm', 'vim-markdown',
-         \ 'AnsiEsc.vim', 'vim-go', 'vim-trailing-whitespace',
-         \ 'lightline.vim', 'vim-css3-syntax',
-         \ 'syntastic', 'vimdoc-ja',
-         \ 'dictionary.vim', 'foldCC.vim' ],
-         \ { 'type__depth': 1 })
-   " Let dein manage dein
    " Required:
    call dein#add('Shougo/dein.vim')
+
+   " install with only depth-1
+   call dein#config(keys(dein#get()), { 'type__depth': 1 })
+   " Let dein manage dein
 
    " Required:
    call dein#end()
@@ -329,12 +325,18 @@ endif
    call dein#install()
  endif
 
-" deoplete
-" let g:deoplete#enable_at_startup = 0
+ " NOTE: dein_plugins_list_path is
+ " $HOME . "/work/github/pinkienort/dotfiles/.vim/dein-plugins-list.bkup.toml
+ " you can get contest of plugins list using following command.
+ " dein#plugins2toml(values(dein#get()))
+
 " "}}}
-" Neocomplete " ============================================================"{{{2
+" Neocomplete " ========================================================="{{{2
 " Disable AutoComplPop. 0: disable | 1: enable
 let g:acp_enableAtStartup = 0
+" deoplete
+ let g:deoplete#enable_at_startup = 0
+
 " Use neocomplete.
 let g:neocomplete#enable_at_startup = 1
 " Use smartcase.
@@ -357,8 +359,8 @@ endif
 let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
 " Plugin key-mappings.
-inoremap <expr><C-g>     neocomplete#undo_completion()
-inoremap <expr><C-l>     neocomplete#complete_common_string()
+inoremap <expr><C-g> neocomplete#undo_completion()
+inoremap <expr><C-l> neocomplete#complete_common_string()
 
 " Recommended key-mappings.
 " <CR>: close popup and save indent.
@@ -373,7 +375,7 @@ inoremap <expr><TAB>   pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " <C-h>, <BS>: close popup and delete backword char.
 inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS>  neocomplete#smart_close_popup()."\<C-h>"
 " Close popup by <Space>.
 "inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
 
@@ -405,18 +407,19 @@ if !exists('g:neocomplete#force_omni_input_patterns')
 endif
 
 " Use vim-clang instead of neocomplete
-let g:neocomplete#force_overwrite_completefunc = 1
-let g:neocomplete#force_omni_input_patterns.c =
-      \ '[^. *\t]\.\w*\|\h\w*::'
-let g:neocomplete#force_omni_input_patterns.cpp =
-      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+" let g:neocomplete#force_overwrite_completefunc = 1
+" let g:neocomplete#force_omni_input_patterns.c =
+"       \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+" let g:neocomplete#force_omni_input_patterns.cpp =
+"       \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
 
 "let g:neocomplete#sources#omni#input_patterns.php =
-"      \'[^. \t]->\h\w*\|\h\w*::'
+"      \ '[^. \t]->\h\w*\|\h\w*::'
 
 " For perlomni.vim setting.
 " https://github.com/c9s/perlomni.vim
-let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+" let g:neocomplete#sources#omni#input_patterns.perl =
+"       \ '\h\w*->\h\w*\|\h\w*::'
 
 " For smart TAB completion.
 "inoremap <expr><TAB>  pumvisible() ? "\<C-n>" :
@@ -427,7 +430,7 @@ let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 "    return !col || getline('.')[col - 1]  =~ '\s'
 "  endfunction"}}}
 "}}}
-" Previm " ============================================================"{{{2
+" Previm " =============================================================="{{{2
 if has('mac')
   let g:previm_open_cmd = 'open -a "/Applications/Google Chrome.app/"'
 endif
@@ -437,12 +440,13 @@ let g:memolist_path = "~/tmp/MemoList"
 if has('win32') || has('win64')
   let g:memolist_path = "/d/Users/hisakazu/tmp/MemoList"
 endif
-nnoremap <Leader>mn  :MemoNew<CR>
-nnoremap <Leader>ml  :MemoList<CR>
-nnoremap <Leader>mg  :MemoGrep<CR>
+nnoremap <Leader>mn :MemoNew<CR>
+nnoremap <Leader>ml :MemoList<CR>
+nnoremap <Leader>mg :MemoGrep<CR>
 "}}}
-" Syntastic " ============================================================"{{{2
-" let g:syntastic_javascript_checker = "jshint" "JavaScriptのSyntaxチェックはjshintで
+" Syntastic " ==========================================================="{{{2
+"JavaScriptのSyntaxチェックはjshintで
+" let g:syntastic_javascript_checker = "jshint"
 let g:syntastic_check_on_open = 0 "ファイルオープン時にはチェックをしない
 let g:syntastic_check_on_save = 0 "ファイル保存時にはチェックを実施
 let g:syntastic_check_on_wq = 0
@@ -450,18 +454,18 @@ let g:syntastic_mode_map = {
   \ "mode": "passive", "active_filetypes": [], "passive_filetypes": [] }
 " if you want to active save-on-check, change "passive" to "active"
 "}}}
-" VIM Table Mode " ============================================================"{{{2
+" VIM Table Mode " ======================================================"{{{2
 let g:table_mode_corner_corner = "|"
 let g:table_mode_corner        = "|"
 "}}}
-" Go lang " ============================================================"{{{2
+" Go lang " ============================================================="{{{2
 let g:go_fmt_autosave = 0
 let g:go_play_open_browser = 0
 "}}}
-" Autodirmak.vim " ============================================================"{{{2
+" Autodirmak.vim " ======================================================"{{{2
 let g:autodirmake#is_confirm = 0 " No confirmation
 "}}}
-" Openrcnt(plugin) " ============================================================"{{{2
+" Openrcnt(plugin) " ===================================================="{{{2
 nnoremap <Leader>rcnt :RecentList<CR>
 "}}}
 " Dictionary ========================================{{{
@@ -570,6 +574,9 @@ function! CLangSetting()
     nnoremap <Leader>arun :!./a.out
   endif
 endfunction
+
+" vim-clang
+let g:clang_c_completeopt = 'longest,menu,preview'
 
 " ============================================================
 " Verilog

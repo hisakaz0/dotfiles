@@ -1,0 +1,182 @@
+[[plugins]]
+repo = 'LeafCage/foldCC.vim'
+merged = 1
+name = 'foldCC.vim'
+normalized_name = 'foldCC'
+
+[[plugins]]
+repo = 'Shougo/NeoComplete.vim'
+lazy = 1
+name = 'NeoComplete.vim'
+normalized_name = 'NeoComplete'
+on_i = 1
+
+[[plugins]]
+repo = 'Shougo/context_filetype.vim'
+lazy = 1
+name = 'context_filetype.vim'
+normalized_name = 'context_filetype'
+on_source = 'NeoComplete.vim'
+
+[[plugins]]
+repo = 'Shougo/dein.vim'
+name = 'dein.vim'
+normalized_name = 'dein'
+
+[[plugins]]
+repo = 'Shougo/neoinclude.vim'
+lazy = 1
+name = 'neoinclude.vim'
+normalized_name = 'neoinclude'
+on_source = 'NeoComplete.vim'
+
+[[plugins]]
+repo = 'Shougo/vimproc.vim'
+build = 'make'
+name = 'vimproc.vim'
+normalized_name = 'vimproc'
+
+[[plugins]]
+repo = 'ap/vim-buftabline'
+merged = 1
+name = 'vim-buftabline'
+normalized_name = 'buftabline'
+
+[[plugins]]
+repo = 'apple/swift'
+merged = 1
+name = 'swift'
+normalized_name = 'swift'
+
+[[plugins]]
+repo = 'bronson/vim-trailing-whitespace'
+merged = 1
+name = 'vim-trailing-whitespace'
+normalized_name = 'trailing-whitespace'
+
+[[plugins]]
+repo = 'cespare/vim-toml'
+merged = 1
+name = 'vim-toml'
+normalized_name = 'toml'
+
+[[plugins]]
+repo = 'ciaranm/inkpot'
+merged = 1
+name = 'inkpot'
+normalized_name = 'inkpot'
+
+[[plugins]]
+repo = 'davidhalter/jedi-vim'
+lazy = 1
+name = 'jedi-vim'
+normalized_name = 'jedi'
+on_ft = 'python'
+
+[[plugins]]
+repo = 'dhruvasagar/vim-table-mode'
+merged = 1
+name = 'vim-table-mode'
+normalized_name = 'table-mode'
+
+[[plugins]]
+repo = 'fatih/vim-go'
+merged = 1
+name = 'vim-go'
+normalized_name = 'go'
+
+[[plugins]]
+repo = 'glidenote/memolist.vim'
+merged = 1
+name = 'memolist.vim'
+normalized_name = 'memolist'
+
+[[plugins]]
+repo = 'godlygeek/tabular'
+merged = 1
+name = 'tabular'
+normalized_name = 'tabular'
+
+[[plugins]]
+repo = 'hail2u/vim-css3-syntax'
+merged = 1
+name = 'vim-css3-syntax'
+normalized_name = 'css3-syntax'
+
+[[plugins]]
+repo = 'itchyny/dictionary.vim'
+merged = 1
+name = 'dictionary.vim'
+normalized_name = 'dictionary'
+
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+merged = 1
+name = 'lightline.vim'
+normalized_name = 'lightline'
+
+[[plugins]]
+repo = 'joker1007/vim-markdown-quote-syntax'
+merged = 1
+name = 'vim-markdown-quote-syntax'
+normalized_name = 'markdown-quote-syntax'
+
+[[plugins]]
+repo = 'justmao945/vim-clang'
+lazy = 1
+name = 'vim-clang'
+normalized_name = 'clang'
+on_ft = ['c', 'cpp']
+
+[[plugins]]
+repo = 'kannokanno/previm'
+merged = 1
+name = 'previm'
+normalized_name = 'previm'
+
+[[plugins]]
+repo = 'kchmck/vim-coffee-script'
+merged = 1
+name = 'vim-coffee-script'
+normalized_name = 'coffee-script'
+
+[[plugins]]
+repo = 'lambdalisue/vim-pyenv'
+depends = 'jedi-vim'
+lazy = 1
+name = 'vim-pyenv'
+normalized_name = 'pyenv'
+on_ft = ['python', 'python3']
+on_source = 'jedi-vim'
+
+[[plugins]]
+repo = 'rcmdnk/vim-markdown'
+merged = 1
+name = 'vim-markdown'
+normalized_name = 'markdown'
+
+[[plugins]]
+repo = 'scrooloose/syntastic'
+merged = 1
+name = 'syntastic'
+normalized_name = 'syntastic'
+
+[[plugins]]
+repo = 'tomtom/tcomment_vim'
+merged = 1
+name = 'tcomment_vim'
+normalized_name = 'tcomment'
+
+[[plugins]]
+repo = 'vim-jp/vimdoc-ja'
+merged = 1
+name = 'vimdoc-ja'
+normalized_name = 'vimdoc-ja'
+
+[[plugins]]
+repo = 'vim-scripts/AnsiEsc.vim'
+merged = 1
+name = 'AnsiEsc.vim'
+normalized_name = 'AnsiEsc'
+
+
