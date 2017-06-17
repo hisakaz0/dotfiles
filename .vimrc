@@ -1,8 +1,8 @@
 
-" %% VIM SETTINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"{{{1
-" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+" %% VIM SETTINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"{{{1
+" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 " runtimepath{{{
 if isdirectory($HOME. "/.vim")
@@ -14,8 +14,7 @@ if isdirectory($HOME. "/.usr/local/share/vim/vim80")
 endif
 "}}}
 
-
-" common options " ============================================================"{{{2
+" common options " ======================================================"{{{2
 set showmatch
 set mouse=a
 set nrformats=alpha
@@ -70,7 +69,7 @@ set wildmode=list:longest
 
 au BufRead,BufEnter,BufNewFile * set formatoptions-=ro
 "}}}
-" fold " ============================================================"{{{2
+" fold " ================================================================"{{{2
 " NOTE: vim option 'foldmethod' is automatically set by function,
 " 'SetFoldMethod'. This function are called at the event 'BufEnter'.
 autocmd BufEnter * call SetFoldMethod()
@@ -89,7 +88,7 @@ set fillchars=vert:\|
 let g:foldCCtext_tail = 'printf("   %s[%4d lines  Lv%-2d]%s",
       \ v:folddashes, v:foldend-v:foldstart+1, v:foldlevel, v:folddashes)'
 "}}}
-" common map " ============================================================"{{{2
+" common map " =========================================================="{{{2
 let mapleader=','
 " alias of escape
 inoremap <C-j> <ESC>
@@ -141,16 +140,16 @@ function! RightShiftOneTab()
   call setpos('.', s:pos)
 endfunction
 "}}}
-" toggle highlight search " ============================================================ "{{{2
+" toggle highlight search " ============================================ "{{{2
 nnoremap <silent> <Leader>hls :set invhlsearch<CR>
 " nnoremap <silent> <F5>        :set invhlsearch<CR>
 "}}}
-" abbreviatio " ============================================================"{{{2
+" abbreviatio " ========================================================="{{{2
 iabbrev lenght length
 iabbrev assing assign
 iabbrev bse base
 "}}}
-" tabpage " ============================================================"{{{2
+" tabpage " ============================================================="{{{2
 if has('unix')
   set <k0>=n " alt + n
   set <k1>=p " alt + p
@@ -172,10 +171,10 @@ set helplang=ja
 " type :help 25.2
 "}}}
 "}}}
-" %% UTILITY COMMANDS AND FUNCTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%"{{{1
-" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+" %% UTILITY COMMANDS AND FUNCTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"{{{1
+" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 " date " ================================================================"{{{2
 command! Date call Date()
@@ -193,7 +192,7 @@ command! -nargs=+ -complete=shellcmd Shell echo system(<f-args>)
 "  execute ":loadview"
 "endfunction
 "}}}
-" Insert header line (for h1) " ============================================================"{{{
+" Insert header line (for h1) " =========================================="{{{
 nnoremap <silent> <Leader>hl :put =InsertHeaderLine()<CR>
 
 function! InsertHeaderLine(...)
@@ -207,12 +206,12 @@ function! InsertHeaderLine(...)
   return l:header_line
 endfunction
 "}}}
-" Chomp  " ============================================================"{{{2
+" Chomp  " =============================================================="{{{2
 function! Chomp(str)
   return substitute(a:str, '\n$', '', "")
 endfunction
 "}}}
-" Count chars" ============================================================"{{{2
+" Count chars" =========================================================="{{{2
 " help g_CTRL-G
 "}}}
 " ClearUndoHistory{{{
@@ -234,12 +233,12 @@ if has('dialog_con')
 endif
 "}}}
 "}}}
-" %% PLUGINS SETTIGNS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"{{{1
-" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+" %% PLUGINS SETTIGNS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"{{{1
+" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-" " dein " ============================================================"{{{2
+" " dein " =============================================================="{{{2
 "
 " debugging information
 " - plugins list: g:dein#_plugins
@@ -250,14 +249,19 @@ endif
  endif
 
  let s:bundle_path = $HOME ."/.vim/bundle"
- let s:dein_path = $HOME."/.vim/bundle/repos/github.com/Shougo/dein.vim"
+ let s:dein_path = s:bundle_path ."/repos/github.com/Shougo/dein.vim"
  if ! isdirectory(s:dein_path)
+   let s:dein_installer_url =
+         \ "https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh"
+   let s:dein_installer_path = $HOME ."/.dein-installer.sh"
    echo "Installing dein.vim"
-   call system('curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > ~/.dein-installer.sh && sh ~/.dein-installer.sh ~/.vim/bundle')
+   call system(printf("curl %s > %s && sh %s %s",
+         \ s:dein_installer_url, s:dein_installer_path,
+         \ s:dein_installer_path, s:bundle_path))
  endif
 
  execute "set runtimepath^=" . s:dein_path
- if dein#load_state('$HOME/.vim/bundle')
+ if dein#load_state(s:bundle_path)
    " Required:
    call dein#begin('$HOME/.vim/bundle')
    call dein#add('dhruvasagar/vim-table-mode')
@@ -347,10 +351,10 @@ let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
 
 " Define dictionary.
 let g:neocomplete#sources#dictionary#dictionaries = {
-    \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell_hist',
-    \ 'scheme' : $HOME.'/.gosh_completions'
-        \ }
+      \ 'default' : '',
+      \ 'vimshell' : $HOME.'/.vimshell_hist',
+      \ 'scheme' : $HOME.'/.gosh_completions'
+      \ }
 
 " Define keyword.
 if !exists('g:neocomplete#keyword_patterns')
@@ -436,7 +440,7 @@ if has('mac')
 endif
 "}}}
 " MemoList " ============================================================"{{{2
-let g:memolist_path = "~/tmp/MemoList"
+let g:memolist_path = $HOME ."/tmp/MemoList"
 if has('win32') || has('win64')
   let g:memolist_path = "/d/Users/hisakazu/tmp/MemoList"
 endif
@@ -468,7 +472,7 @@ let g:autodirmake#is_confirm = 0 " No confirmation
 " Openrcnt(plugin) " ===================================================="{{{2
 nnoremap <Leader>rcnt :RecentList<CR>
 "}}}
-" Dictionary ========================================{{{
+" Dictionary =============================================================={{{
 " buftype=nofile
 " buflisted=nobuflisted
 " bufhidden=hide
@@ -527,36 +531,38 @@ augroup vimrc-auto-mkdir
 augroup END
 "}}}
 "}}}
-" %% DOMAIN-SPECIFIC SETTINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"{{{1
-" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+" %% DOMAIN-SPECIFIC SETTINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"{{{1
+" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 " Gnuplot
 autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.plt set ft=sh
 
-" ============================================================
+" ============================================================================
 " Coffee Script
 autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.coffee set ft=coffee
 
-" ============================================================
+" ============================================================================
 " Common autocmd
 autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.conf set ft=configuration
 
-" ============================================================
+" ============================================================================
 " Javascript
 autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.json set filetype=javascript
 
-" ============================================================
+" ============================================================================
 " ShortShort
-autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.{ss,shortshort} set filetype=shortshort
+autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.{ss,shortshort}
+      \set filetype=shortshort
 
-" ============================================================
+" ===========================================================================
 " Markdown
-autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.{mkd,mk,markdown} set filetype=markdown
+autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.{mkd,mk,markdown}
+      \set filetype=markdown
 nnoremap <Leader>mkdn :set ft=markdown<CR>
 
-" ============================================================
+" ============================================================================
 " C
 augroup c_lang " not meaned clang compiler
   autocmd!
@@ -569,6 +575,7 @@ function! CLangSetting()
     nnoremap <Leader>run :make run<CR>
     nnoremap <F5> :make && make run<CR>
   else
+    set makeprg=gcc\ %
     nnoremap <Leader>make :!gcc %<CR>
     nnoremap <Leader>run :!./a.out<CR>
     nnoremap <Leader>arun :!./a.out
@@ -578,21 +585,21 @@ endfunction
 " vim-clang
 let g:clang_c_completeopt = 'longest,menu,preview'
 
-" ============================================================
+" ============================================================================
 " Verilog
 augroup my_verilog
   autocmd!
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.vh set filetype=verilog
 augroup END
 
-" ============================================================
+" ============================================================================
 " Jq / Json Parser
 command! Jq %!jq '.'
 "
 " experimental
 " set runtimepath^=~/tmp/vim/shortshort
 
-" ============================================================
+" ============================================================================
 " Python / jedi-vim
 augroup my_python
   autocmd!
