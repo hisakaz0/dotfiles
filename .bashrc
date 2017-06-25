@@ -1,3 +1,4 @@
+#!/bin/bash
 ### If bash does not exist, return{{{
 [ -z "$BASH" ] &&  return
 [ -z "$PS1" ] && return
@@ -130,6 +131,13 @@ fi
 if [ -x "`which screen`" ] ; then
   alias scr='screen -D -RR'
 fi
+#}}}
+### GNU Screen#{{{
+export SCREENDIR=$HOME/.screen/$__hostname
+if [ ! -d "$SCREENDIR" ] ; then
+  mkdir -p $SCREENDIR
+fi
+chmod 700 $SCREENDIR
 #}}}
 ### utiles{{{
 [ -s ${HOME}/tmp/bash/fpath.sh ] && \
