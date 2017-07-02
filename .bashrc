@@ -462,8 +462,8 @@ fi
 #   >> conda env list
 # - Remove a env.
 #   >> conda remove -n <env name> --all
-
 #
+
 if \
   [ "$__hostname" = "cad101.naist.jp" ] ||
   [ "$__hostname" = "cad102.naist.jp" ] ||
@@ -484,9 +484,11 @@ elif \
   # NOTE: #2 has chainer, version 2.0.0
   # But current program of train_imagenet is worked
   # in version 1.23.0. And #3 is has 1.23.0
-  [ "$__hostname" = "cad103.naist.jp" ] ||
-  [ "$__hostname" = "cad104.naist.jp" ] ; then
+  [ "$__hostname" = "cad103.naist.jp" ] ; then
   export PYENV_ROOT=$HOME/.pyenv/s3 # pyenv setting #3
+elif \
+  [ "$__hostname" = "cad104.naist.jp" ] ; then
+  export PYENV_ROOT=$HOME/.pyenv/s4 # pyenv setting #4
 elif [ "$__hostname" = 'quark' ] ; then
   export PYENV_ROOT=$HOME/.pyenv
 fi
@@ -637,7 +639,9 @@ if [ "`which ldd`" ] ; then
 else
   __vim_lib_error=""
 fi
-if [ -z "$__vim_lib_error" ] ; then
+if [ -z "$__vim_lib_error" ] &&
+   [ "$__hostname" != "cad103.naist.jp" ] &&
+   [ "$__hostname" != "cad104.naist.jp" ] ; then
   echo "vim > use package installed"
   __vim_path=`which vim`
   alias vim=$__vim_path

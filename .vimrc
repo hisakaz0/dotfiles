@@ -156,6 +156,8 @@ if has('unix')
 endif
 nnoremap <k0> :tabn<CR>
 nnoremap <k1> :tabp<CR>
+nnoremap <Leader>tabn :tabn<CR>
+nnoremap <Leader>tabp :tabp<CR>
 " quickfix " ============================================================"{{{2
 nnoremap <silent> <Leader>cn :cn<CR>
 nnoremap <silent> <Leader>cp :cp<CR>
@@ -288,6 +290,7 @@ endif
    call dein#add('Shougo/vimproc.vim',
          \ {'build' : 'make' })
    call dein#add('cespare/vim-toml')
+   call dein#add('pinkienort/openrcnt.vim')
 
    " Completion plugins
    call dein#add('Shougo/NeoComplete.vim',
@@ -448,6 +451,7 @@ nnoremap <Leader>mn :MemoNew<CR>
 nnoremap <Leader>ml :MemoList<CR>
 nnoremap <Leader>mg :MemoGrep<CR>
 "}}}
+
 " Syntastic " ==========================================================="{{{2
 "JavaScriptのSyntaxチェックはjshintで
 " let g:syntastic_javascript_checker = "jshint"
