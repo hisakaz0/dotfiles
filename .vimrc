@@ -234,6 +234,7 @@ if has('dialog_con')
   command! ClearUndoHistory :call ClearUndoHistoryFunc()
 endif
 "}}}
+
 "}}}
 " %% PLUGINS SETTIGNS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"{{{1
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -291,6 +292,7 @@ endif
          \ {'build' : 'make' })
    call dein#add('cespare/vim-toml')
    call dein#add('pinkienort/openrcnt.vim')
+   call dein#add('pinkienort/shimapan.vim')
 
    " Completion plugins
    call dein#add('Shougo/NeoComplete.vim',
@@ -301,6 +303,7 @@ endif
          \ {'on_source': ['NeoComplete.vim'] })
    call dein#add('justmao945/vim-clang',
          \ {'on_ft': ['c', 'cpp'] })
+
 
    " Python plugins
    call dein#add('davidhalter/jedi-vim',
@@ -521,7 +524,6 @@ function! ConcatStringBody(str, num)
   endif
 endfunction
 "}}}
-
 " Make directory automatically "{{{
 " ref: http://tyru.hatenablog.com/entry/20140518/vimhacks_mkdir_hack_without_vimrc
 augroup vimrc-auto-mkdir
@@ -533,6 +535,12 @@ augroup vimrc-auto-mkdir
     endif
   endfunction
 augroup END
+"}}}
+" vim-trailing-whitespace {{{
+let g:extra_whitespace_ignored_filetypes = [ 'shimapan' ]
+"}}}
+" shimapan.vim {{{
+let g:shimapan_first_color = "ctermfg=255 ctermbg=32"
 "}}}
 "}}}
 " %% DOMAIN-SPECIFIC SETTINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"{{{1
