@@ -158,11 +158,40 @@ nnoremap <k0> :tabn<CR>
 nnoremap <k1> :tabp<CR>
 nnoremap <Leader>tabn :tabn<CR>
 nnoremap <Leader>tabp :tabp<CR>
+nnoremap <Leader>tabs :tab split<CR>
+
+set tabline=%!MyTabLine()
+
+function! MyTabLine ()
+  let s = ''
+  for i in range(tabpagenr('$'))
+    if i+1 == tabpagenr()
+      let s .= '%#TabLineSel#'
+    else
+      let s .= '%#TabLine#'
+    endif
+    let s .= '%' . (i+1) . 'T'
+    let s .= ' %{MyTabLabel(' . (i+1) . ')} '
+  endfor
+
+  let s .= '%#TabLineFill#%T'
+  if tabpagenr('$') > 1
+    let s .= '%=%#TabLine#999Xclose'
+  endif
+
+  return s
+endfunction
+
+function! MyTabLabel (n)
+  let buflist = tabpagebuflist(a:n)
+  let winnr = tabpagewinnr(a:n)
+  return bufname(buflist[winnr - 1])
+endfunction
+
 " quickfix " ============================================================"{{{2
 nnoremap <silent> <Leader>cn :cn<CR>
 nnoremap <silent> <Leader>cp :cp<CR>
 nnoremap <silent> <Leader>cc :cc<CR>
-nnoremap <silent> <Leader>tab :tab split<CR>
 "}}}
 " help documents " ======================================================="{{{
 set helplang=ja
@@ -628,8 +657,17 @@ endif
 " after showing preview window of doc, do not close
 " 1: auto close / 0: dont close
 let g:jedi#auto_close_doc = 0
-
 "}}}
+
+" ============================================================================
+" latex / tex
+augroup my_latex
+  autocmd! BufRead,BufEnter,BufReadPre *.tex call MyLatexSetting()
+augroup END
+
+function! MyLatexSetting()
+  set textwidth=78
+endfunction
 
 " colorsheme & cursorhighlight " =========================================={{{
 " NOTE: DO NOT CHANGE ORDER of COMMANDS.
