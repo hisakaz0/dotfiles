@@ -159,6 +159,20 @@ if [ "`which find`" ] && [ "`which xargs`" ] && [ "`which egrep`" ] ; then
       xargs -I% egrep -H "$__regex" %
   }
 fi
+
+if [ "$__uname" == 'Darwin' ] ; then
+  _print_battery_status () {
+    # Show current battery status on Mac.
+    # The items of battery status are both of percentage of remain battery,
+    # and remain time to charge.
+    #
+    # Input args:
+    #     <no parameters>
+    # Expected print format:
+    #     "%d\% hh:mm", remain_battery, remain_time
+    pmset -g ps | tail -n1 | awk '{print $3,$5 }' | sed -e 's@;@@'
+  }
+fi
 #}}}
 ### go lang{{{
 # macOS
@@ -212,6 +226,9 @@ if [ "`echo $TERM | grep 'screen'`" != "" ]; then
 else
   export PS1='\u@\h:\W\$ '
   export PROMPT_COMMAND='share_history'
+fi
+if [ "$__uname" == "Darwin" ] ; then
+  export PS1='($(_print_battery_status)) \u@\h:\W\$ '
 fi
 #}}}
 ### shopt{{{
