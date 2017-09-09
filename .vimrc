@@ -37,8 +37,10 @@ set laststatus=2
 set t_Co=256
 set encoding=utf-8
 set fileencodings=iso-2022-jp,cp932,sjis,euc-jp,utf-8
-" set clipboard+=autoselect
-set clipboard+=unnamed
+if has('xterm_clipboard')
+  set clipboard+=autoselect
+  set clipboard+=unnamed
+endif
 set incsearch
 set nohlsearch
 set ignorecase
@@ -57,6 +59,7 @@ set autoread
 set colorcolumn=+1
 set wildmenu
 set wildmode=list:longest
+set display=lastline
 " If you edit or read binary file,
 " you should set following option, 'set binary'.
 " set binary
@@ -322,6 +325,7 @@ endif
    call dein#add('cespare/vim-toml')
    call dein#add('pinkienort/openrcnt.vim')
    call dein#add('pinkienort/shimapan.vim')
+   call dein#add('fuenor/JpFormat.vim')
 
    " Completion plugins
    call dein#add('Shougo/NeoComplete.vim',
@@ -696,5 +700,9 @@ augroup my_highlight
   autocmd!
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre * call MyCursorHighlight()
 augroup END
+
+" ============================================================================
+" JpFormat
+" set formatexpr=jpvim#formatexpr()
 "}}}
 
