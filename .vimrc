@@ -60,6 +60,7 @@ set colorcolumn=+1
 set wildmenu
 set wildmode=list:longest
 set display=lastline
+set textwidth=78
 " If you edit or read binary file,
 " you should set following option, 'set binary'.
 " set binary
