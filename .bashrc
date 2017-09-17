@@ -168,9 +168,13 @@ if [ "$__uname" == 'Darwin' ] ; then
     #
     # Input args:
     #     <no parameters>
-    # Expected print format:
-    #     "%d\% hh:mm", remain_battery, remain_time
-    pmset -g ps | tail -n1 | awk '{print $3,$5 }' | sed -e 's@;@@'
+    # Options:
+    #     -o: only percent of battery
+    if [ "$1" != "-o" ] ; then
+      pmset -g ps
+      return 0
+    fi
+    pmset -g ps | egrep -o "[0-9]{1,3}%"
   }
 fi
 #}}}
@@ -228,7 +232,7 @@ else
   export PROMPT_COMMAND='share_history'
 fi
 if [ "$__uname" == "Darwin" ] ; then
-  export PS1='($(_print_battery_status)) \u@\h:\W\$ '
+  export PS1='($(_print_battery_status -o)) \u@\h:\W\$ '
 fi
 #}}}
 ### shopt{{{
