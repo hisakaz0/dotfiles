@@ -1,9 +1,9 @@
 #!/bin/sh
 
-userresources=$HOME/.Xresources
-usermodmap=$HOME/.Xmodmap
-sysresources=/usr/local/etc/X11/xinit/.Xresources
-sysmodmap=/usr/local/etc/X11/xinit/.Xmodmap
+userresources='$HOME/.Xresources'
+usermodmap='$HOME/.Xmodmap'
+sysresources='/usr/local/etc/X11/xinit/.Xresources'
+sysmodmap='/usr/local/etc/X11/xinit/.Xmodmap'
 
 # merge in defaults and keymaps
 
@@ -32,8 +32,17 @@ if [ -d /usr/local/etc/X11/xinit/xinitrc.d ] ; then
   unset f
 fi
 
+### Capslock to Control
 setxkbmap -option "ctrl:nocaps"
 
+### Fcitx
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=xim
+export XMODIFIERS=@im=fcitx
+/usr/local/bin/mozc start
+fcitx -r -d
+
+### Awesome
 exec awesome
 
 # twm &

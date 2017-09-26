@@ -81,7 +81,10 @@ stty -ixon -ixoff # ctrl+s, ctrl+qの無効化
 ### language{{{
 # If you want to check avaliable list,
 # you type `local -a | grep "ja"`
-if [ "$__uname" = "FreeBSD" ] ; then
+if [ "$__hostname" = 'kirara' ] ; then
+  export LANG='ja_JP.UTF-8'
+  export LC_ALL='ja_JP.UTF-8'
+elif [ "$__uname" = "FreeBSD" ] ; then
   # export LANG=ja_JP.SJIS
   # export LC_ALL=ja_JP.SJIS
   export LANG=ja_JP.eucJP
