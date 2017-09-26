@@ -163,7 +163,15 @@ if [ "`which find`" ] && [ "`which xargs`" ] && [ "`which egrep`" ] ; then
   }
 fi
 
-if [ "$__uname" == 'Darwin' ] ; then
+if [ "$__uname" = 'FreeBSD' ] ; then
+  _print_battery_status () {
+    if [ "$1" != '-o' ] ; then
+      acpiconf -i 0
+      return 0
+    fi
+    acpiconf -i 0 | tail -n4 | head -n1 | awk '{print $3}' 
+  }
+elif [ "$__uname" = 'Darwin' ] ; then
   _print_battery_status () {
     # Show current battery status on Mac.
     # The items of battery status are both of percentage of remain battery,
@@ -234,7 +242,9 @@ else
   export PS1='\u@\h:\W\$ '
   export PROMPT_COMMAND='share_history'
 fi
-if [ "$__uname" == "Darwin" ] ; then
+if \
+  [ "$__uname" = "Darwin" ] ||
+  [ "$__uname" = "FreeBSD" ]  ; then
   export PS1='($(_print_battery_status -o)) \u@\h:\W\$ '
 fi
 #}}}
