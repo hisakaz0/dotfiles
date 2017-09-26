@@ -1,0 +1,8 @@
+XTerm*termName: xterm256-color
+XTerm*locale:   true
+Xterm*selectToClipboard:  true
+Xterm*saveLines:  9999
+Xterm*faceName: DejaVu Sans Mono:style=Book:size=10
+Xterm*faceNameDoublesize: IPAUIGochic:style=Regular:size=10
+XTerm*background: black
+XTerm*foreground: green
