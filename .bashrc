@@ -477,12 +477,13 @@ if [ -r $HOME/.local/bin/bashmarks.sh ] ; then
 fi
 #}}}
 ### nvm (Node Version Manager{{{
-# => nvm source string already in /home/hisakazu-fu/.bashrc
-# => Appending bash_completion source string to /home/hisakazu-fu/.bashrc
-# => Close and reopen your terminal to start using nvm or run the following to use it now:
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# This loads nvm
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+# This loads nvm bash_completion
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+# Use latest node
+nvm use `ls -1 $NVM_DIR/versions/node/ | sort | tail -n1`
 #}}}
 ### docker{{{
 # eval `docker-machine env default`
