@@ -23,6 +23,16 @@ if [ -z "$__hostname" ] ; then
   return
 fi
 # }}}
+### reset env variables{{{
+[ -z "$LD_LIBRARY_PATH" ] && \
+  export LD_LIBRARY_PATH="" # reset
+[ -z "$DYLD_LIBRARY_PATH" ] && \
+  export DYLD_LIBRARY_PATH=""
+[ -z "$CPATH" ] && \
+  export CPATH=""
+[ -z "$LIBRARY_PATH" ] && \
+  export LIBRARY_PATH=""
+#}}}
 ### internet access{{{
 {
   __is_interface_active() {
@@ -292,9 +302,9 @@ if [ -x "`which rbenv`" ] ; then
 fi
 #}}}
 ### user commands {{{
-[ "$__uname" = "Linux" ] && [ "`uname -a | grep 'x86_64'`" ] && \
-  [ -d $HOME/.usr/local/linux_x64/bin ] && \
-  export PATH=$HOME/.usr/local/linux_x64/bin:$PATH
+# [ "$__uname" = "Linux" ] && [ "`uname -a | grep 'x86_64'`" ] && \
+#   [ -d $HOME/.usr/local/linux_x64/bin ] && \
+#   export PATH=$HOME/.usr/local/linux_x64/bin:$PATH
 [ "$__uname" = "FreeBSD" ] && [ -z "`uname -a | grep 'x86_64'`" ] && \
   [ -d $HOME/.usr/local/freebsd_386 ] && \
   export PATH=$HOME/.usr/local/freebsd_386/bin:$PATH
@@ -314,6 +324,15 @@ fi
   export PATH=$HOME/tmp/utils/bin:$PATH
 [ -d $HOME/tmp/kancolle/utils/macosx-x64-ex.2.3.4 ] && \
   export PATH=$HOME/tmp/kancolle/utils/macosx-x64-ex.2.3.4:$PATH
+if [ -f "/etc/redhat-release" ] ; then
+  __arr=( `cat /etc/redhat-release | cut -d' ' -f3 | tr -s '.' ' '` )
+  if [ ${__arr[0]} -eq 6 ] ; then
+    export PATH=$HOME/.usr/local/cent69/usr/bin:$PATH
+    export PATH=$HOME/.usr/local/cent6/usr/bin:$PATH
+  fi
+  unset -v __arr
+fi
+
 #}}}
 ### machine specific .bashrc{{{
 if [ -s ".$__hostname/dot.bashrc.bash" ] ; then
@@ -321,7 +340,7 @@ if [ -s ".$__hostname/dot.bashrc.bash" ] ; then
 fi
 #}}}
 ### ssh-agent{{{
-if [ "$__hostname" = 'auark' ] ; then
+if [ "$__hostname" = 'quark' ] ; then
   # Refs: http://qiita.com/isaoshimizu/items/84ac5a0b1d42b9d355cf
   # eval `ssh-agent`
   SSH_IDENTIFY_FILE="$HOME/.ssh/hisakazu_quark"
@@ -458,8 +477,12 @@ if [ -r $HOME/.local/bin/bashmarks.sh ] ; then
 fi
 #}}}
 ### nvm (Node Version Manager{{{
+# => nvm source string already in /home/hisakazu-fu/.bashrc
+# => Appending bash_completion source string to /home/hisakazu-fu/.bashrc
+# => Close and reopen your terminal to start using nvm or run the following to use it now:
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 #}}}
 ### docker{{{
 # eval `docker-machine env default`
@@ -507,8 +530,21 @@ fi
 #
 
 if \
+  # NOTE: #2 has chainer, version 2.0.0
+  # But current program of train_imagenet is worked
+  # in version 1.23.0. And #3 is has 1.23.0
+  #
+  # Date: 2017/09/21
+  # cad11{5,8,9} machies are assigned as machine for Machine Learning.
+  # Previously, cad10{3,4,5,6} are assigned, but GPUs on these machine are
+  # migrated to cad11{5,8}. Old pythnon env. are reamined such as
+  # ~/.pyenv/s{2,3,4,5,6}. Currently, no-GPU machines use same python env.,
+  # such as 's1'. Other machiens which has GPUs, has own env which is named
+  # with `hostname`.
   [ "$__hostname" = "cad101.naist.jp" ] ||
   [ "$__hostname" = "cad102.naist.jp" ] ||
+  [ "$__hostname" = "cad103.naist.jp" ] ||
+  [ "$__hostname" = "cad104.naist.jp" ] ||
   [ "$__hostname" = "cad105.naist.jp" ] ||
   [ "$__hostname" = "cad106.naist.jp" ] ||
 
@@ -517,23 +553,23 @@ if \
   [ "$__hostname" = "cad112.naist.jp" ] ||
   [ "$__hostname" = "cad113.naist.jp" ] ||
   [ "$__hostname" = "cad114.naist.jp" ] ||
-  [ "$__hostname" = "cad115.naist.jp" ] ||
   [ "$__hostname" = "cad116.naist.jp" ] ||
-  [ "$__hostname" = "cad117.naist.jp" ] ||
+  [ "$__hostname" = "cad117.naist.jp" ] ; then
+  export PYENV_ROOT=$HOME/.pyenv/s1
+elif \
+  [ "$__hostname" = "cad115.naist.jp" ] ; then
+  export PYENV_ROOT=$HOME/.pyenv/cad115
+elif \
   [ "$__hostname" = "cad118.naist.jp" ] ; then
-  export PYENV_ROOT=$HOME/.pyenv/s1 # pyenv setting #1
+  export PYENV_ROOT=$HOME/.pyenv/cad118
 elif \
-  # NOTE: #2 has chainer, version 2.0.0
-  # But current program of train_imagenet is worked
-  # in version 1.23.0. And #3 is has 1.23.0
-  [ "$__hostname" = "cad103.naist.jp" ] ; then
-  export PYENV_ROOT=$HOME/.pyenv/s3 # pyenv setting #3
+  [ "$__hostname" = "cad119.naist.jp" ] ; then
+  export PYENV_ROOT=$HOME/.pyenv/cad119
 elif \
-  [ "$__hostname" = "cad104.naist.jp" ] ; then
-  export PYENV_ROOT=$HOME/.pyenv/s4 # pyenv setting #4
-elif [ "$__hostname" = 'quark' ] ; then
+  [ "$__hostname" = 'quark' ] ; then
   export PYENV_ROOT=$HOME/.pyenv
 fi
+
 if [ "$PYENV_ROOT" ] ; then
   echo "##############################"
   echo "## pyenv #####################"
@@ -543,11 +579,9 @@ if [ "$PYENV_ROOT" ] ; then
   eval "`pyenv virtualenv-init -`"
 fi
 #}}}
-### LD_LIBRARY_PATH{{{
-[ -z "$LD_LIBRARY_PATH" ] && \
-  export LD_LIBRARY_PATH="" # reset
-[ -z "$DYLD_LIBRARY_PATH" ] && \
-  export DYLD_LIBRARY_PATH=""
+### Python {{{
+[ -d "/home/hisakazu-fu/work/edge-iot/exp/chainer/dataset/imagenet/lib" ] &&
+    export PYTHONPATH="/home/hisakazu-fu/work/edge-iot/exp/chainer/dataset/imagenet/lib"
 #}}}
 ### cuda{{{
 if   [ -d /usr/local/cuda-8.0 ] ; then
@@ -574,6 +608,21 @@ if [ -d "$__cuda_dir" ] ; then
   fi
 fi
 unset -v __cuda_dir
+### NCCL#{{{
+[ "$__hostname" = "cad115.naist.jp" ] && [ -d "$HOME/.usr/local/cad115/nccl" ] && \
+  export NCCL_ROOT=$HOME/.usr/local/cad115/nccl
+[ "$__hostname" = "cad118.naist.jp" ] && [ -d "$HOME/.usr/local/cad118/nccl" ] && \
+  export NCCL_ROOT=$HOME/.usr/local/cad118/nccl
+# On cad119, use system-wide NCCL lib.
+#[ "$__hostname" = "cad119.naist.jp" ] && [ -d "$HOME/.usr/local/cad115/nccl" ] && \
+#  export NCCL_ROOT=$HOME/.usr/local/cad119/nccl
+
+if [ -n "$NCCL_ROOT" ] ; then
+  export CPATH=$NCCL_ROOT/include:$CPATH
+  export LD_LIBRARY_PATH=$NCCL_ROOT/lib:$LD_LIBRARY_PATH
+  export LIBRARY_PATH=$NCCL_ROOT/lib:$LIBRARY_PATH
+fi
+#}}}
 #}}}
 ### perl {{{
 # TODO: fix error (see log
@@ -593,14 +642,14 @@ if [ "$__uname" = "Darwin" ] && [ "`which brew`" ] && [ -d $PYENV_ROOT ] ; then
 fi
 #}}}
 ### emax{{{
-[ -d $HOME/work/emaxv/nakashim/proj-arm64.cent ] && \
-  export EMAXV_SIML_PROJ_ROOT="$HOME/work/emaxv/nakashim/proj-arm64.cent"
-[ -d $EMAXV_SIML_PROJ_ROOT/bin ] && \
-  export PATH=$EMAXV_SIML_PROJ_ROOT/bin:$PATH
-[ -d $EMAXV_SIML_PROJ_ROOT/lib ] && \
-  export LD_LIBRARY_PATH=$EMAXV_SIML_PROJ_ROOT/lib:$LD_LIBRARY_PATH
-[ -d "$HOME/works/nakashim/proj-arm64.cent/lib/asim64-lib" ] && \
-  export LD_LIBRARY_PATH="$HOME/works/nakashim/proj-arm64.cent/lib/asim64-lib:$LD_LIBRARY_PATH"
+# [ -d $HOME/work/emaxv/nakashim/proj-arm64.cent ] && \
+#   export EMAXV_SIML_PROJ_ROOT="$HOME/work/emaxv/nakashim/proj-arm64.cent"
+# [ -d $EMAXV_SIML_PROJ_ROOT/bin ] && \
+#   export PATH=$EMAXV_SIML_PROJ_ROOT/bin:$PATH
+# [ -d $EMAXV_SIML_PROJ_ROOT/lib ] && \
+#   export LD_LIBRARY_PATH=$EMAXV_SIML_PROJ_ROOT/lib:$LD_LIBRARY_PATH
+# [ -d "$HOME/works/nakashim/proj-arm64.cent/lib/asim64-lib" ] && \
+#   export LD_LIBRARY_PATH="$HOME/works/nakashim/proj-arm64.cent/lib/asim64-lib:$LD_LIBRARY_PATH"
 #}}}
 ### cad tools{{{
 # vdec (synopsys, cadence{{{
@@ -697,6 +746,10 @@ else
   echo "vim > there are no vim to execute..."
   export EDITOR=vi
 fi
+
+# thinca/vim-themis: test tool for vim plugins
+[ -d $HOME/.vim/bundle/repos/github.com/thinca/vim-themis/bin ] &&
+  export PATH=$HOME/.vim/bundle/repos/github.com/thinca/vim-themis/bin:$PATH
 unset -v __vim_lib_error
 #}}}
 ### remove duplicate ENVs{{{
@@ -727,9 +780,12 @@ unset -v __vim_lib_error
   __remove_duplicate "PATH"
   __remove_duplicate "LD_LIBRARY_PATH"
   __remove_duplicate "DYLD_LIBRARY_PATH"
+  __remove_duplicate "LIBRARY_PATH"
+  __remove_duplicate "CPATH"
   unset -f __remove_duplicate
 }
 #}}}
+
 unset -v __uname
 unset -v __hostname
 
@@ -738,3 +794,4 @@ set -o vi
 
 update_date
 update_time
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
