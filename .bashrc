@@ -1,6 +1,6 @@
 #!/bin/bash
 ### If bash does not exist, return{{{
-[ -z "$BASH" ] &&  return
+[ -z "$BASH" ] && return
 [ -z "$PS1" ] && return
 #}}}
 ### source system wide aliases{{{
@@ -14,26 +14,21 @@ if [ "$__uname" = 'Darwin' ] ; then
   cmd_hostname="scutil --get LocalHostName"
 elif [ "$__uname" = "FreeBSD" ] ; then
   cmd_hostname="hostname"
-else
-  cmd_hostname="hostname -f" # linux stle
+elif [ "$__uname" = "Linux" ] ; then
+  cmd_hostname="hostname -f" # linux style
 fi
 __hostname=`$cmd_hostname`
 if [ -z "$__hostname" ] ; then
   echo ">> error: hostname is not set!!!" 1>&2
-  return
 fi
 # }}}
 ### reset env variables{{{
-[ -z "$LD_LIBRARY_PATH" ] && \
-  export LD_LIBRARY_PATH="" # reset
-[ -z "$DYLD_LIBRARY_PATH" ] && \
-  export DYLD_LIBRARY_PATH=""
-[ -z "$CPATH" ] && \
-  export CPATH=""
-[ -z "$LIBRARY_PATH" ] && \
-  export LIBRARY_PATH=""
+[ -z "$LD_LIBRARY_PATH" ] && export LD_LIBRARY_PATH=""
+[ -z "$DYLD_LIBRARY_PATH" ] && export DYLD_LIBRARY_PATH=""
+[ -z "$CPATH" ] && export CPATH=""
+[ -z "$LIBRARY_PATH" ] && export LIBRARY_PATH=""
 #}}}
-### internet access{{{
+### Internet access{{{
 {
   __is_interface_active() {
     if [ "$__uname" = 'Darwin' ] ; then
@@ -72,35 +67,29 @@ fi
   unset -f __is_net
 }
 #}}}
-### stty{{{
-stty sane
+### stty / options {{{
+stty sane # reset all option to reasonable value
 stty -ixon -ixoff # ctrl+s, ctrl+qの無効化
-[ "$__uname" != 'Darwin' ] && [ -z "`stty | grep erase`" ] && \
-  stty erase 
-[ -x "`which tabs`" ] && \
-  tabs -2 # tab width
-#}}}
-### completion{{{
-[ -s /etc/bash_completion ] && \
-  source /etc/bash_completion
-[ -x "`which brew`" ] && [ -s "`brew --prefix`/etc/bash_completion" ] && \
-  source `brew --prefix`/etc/bash_completion
-[ -x "`which brew`" ] && [ -s "`brew --prefix`/etc/bash_completion.d/rails.bash" ] && \
-  source `brew --prefix`/etc/bash_completion.d/rails.bash
+if [ "$__uname" != 'Darwin' ] && [ -z "`stty | grep erase`" ] ; then
+   # If a escape sequence which deletes a charactor is not set correctly, the
+   # sequence is set to 
+   stty erase 
+fi
+[ -x "`which tabs`" ] && tabs -2 # tab width
+set -o vi
 #}}}
 ### language{{{
-# If you want to check avaliable list,
-# you type `local -a | grep "ja"`
+# NOTE: To check avaliable font list with `local -a | grep "ja"`
 if [ "$__hostname" = 'kirara' ] ; then
   export LANG='ja_JP.UTF-8'
   export LC_ALL='ja_JP.UTF-8'
 elif [ "$__uname" = "FreeBSD" ] ; then
   # export LANG=ja_JP.SJIS
   # export LC_ALL=ja_JP.SJIS
-  export LANG=ja_JP.eucJP
-  export LC_ALL=ja_JP.eucJP
-else
-  # ubuntu/centos
+  # export LANG=ja_JP.eucJP
+  # export LC_ALL=ja_JP.eucJP
+  :
+elif [ "$__uname" = "Linux" ] ; then
   export LANG=en_US.UTF-8
   export LC_ALL=en_US.UTF-8
 fi
@@ -131,55 +120,59 @@ alias update_date='export DATE=`date +%Y%m%d`' # year month day
 alias update_time='export TIME=`date +%s`'
 alias bash_keybind="bind -p | grep 'C-' | grep -v 'abort\|version\|accept' | less"
 alias ducks='du -h -d 1'
-if [ "$__uname" = 'Linux' ] && [ -x "`which xdg-open`" ] ; then
+if [ "$__uname" != 'Darwin' ] && [ -x "`which xdg-open`" ] ; then
+  # NOTE: On the Darwin, `open` is supported in default
   alias open='xdg-open'
-  # else if 'Darwin': `open` is supported in default
-  # else if 'FreeBSD': NOT supported
 fi
 if [ -x "`which tmux`" ] ; then
   alias tmux='tmux -2'
   alias ta='tmux a'
   alias tat='tmux a -t'
 fi
-if [ -x "`which screen`" ] ; then
-  alias scr='screen -D -RR'
-fi
 #}}}
 ### GNU Screen#{{{
+if [ -x "`which screen`" ] ; then
+  # The alias is the meant that if there is no available session, create new
+  # session, else attach a most recently session.
+  alias scr='screen -D -RR'
+fi
+# Creating directory to manage the screen sesison, to avoid a error such
+# impossible to create session file beacase of permission.
 export SCREENDIR=$HOME/.screen/$__hostname
 if [ ! -d "$SCREENDIR" ] ; then
   mkdir -p $SCREENDIR
+  chmod 700 $SCREENDIR
 fi
-chmod 700 $SCREENDIR
 #}}}
 ### utiles{{{
-[ -s ${HOME}/tmp/bash/fpath.sh ] && \
-  . $HOME/tmp/bash/fpath.sh ## get full path func
-[ -s ${HOME}/tmp/bash/prand.sh ] && \
-  . $HOME/tmp/bash/prand.sh ## print random charactors
-[ -s ${HOME}/tmp/bash/makeMakefile.sh ] && \
-  . $HOME/tmp/bash/makeMakefile.sh ## create template files for c lang
+# [ -s ${HOME}/tmp/bash/fpath.sh ] && \
+#   . $HOME/tmp/bash/fpath.sh ## get full path func
+# [ -s ${HOME}/tmp/bash/prand.sh ] && \
+#   . $HOME/tmp/bash/prand.sh ## print random charactors
+# [ -s ${HOME}/tmp/bash/makeMakefile.sh ] && \
+#   . $HOME/tmp/bash/makeMakefile.sh ## create template files for c lang
 [ -s ${HOME}/tmp/kancolle/utils/kancolle_logbook.sh ] && \
   . $HOME/tmp/kancolle/utils/kancolle_logbook.sh ## kancolle logbook
 
-if [ "`which find`" ] && [ "`which xargs`" ] && [ "`which egrep`" ] ; then
-  fgx() {
-    __search_path=$1 && shift
-    __filetype=$1 && shift
-    __filename=$1 && shift
-    __regex=$1
-    find $__search_path -type $__filetype -name "$__filename" | \
-      xargs -I% egrep -H "$__regex" %
-  }
-fi
+# if [ "`which find`" ] && [ "`which xargs`" ] && [ "`which egrep`" ] ; then
+#   fgx() {
+#     __search_path=$1 && shift
+#     __filetype=$1 && shift
+#     __filename=$1 && shift
+#     __regex=$1
+#     find $__search_path -type $__filetype -name "$__filename" | \
+#       xargs -I% egrep -H "$__regex" %
+#   }
+# fi
 
+# Function printing the battery status
 if [ "$__uname" = 'FreeBSD' ] ; then
   _print_battery_status () {
     if [ "$1" != '-o' ] ; then
       acpiconf -i 0
       return 0
     fi
-    acpiconf -i 0 | tail -n4 | head -n1 | awk '{print $3}' 
+    acpiconf -i 0 | tail -n4 | head -n1 | awk '{print $3}'
   }
 elif [ "$__uname" = 'Darwin' ] ; then
   _print_battery_status () {
@@ -199,26 +192,7 @@ elif [ "$__uname" = 'Darwin' ] ; then
   }
 fi
 #}}}
-### go lang{{{
-# macOS
-[ -d /usr/local/opt/go/libexec ] && \
-  export GOROOT=/usr/local/opt/go/libexec # go lang bin dir
-# linux
-[ -d $HOME/.go/versions/1.6 ] && \
-  export GOROOT=$HOME/.go/versions/1.6
-export GOPATH=$HOME/tmp/go # workspace dir
-[ ! -d "$GOPATH" ] && mkdir -p $GOPATH
-[   -d "$GOPATH" ] && export PATH=$GOPATH/bin:$PATH
-(
-  if [ ! -x "$GOPATH/bin/ringot" ] && [ "`which go`" ] ; then
-    logfile="$GOPATH/.install.log"
-    echo ">> install ringot... | logfile: $logfile"
-    go get     github.com/tSU-RooT/ringot 1> $logfile 2>&1 &
-    go install github.com/tSU-RooT/ringot 1> $logfile 2>&1 &
-  fi
-)
-#}}}
-### completion{{{
+### autoextract {{{
 # complete -W "vim study php html cake" cake # cakeの補完設定
 [ -x "`which autoextract`" ] && \
   complete -d autoextract # ~/bin/autoextracの補完
@@ -229,54 +203,46 @@ export SVN_SSH='ssh -q'
 export DAY=`date +%d` # month day
 export MONTH=`date +%B` # month in literal
 export YEAR=`date +%Y` # year
-export MEMO_PATH=${HOME}/Copy/Documents/.memo
-# export PAGER="col -b -x | vim -"
-# export XMODIFIERS=@im=uim
-# export GTK_IM_MODULE=uim
+export MEMO_PATH=${HOME}/.memo
 #}}}
 ### console style{{{
-if [ "`echo $TERM | grep 'screen'`" != "" ]; then
-  ## Current command name as window name
-  #export PS1='\[\033k\033\\\][\u@\h \W]\$ '
-  #export PS1='\[\033k\033\\\]\u@\h:\W\$ '
-  ## PWD as window name
-  #export PS1='\u@\h:\W\$ '
-  #export PROMPT_COMMAND='echo -ne "\033k$(basename $(pwd))\033\\"'
-  ## PWD when no command is running, otherwise current command name as window name
-  #export PS1='\u@\h:\W\$ '
-  #export PROMPT_COMMAND='echo -ne "\033k\033\0134\033k$(basename $(pwd))\033\\"'
-  ## Above with a shared history among all terminals
-  export PS1='\u@\h:\W\$ '
-  export PROMPT_COMMAND='pwd=`pwd`; echo -ne "\033k\033\0134\033k`basename $pwd`\033\\";share_history'
+if [ "$__uname" = "Darwin" ] || [ "$__uname" = "FreeBSD" ]  ; then
+  export PS1='($(_print_battery_status -o)) \u@\h:\W\$ '
 else
   export PS1='\u@\h:\W\$ '
+fi
+if [ "`echo $TERM | grep 'screen'`" != "" ]; then
+  export PROMPT_COMMAND='pwd=`pwd`; echo -ne "\033k\033\0134\033k`basename $pwd`\033\\";share_history'
+else
   export PROMPT_COMMAND='share_history'
 fi
-if \
-  [ "$__uname" = "Darwin" ] ||
-  [ "$__uname" = "FreeBSD" ]  ; then
-  export PS1='($(_print_battery_status -o)) \u@\h:\W\$ '
-fi
-#}}}
-### shopt{{{
-# shopt -s cdspell
-# shopt -s extglob
-# shopt -s histreedit
-# shopt -s no_empty_cmd_completion
-#}}}
-### history{{{
 share_history() {
   history -a
   history -c
   history -r
   update_time
 }
-export HISTCONTROL=ignoreboth
 export HISTCONTROL=ignoredups
 export HISTFILE=$HOME/.bash_history
 export HISTIGNORE="cd*:pwd*:fg*:bg*"
 shopt -u histappend
 export HISTSIZE=10000
+## Current command name as window name
+#export PS1='\[\033k\033\\\][\u@\h \W]\$ '
+#export PS1='\[\033k\033\\\]\u@\h:\W\$ '
+## PWD as window name
+#export PS1='\u@\h:\W\$ '
+#export PROMPT_COMMAND='echo -ne "\033k$(basename $(pwd))\033\\"'
+## PWD when no command is running, otherwise current command name as window name
+#export PS1='\u@\h:\W\$ '
+#export PROMPT_COMMAND='echo -ne "\033k\033\0134\033k$(basename $(pwd))\033\\"'
+## Above with a shared history among all terminals
+#}}}
+### shopt{{{
+# shopt -s cdspell
+# shopt -s extglob
+# shopt -s histreedit
+# shopt -s no_empty_cmd_completion
 #}}}
 ### ls color{{{
 if [ "$__uname" = "Linux" ]; then
@@ -294,8 +260,6 @@ export RUBYGEMS_GEMDEPS=
 [ -d $HOME/.rbenv ] &&
   export PATH=$HOME/.rbenv:$PATH
 if [ -x "`which rbenv`" ] ; then
-  echo "##############################"
-  echo "## rbenv #####################"
   export RBENV_ROOT=`rbenv root`
   echo "RBENV_ROOT: $RBENV_ROOT"
   eval "`rbenv init -`"
@@ -381,8 +345,10 @@ if [ "$__uname" != 'Darwin' ] ; then
 fi
 #}}}
 ### hub (github{{{
-[ "`which hub`" ] && \
+# Load hub
+if [ -x "`which hub`" ] ; then
   eval "`hub alias -s`"
+fi
 #}}}
 ### autoupdate dotfiles{{{
 (
@@ -471,23 +437,6 @@ unset -f __github_install
 unset -f __github_info
 unset -v __repo_arr
 #}}}
-### bashmarks{{{
-if [ -r $HOME/.local/bin/bashmarks.sh ] ; then
-  source $HOME/.local/bin/bashmarks.sh
-fi
-#}}}
-### nvm (Node Version Manager{{{
-export NVM_DIR="$HOME/.nvm"
-# This loads nvm
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-# This loads nvm bash_completion
-[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
-# Use latest node
-nvm use `ls -1 $NVM_DIR/versions/node/ | sort | tail -n1`
-#}}}
-### docker{{{
-# eval `docker-machine env default`
-#}}}
 ### kancolle logbook (check wheather process is running{{{
 if [ "$__hostname" = 'quark' ] ; then
   logbook_pid=`ps aux| grep "logbook" | grep -v "grep" | awk '{ print $2; }'`
@@ -498,159 +447,51 @@ if [ "$__hostname" = 'quark' ] ; then
   fi
 fi
 #}}}
-### java{{{
-[ -x "/usr/libexec/java_home" ] && \
-  export JAVA_HOME="`/usr/libexec/java_home`"
-#}}}
-### pyenv{{{
-#
-# NOTE: pyenv is PYthon ENVironment manager...maybe.
-# pyenv can install official python distributions, and also
-# can install 'anaconda distributions.
-# In anaconda distribution, virtual environments are created by
-# 'conda' command(Usually, in officail python distributions,
-# you should use 'pyenv virtualenv' command.
-#
-# How to manage python environments on Anaconda python distribution.
-# reference: http://qiita.com/y__sama/items/5b62d31cb7e6ed50f02c
-#          : http://qiita.com/y__sama/items/f732bb7bec2bff355b69
-# - Create new env.
-#   >> conda -n <env name>
-# - Enable a env. DO NOT USE 'source activate/diactivate' commands 
-#   which are introduced in official. Above commands are conflicts
-#   with 'source' command of 'bash'.
-#   >> pyenv activate <env name>
-#   Disable a env.
-#   >> pyenv deactivate <env name>
-# - Install python of anaconda distribution
-#   >> pyenv installpython ver. or distribution>
-# - Show env list.
-#   >> conda env list
-# - Remove a env.
-#   >> conda remove -n <env name> --all
-#
-
-if \
-  # NOTE: #2 has chainer, version 2.0.0
-  # But current program of train_imagenet is worked
-  # in version 1.23.0. And #3 is has 1.23.0
-  #
-  # Date: 2017/09/21
-  # cad11{5,8,9} machies are assigned as machine for Machine Learning.
-  # Previously, cad10{3,4,5,6} are assigned, but GPUs on these machine are
-  # migrated to cad11{5,8}. Old pythnon env. are reamined such as
-  # ~/.pyenv/s{2,3,4,5,6}. Currently, no-GPU machines use same python env.,
-  # such as 's1'. Other machiens which has GPUs, has own env which is named
-  # with `hostname`.
-  [ "$__hostname" = "cad101.naist.jp" ] ||
-  [ "$__hostname" = "cad102.naist.jp" ] ||
-  [ "$__hostname" = "cad103.naist.jp" ] ||
-  [ "$__hostname" = "cad104.naist.jp" ] ||
-  [ "$__hostname" = "cad105.naist.jp" ] ||
-  [ "$__hostname" = "cad106.naist.jp" ] ||
-
-  [ "$__hostname" = "cad110.naist.jp" ] ||
-  [ "$__hostname" = "cad111.naist.jp" ] ||
-  [ "$__hostname" = "cad112.naist.jp" ] ||
-  [ "$__hostname" = "cad113.naist.jp" ] ||
-  [ "$__hostname" = "cad114.naist.jp" ] ||
-  [ "$__hostname" = "cad116.naist.jp" ] ||
-  [ "$__hostname" = "cad117.naist.jp" ] ; then
-  export PYENV_ROOT=$HOME/.pyenv/s1
-elif \
-  [ "$__hostname" = "cad115.naist.jp" ] ; then
-  export PYENV_ROOT=$HOME/.pyenv/cad115
-elif \
-  [ "$__hostname" = "cad118.naist.jp" ] ; then
-  export PYENV_ROOT=$HOME/.pyenv/cad118
-elif \
-  [ "$__hostname" = "cad119.naist.jp" ] ; then
-  export PYENV_ROOT=$HOME/.pyenv/cad119
-elif \
-  [ "$__hostname" = 'quark' ] ; then
-  export PYENV_ROOT=$HOME/.pyenv
+### vim settings{{{
+# NOTE: make executable file without dynamic link lib.
+alias vim 1>/dev/null 2>&1  # reset vim alias
+if [ $? -eq 0 ] ; then
+  unalias vim
 fi
 
-if [ "$PYENV_ROOT" ] ; then
-  echo "##############################"
-  echo "## pyenv #####################"
-  echo "PYENV_ROOT: $PYENV_ROOT"
-  export PATH=$PYENV_ROOT/bin:$PATH
-  eval "`pyenv init -`"
-  eval "`pyenv virtualenv-init -`"
+if [ "`which ldd`" ] ; then
+  __which_vim=`which vim`
+  __vim_lib_error="`ldd $__which_vim 2>&1 1>/dev/null`"
+  unset -v __which_vim
+else
+  __vim_lib_error=""
 fi
-#}}}
-### Python {{{
-[ -d "/home/hisakazu-fu/work/edge-iot/exp/chainer/dataset/imagenet/lib" ] &&
-    export PYTHONPATH="/home/hisakazu-fu/work/edge-iot/exp/chainer/dataset/imagenet/lib"
-#}}}
-### cuda{{{
-if   [ -d /usr/local/cuda-8.0 ] ; then
-  __cuda_dir='/usr/local/cuda-8.0'
-elif [ -d /usr/local/cuda-7.5 ] ; then
-  __cuda_dir='/usr/local/cuda-7.5'
-elif [ -d /usr/local/cuda-7.0 ] ; then
-  __cuda_dir='/usr/local/cuda-7.0'
-elif [ -d /usr/local/cuda ] ; then
-  __cuda_dir='/usr/local/cuda'
+if [ -z "$__vim_lib_error" ] &&
+   [ "$__hostname" != "cad103.naist.jp" ] &&
+   [ "$__hostname" != "cad104.naist.jp" ] ; then
+  echo "vim > use package installed"
+  __vim_path=`which vim`
+  alias vim=$__vim_path
+  export EDITOR=$__vim_path
+  unset -v __vim_path
+elif [ -x /usr/bin/vim ] ; then
+  echo "vim > use system"
+  alias vim=/usr/bin/vim
+  export EDITOR=/usr/bin/vim
+else
+  echo "vim > there are no vim to execute..."
+  export EDITOR=vi
 fi
-if [ -d "$__cuda_dir" ] ; then
-  echo "##############################"
-  echo "## cuda ######################"
-  export CUDA_PATH="$__cuda_dir"
-  export PATH="$CUDA_PATH/bin:$PATH"
-  export CFLAGS="-I$CUDA_PATH/include"
-  export LDFLAGS="-L$CUDA_PATH/lib64"
-  export LD_LIBRARY_PATH="$CUDA_PATH/lib64:$LD_LIBRARY_PATH"
-  export DYLD_LIBRARY_PATH="$CUDA_PATH/lib64:$DYLD_LIBRARY_PATH"
-  nvcc -V
-  if [ -f $CUDA_PATH/include/cudnn.h ] ; then
-    echo ">> cudnn is available"
-  fi
-fi
-unset -v __cuda_dir
-### NCCL#{{{
-[ "$__hostname" = "cad115.naist.jp" ] && [ -d "$HOME/.usr/local/cad115/nccl" ] && \
-  export NCCL_ROOT=$HOME/.usr/local/cad115/nccl
-[ "$__hostname" = "cad118.naist.jp" ] && [ -d "$HOME/.usr/local/cad118/nccl" ] && \
-  export NCCL_ROOT=$HOME/.usr/local/cad118/nccl
-# On cad119, use system-wide NCCL lib.
-#[ "$__hostname" = "cad119.naist.jp" ] && [ -d "$HOME/.usr/local/cad115/nccl" ] && \
-#  export NCCL_ROOT=$HOME/.usr/local/cad119/nccl
 
-if [ -n "$NCCL_ROOT" ] ; then
-  export CPATH=$NCCL_ROOT/include:$CPATH
-  export LD_LIBRARY_PATH=$NCCL_ROOT/lib:$LD_LIBRARY_PATH
-  export LIBRARY_PATH=$NCCL_ROOT/lib:$LIBRARY_PATH
+# thinca/vim-themis: test tool for vim plugins
+[ -d $HOME/.vim/bundle/repos/github.com/thinca/vim-themis/bin ] &&
+  export PATH=$HOME/.vim/bundle/repos/github.com/thinca/vim-themis/bin:$PATH
+unset -v __vim_lib_error
+#}}}
+### bashmarks{{{
+if [ -r $HOME/.local/bin/bashmarks.sh ] ; then
+  . $HOME/.local/bin/bashmarks.sh
 fi
 #}}}
-#}}}
-### perl {{{
-# TODO: fix error (see log
-# if [ ! $IS_INTERNET_ACTIVE ] ; then
-#   PERL_MM_OPT="INSTALL_BASE=$HOME/perl5" cpan local::lib
-#   eval "`perl -I$HOME/perl5/lib/perl5 -Mlocal::lib`"
-# fi
-[ -d $HOME/.usr/local/perl/modules/lib/perl5 ] && \
-  export PERL5LIB=$HOME/.usr/local/perl/modules/lib/perl5
-[ -d $HOME/.usr/local/perl/modules/lib64/perl5 ] && \
-  export PERL5LIB=$HOME/.usr/local/perl/modules/lib64/perl5:$PERL5LIB
-alias iperl="perl -de 0"
-#}}}
-### homebrew{{{
-if [ "$__uname" = "Darwin" ] && [ "`which brew`" ] && [ -d $PYENV_ROOT ] ; then
-  alias brew="env PATH=${PATH/${PYENV_ROOT}\/shims:/} brew"
+### docker{{{
+if [ -x "`docker-machin`" ] ; then
+  eval `docker-machine env default`
 fi
-#}}}
-### emax{{{
-# [ -d $HOME/work/emaxv/nakashim/proj-arm64.cent ] && \
-#   export EMAXV_SIML_PROJ_ROOT="$HOME/work/emaxv/nakashim/proj-arm64.cent"
-# [ -d $EMAXV_SIML_PROJ_ROOT/bin ] && \
-#   export PATH=$EMAXV_SIML_PROJ_ROOT/bin:$PATH
-# [ -d $EMAXV_SIML_PROJ_ROOT/lib ] && \
-#   export LD_LIBRARY_PATH=$EMAXV_SIML_PROJ_ROOT/lib:$LD_LIBRARY_PATH
-# [ -d "$HOME/works/nakashim/proj-arm64.cent/lib/asim64-lib" ] && \
-#   export LD_LIBRARY_PATH="$HOME/works/nakashim/proj-arm64.cent/lib/asim64-lib:$LD_LIBRARY_PATH"
 #}}}
 ### cad tools{{{
 # vdec (synopsys, cadence{{{
@@ -717,41 +558,186 @@ esac
 #  esac
 #}}}
 #}}}
-### vim settings{{{
-# NOTE: make executable file without dynamic link lib.
-alias vim 1>/dev/null 2>&1  # reset vim alias
-if [ $? -eq 0 ] ; then
-  unalias vim
-fi
+### nvm (Node Version Manager{{{
+export NVM_DIR="$HOME/.nvm"
+# This loads nvm
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+# This loads nvm bash_completion
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+# Use latest node
+nvm use `ls -1 $NVM_DIR/versions/node/ | sort | tail -n1`
+#}}}
+### java{{{
+[ -x "/usr/libexec/java_home" ] && \
+  export JAVA_HOME="`/usr/libexec/java_home`"
+#}}}
+### pyenv{{{
+#
+# NOTE: pyenv is PYthon ENVironment manager...maybe.
+# pyenv can install official python distributions, and also
+# can install 'anaconda distributions.
+# In anaconda distribution, virtual environments are created by
+# 'conda' command(Usually, in officail python distributions,
+# you should use 'pyenv virtualenv' command.
+#
+# How to manage python environments on Anaconda python distribution.
+# reference: http://qiita.com/y__sama/items/5b62d31cb7e6ed50f02c
+#          : http://qiita.com/y__sama/items/f732bb7bec2bff355b69
+# - Create new env.
+#   >> conda -n <env name>
+# - Enable a env. DO NOT USE 'source activate/diactivate' commands
+#   which are introduced in official. Above commands are conflicts
+#   with 'source' command of 'bash'.
+#   >> pyenv activate <env name>
+#   Disable a env.
+#   >> pyenv deactivate <env name>
+# - Install python of anaconda distribution
+#   >> pyenv installpython ver. or distribution>
+# - Show env list.
+#   >> conda env list
+# - Remove a env.
+#   >> conda remove -n <env name> --all
+#
 
-if [ "`which ldd`" ] ; then
-  __which_vim=`which vim`
-  __vim_lib_error="`ldd $__which_vim 2>&1 1>/dev/null`"
-  unset -v __which_vim
-else
-  __vim_lib_error=""
-fi
-if [ -z "$__vim_lib_error" ] &&
-   [ "$__hostname" != "cad103.naist.jp" ] &&
-   [ "$__hostname" != "cad104.naist.jp" ] ; then
-  echo "vim > use package installed"
-  __vim_path=`which vim`
-  alias vim=$__vim_path
-  export EDITOR=$__vim_path
-  unset -v __vim_path
-elif [ -x /usr/bin/vim ] ; then
-  echo "vim > use system"
-  alias vim=/usr/bin/vim
-  export EDITOR=/usr/bin/vim
-else
-  echo "vim > there are no vim to execute..."
-  export EDITOR=vi
-fi
+if \
+  # NOTE: #2 has chainer, version 2.0.0
+  # But current program of train_imagenet is worked
+  # in version 1.23.0. And #3 is has 1.23.0
+  #
+  # Date: 2017/09/21
+  # cad11{5,8,9} machies are assigned as machine for Machine Learning.
+  # Previously, cad10{3,4,5,6} are assigned, but GPUs on these machine are
+  # migrated to cad11{5,8}. Old pythnon env. are reamined such as
+  # ~/.pyenv/s{2,3,4,5,6}. Currently, no-GPU machines use same python env.,
+  # such as 's1'. Other machiens which has GPUs, has own env which is named
+  # with `hostname`.
+  [ "$__hostname" = "cad101.naist.jp" ] ||
+  [ "$__hostname" = "cad102.naist.jp" ] ||
+  [ "$__hostname" = "cad103.naist.jp" ] ||
+  [ "$__hostname" = "cad104.naist.jp" ] ||
+  [ "$__hostname" = "cad105.naist.jp" ] ||
+  [ "$__hostname" = "cad106.naist.jp" ] ||
 
-# thinca/vim-themis: test tool for vim plugins
-[ -d $HOME/.vim/bundle/repos/github.com/thinca/vim-themis/bin ] &&
-  export PATH=$HOME/.vim/bundle/repos/github.com/thinca/vim-themis/bin:$PATH
-unset -v __vim_lib_error
+  [ "$__hostname" = "cad110.naist.jp" ] ||
+  [ "$__hostname" = "cad111.naist.jp" ] ||
+  [ "$__hostname" = "cad112.naist.jp" ] ||
+  [ "$__hostname" = "cad113.naist.jp" ] ||
+  [ "$__hostname" = "cad114.naist.jp" ] ||
+  [ "$__hostname" = "cad116.naist.jp" ] ||
+  [ "$__hostname" = "cad117.naist.jp" ] ; then
+  export PYENV_ROOT=$HOME/.pyenv/s1
+elif \
+  [ "$__hostname" = "cad115.naist.jp" ] ; then
+  export PYENV_ROOT=$HOME/.pyenv/cad115
+elif \
+  [ "$__hostname" = "cad118.naist.jp" ] ; then
+  export PYENV_ROOT=$HOME/.pyenv/cad118
+elif \
+  [ "$__hostname" = "cad119.naist.jp" ] ; then
+  export PYENV_ROOT=$HOME/.pyenv/cad119
+else
+  export PYENV_ROOT=$HOME/.pyenv
+fi
+if [ -d "$PYENV_ROOT" ] ; then
+  echo "PYENV_ROOT: $PYENV_ROOT"
+  export PATH=$PYENV_ROOT/bin:$PATH
+  eval "`pyenv init -`"
+  eval "`pyenv virtualenv-init -`"
+fi
+#}}}
+### Python {{{
+[ -d "$HOME/work/edge-iot/exp/chainer/dataset/imagenet/lib" ] &&
+  export PYTHONPATH="$HOME/work/edge-iot/exp/chainer/dataset/imagenet/lib"
+#}}}
+### cuda{{{
+if   [ -d /usr/local/cuda-8.0 ] ; then
+  __cuda_dir='/usr/local/cuda-8.0'
+elif [ -d /usr/local/cuda-7.5 ] ; then
+  __cuda_dir='/usr/local/cuda-7.5'
+elif [ -d /usr/local/cuda-7.0 ] ; then
+  __cuda_dir='/usr/local/cuda-7.0'
+elif [ -d /usr/local/cuda ] ; then
+  __cuda_dir='/usr/local/cuda'
+fi
+if [ -d "$__cuda_dir" ] ; then
+  export CUDA_PATH="$__cuda_dir"
+  export PATH="$CUDA_PATH/bin:$PATH"
+  export CFLAGS="-I$CUDA_PATH/include"
+  export LDFLAGS="-L$CUDA_PATH/lib64"
+  export LD_LIBRARY_PATH="$CUDA_PATH/lib64:$LD_LIBRARY_PATH"
+  export DYLD_LIBRARY_PATH="$CUDA_PATH/lib64:$DYLD_LIBRARY_PATH"
+  nvcc -V
+  if [ -f $CUDA_PATH/include/cudnn.h ] ; then
+    echo ">> cudnn is available"
+  fi
+fi
+unset -v __cuda_dir
+### NCCL#{{{
+if [ -d "$HOME/.usr/local/cad115/nccl" ] ; then
+  export NCCL_ROOT=$HOME/.usr/local/cad115/nccl
+fi
+if [ -d "$HOME/.usr/local/cad118/nccl" ] ; then
+  export NCCL_ROOT=$HOME/.usr/local/cad118/nccl
+fi
+# On cad119, use system-wide NCCL lib.
+# if [ -d "$HOME/.usr/local/cad115/nccl" ] ; then
+#  export NCCL_ROOT=$HOME/.usr/local/cad119/nccl
+# if
+
+if [ -n "$NCCL_ROOT" ] ; then
+  export CPATH=$NCCL_ROOT/include:$CPATH
+  export LD_LIBRARY_PATH=$NCCL_ROOT/lib:$LD_LIBRARY_PATH
+  export LIBRARY_PATH=$NCCL_ROOT/lib:$LIBRARY_PATH
+fi
+#}}}
+#}}}
+### perl {{{
+# TODO: fix error (see log
+# if [ ! $IS_INTERNET_ACTIVE ] ; then
+#   PERL_MM_OPT="INSTALL_BASE=$HOME/perl5" cpan local::lib
+#   eval "`perl -I$HOME/perl5/lib/perl5 -Mlocal::lib`"
+# fi
+[ -d $HOME/.usr/local/perl/modules/lib/perl5 ] && \
+  export PERL5LIB=$HOME/.usr/local/perl/modules/lib/perl5
+[ -d $HOME/.usr/local/perl/modules/lib64/perl5 ] && \
+  export PERL5LIB=$HOME/.usr/local/perl/modules/lib64/perl5:$PERL5LIB
+alias iperl="perl -de 0"
+#}}}
+### emax{{{
+# [ -d $HOME/work/emaxv/nakashim/proj-arm64.cent ] && \
+#   export EMAXV_SIML_PROJ_ROOT="$HOME/work/emaxv/nakashim/proj-arm64.cent"
+# [ -d $EMAXV_SIML_PROJ_ROOT/bin ] && \
+#   export PATH=$EMAXV_SIML_PROJ_ROOT/bin:$PATH
+# [ -d $EMAXV_SIML_PROJ_ROOT/lib ] && \
+#   export LD_LIBRARY_PATH=$EMAXV_SIML_PROJ_ROOT/lib:$LD_LIBRARY_PATH
+# [ -d "$HOME/works/nakashim/proj-arm64.cent/lib/asim64-lib" ] && \
+#   export LD_LIBRARY_PATH="$HOME/works/nakashim/proj-arm64.cent/lib/asim64-lib:$LD_LIBRARY_PATH"
+#}}}
+### Rails(ruby){{{
+# completion
+[ -s "`brew --prefix`/etc/bash_completion.d/rails.bash" ] && \
+  . `brew --prefix`/etc/bash_completion.d/rails.bash
+#}}}
+### go lang{{{
+# macOS
+[ -d /usr/local/opt/go/libexec ] && \
+  export GOROOT=/usr/local/opt/go/libexec # go lang bin dir
+# linux
+[ -d $HOME/.go/versions/1.6 ] && \
+  export GOROOT=$HOME/.go/versions/1.6
+export GOPATH=$HOME/work/share/go # workspace dir
+[ ! -d "$GOPATH" ] && mkdir -p $GOPATH
+[   -d "$GOPATH" ] && export PATH=$GOPATH/bin:$PATH
+(
+  # Install twitter client written with go-lang. The process launched as child
+  # of this bash process so that it takes a time.
+  if [ ! -x "$GOPATH/bin/ringot" ] && [ -n "`which go`" ] ; then
+    logfile="$GOPATH/.install.log"
+    echo ">> install ringot... | logfile: $logfile"
+    go get     github.com/tSU-RooT/ringot 1> $logfile 2>&1 &
+    go install github.com/tSU-RooT/ringot 1> $logfile 2>&1 &
+  fi
+)
 #}}}
 ### remove duplicate ENVs{{{
 {
@@ -786,13 +772,17 @@ unset -v __vim_lib_error
   unset -f __remove_duplicate
 }
 #}}}
+### homebrew{{{
+[ -s "`brew --prefix`/etc/bash_completion" ] &&
+  . `brew --prefix`/etc/bash_completion
+if [ "`which brew`" ] && [ -d $PYENV_ROOT ] ; then
+  alias brew="env PATH=${PATH/${PYENV_ROOT}\/shims:/} brew"
+fi
+#}}}
 
 unset -v __uname
 unset -v __hostname
 
-### command line editting
-set -o vi
 
 update_date
 update_time
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
