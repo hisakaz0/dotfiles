@@ -489,7 +489,7 @@ if [ -r $HOME/.local/bin/bashmarks.sh ] ; then
 fi
 #}}}
 ### docker{{{
-if [ -x "`docker-machin`" ] ; then
+if [ -x "`which docker-machine`" ] ; then
   eval `docker-machine env default`
 fi
 #}}}
