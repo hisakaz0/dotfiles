@@ -55,8 +55,9 @@ fi
     return 1 # impossible
   }
 
-  echo "checking to access to internet..."
-  __is_net 'en0' 'bridge 0' 'eth0' 'bce0' 'eno1'
+  # NOTE: xargs command use a defined function so thant it is need to export
+  # the function.
+  ifconfig | grep 'associated\|active' 1>/dev/null 2>/dev/null
   export IS_INTERNET_ACTIVE=$?
   if [ $IS_INTERNET_ACTIVE -eq 0 ] ; then
     echo ">> possible to access to internet!!"
@@ -69,7 +70,7 @@ fi
 #}}}
 ### stty / options {{{
 stty sane # reset all option to reasonable value
-stty -ixon -ixoff # ctrl+s, ctrl+qの無効化
+stty -ixon -ixoff # ctrl+s, ctrl+q????????????
 if [ "$__uname" != 'Darwin' ] && [ -z "`stty | grep erase`" ] ; then
    # If a escape sequence which deletes a charactor is not set correctly, the
    # sequence is set to 
@@ -81,8 +82,13 @@ set -o vi
 ### language{{{
 # NOTE: To check avaliable font list with `local -a | grep "ja"`
 if [ "$__hostname" = 'kirara' ] ; then
-  export LANG='ja_JP.UTF-8'
-  export LC_ALL='ja_JP.UTF-8'
+  # NOTE: I think it is not cool for terminal hacker to use Japanese, so that
+  # I use English.
+  # export LANG='ja_JP.UTF-8'
+  # export LC_ALL='ja_JP.UTF-8'
+  # export LANG='en_US.UTF-8'
+  # export LC_ALL='en_US.UTF-8'
+  :
 elif [ "$__uname" = "FreeBSD" ] ; then
   # export LANG=ja_JP.SJIS
   # export LC_ALL=ja_JP.SJIS
@@ -193,9 +199,9 @@ elif [ "$__uname" = 'Darwin' ] ; then
 fi
 #}}}
 ### autoextract {{{
-# complete -W "vim study php html cake" cake # cakeの補完設定
+# complete -W "vim study php html cake" cake # cake???????????????
 [ -x "`which autoextract`" ] && \
-  complete -d autoextract # ~/bin/autoextracの補完
+  complete -d autoextract # ~/bin/autoextrac?????????
 #}}}
 ### environments{{{
 export PAGER='less'
@@ -738,6 +744,9 @@ export GOPATH=$HOME/work/share/go # workspace dir
     go install github.com/tSU-RooT/ringot 1> $logfile 2>&1 &
   fi
 )
+#}}}
+### Rust{{{
+[ -f $HOME/.cargo/env ] && . $HOME/.cargo/env
 #}}}
 ### remove duplicate ENVs{{{
 {
