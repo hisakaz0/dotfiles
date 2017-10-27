@@ -36,7 +36,7 @@ set cmdheight=1
 set laststatus=2
 set t_Co=256
 set encoding=utf-8
-set fileencodings=iso-2022-jp,cp932,sjis,euc-jp,utf-8
+set fileencodings=utf-8,iso-2022-jp,cp932,sjis,euc-jp
 if has('xterm_clipboard')
   set clipboard+=autoselect
   set clipboard+=unnamed
@@ -676,6 +676,7 @@ command! Jq %!jq '.'
 augroup my_python
   autocmd!
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.py call MyPythonSetting()
+  autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.ipy call MyPythonSetting()
 augroup END
 
 function! MyPythonSetting()

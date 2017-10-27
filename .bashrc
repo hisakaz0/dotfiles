@@ -70,12 +70,12 @@ fi
 #}}}
 ### stty / options {{{
 stty sane # reset all option to reasonable value
-stty -ixon -ixoff # ctrl+s, ctrl+q????????????
-if [ "$__uname" != 'Darwin' ] && [ -z "`stty | grep erase`" ] ; then
-   # If a escape sequence which deletes a charactor is not set correctly, the
-   # sequence is set to 
-   stty erase 
-fi
+stty -ixon -ixoff # ctrl+s, ctrl+qの無効化
+# if [ "$__uname" != 'Darwin' ] && [ -z "`stty | grep erase`" ] ; then
+#    # If a escape sequence which deletes a charactor is not set correctly, the
+#    # sequence is set to 
+#    stty erase 
+# fi
 [ -x "`which tabs`" ] && tabs -2 # tab width
 set -o vi
 #}}}
@@ -495,9 +495,9 @@ if [ -r $HOME/.local/bin/bashmarks.sh ] ; then
 fi
 #}}}
 ### docker{{{
-if [ -x "`which docker-machine`" ] ; then
-  eval `docker-machine env default`
-fi
+# if [ -x "`which docker-machin`" ] ; then
+#   eval `docker-machine env default`
+# fi
 #}}}
 ### cad tools{{{
 # vdec (synopsys, cadence{{{
@@ -721,8 +721,10 @@ alias iperl="perl -de 0"
 #}}}
 ### Rails(ruby){{{
 # completion
-[ -s "`brew --prefix`/etc/bash_completion.d/rails.bash" ] && \
+if [ -x "`which brew`" ] &&
+   [ -s "`brew --prefix`/etc/bash_completion.d/rails.bash" ] ; then
   . `brew --prefix`/etc/bash_completion.d/rails.bash
+fi
 #}}}
 ### go lang{{{
 # macOS
@@ -782,10 +784,13 @@ export GOPATH=$HOME/work/share/go # workspace dir
 }
 #}}}
 ### homebrew{{{
-[ -s "`brew --prefix`/etc/bash_completion" ] &&
-  . `brew --prefix`/etc/bash_completion
-if [ "`which brew`" ] && [ -d $PYENV_ROOT ] ; then
-  alias brew="env PATH=${PATH/${PYENV_ROOT}\/shims:/} brew"
+if [ -x "`which brew`" ] ; then
+  if [ -s "`brew --prefix`/etc/bash_completion" ] ; then
+    . `brew --prefix`/etc/bash_completion
+  fi
+  if [ -d $PYENV_ROOT ] ; then
+    alias brew="env PATH=${PATH/${PYENV_ROOT}\/shims:/} brew"
+  fi
 fi
 #}}}
 

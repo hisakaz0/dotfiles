@@ -1,5 +1,5 @@
 #!/bin/bash
-dotfiles_root=$(cd $(dirname $0) && pwd)
+dotfiles_root=$(cd $(dirname $0) && pwd | sed -e "s@$HOME/@@")
 list=(.bashrc .config .cshrc .cshrc.body .gitconfig .inputrc .tmux.conf .vim/after .vim/autoload .vim/plugin .vim/templates .vim/colors .vimrc .screenrc .hammerspoon/init.lua)
 cd $HOME
 for file in ${list[*]}
