@@ -136,6 +136,13 @@ if [ -x "`which tmux`" ] ; then
   alias tat='tmux a -t'
 fi
 #}}}
+### tmux#{{{
+if [ "$__uname" = "Darwin" ] ; then
+  ln -sf ~/.tmux.mac.conf ~/.tmux.conf
+else
+  ln -sf ~/.tmux.noplugin.conf ~/.tmux.conf
+fi
+#}}}
 ### GNU Screen#{{{
 if [ -x "`which screen`" ] ; then
   # The alias is the meant that if there is no available session, create new
