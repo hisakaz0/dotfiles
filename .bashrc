@@ -55,8 +55,9 @@ fi
     return 1 # impossible
   }
 
-  echo "checking to access to internet..."
-  __is_net 'en0' 'bridge 0' 'eth0' 'bce0' 'eno1'
+  # NOTE: xargs command use a defined function so thant it is need to export
+  # the function.
+  ifconfig | grep 'associated\|active' 1>/dev/null 2>/dev/null
   export IS_INTERNET_ACTIVE=$?
   if [ $IS_INTERNET_ACTIVE -eq 0 ] ; then
     echo ">> possible to access to internet!!"
@@ -70,19 +71,24 @@ fi
 ### stty / options {{{
 stty sane # reset all option to reasonable value
 stty -ixon -ixoff # ctrl+s, ctrl+qの無効化
-if [ "$__uname" != 'Darwin' ] && [ -z "`stty | grep erase`" ] ; then
-   # If a escape sequence which deletes a charactor is not set correctly, the
-   # sequence is set to 
-   stty erase 
-fi
+# if [ "$__uname" != 'Darwin' ] && [ -z "`stty | grep erase`" ] ; then
+#    # If a escape sequence which deletes a charactor is not set correctly, the
+#    # sequence is set to 
+#    stty erase 
+# fi
 [ -x "`which tabs`" ] && tabs -2 # tab width
 set -o vi
 #}}}
 ### language{{{
 # NOTE: To check avaliable font list with `local -a | grep "ja"`
 if [ "$__hostname" = 'kirara' ] ; then
-  export LANG='ja_JP.UTF-8'
-  export LC_ALL='ja_JP.UTF-8'
+  # NOTE: I think it is not cool for terminal hacker to use Japanese, so that
+  # I use English.
+  # export LANG='ja_JP.UTF-8'
+  # export LC_ALL='ja_JP.UTF-8'
+  # export LANG='en_US.UTF-8'
+  # export LC_ALL='en_US.UTF-8'
+  :
 elif [ "$__uname" = "FreeBSD" ] ; then
   # export LANG=ja_JP.SJIS
   # export LC_ALL=ja_JP.SJIS
@@ -128,6 +134,13 @@ if [ -x "`which tmux`" ] ; then
   alias tmux='tmux -2'
   alias ta='tmux a'
   alias tat='tmux a -t'
+fi
+#}}}
+### tmux#{{{
+if [ "$__uname" = "Darwin" ] ; then
+  ln -sf ~/.tmux.mac.conf ~/.tmux.conf
+else
+  ln -sf ~/.tmux.noplugin.conf ~/.tmux.conf
 fi
 #}}}
 ### GNU Screen#{{{
@@ -193,9 +206,9 @@ elif [ "$__uname" = 'Darwin' ] ; then
 fi
 #}}}
 ### autoextract {{{
-# complete -W "vim study php html cake" cake # cakeの補完設定
+# complete -W "vim study php html cake" cake # cake???????????????
 [ -x "`which autoextract`" ] && \
-  complete -d autoextract # ~/bin/autoextracの補完
+  complete -d autoextract # ~/bin/autoextrac?????????
 #}}}
 ### environments{{{
 export PAGER='less'
@@ -489,9 +502,9 @@ if [ -r $HOME/.local/bin/bashmarks.sh ] ; then
 fi
 #}}}
 ### docker{{{
-if [ -x "`which docker-machine`" ] ; then
-  eval `docker-machine env default`
-fi
+# if [ -x "`which docker-machin`" ] ; then
+#   eval `docker-machine env default`
+# fi
 #}}}
 ### cad tools{{{
 # vdec (synopsys, cadence{{{
@@ -715,8 +728,10 @@ alias iperl="perl -de 0"
 #}}}
 ### Rails(ruby){{{
 # completion
-[ -s "`brew --prefix`/etc/bash_completion.d/rails.bash" ] && \
+if [ -x "`which brew`" ] &&
+   [ -s "`brew --prefix`/etc/bash_completion.d/rails.bash" ] ; then
   . `brew --prefix`/etc/bash_completion.d/rails.bash
+fi
 #}}}
 ### go lang{{{
 # macOS
@@ -738,6 +753,9 @@ export GOPATH=$HOME/work/share/go # workspace dir
     go install github.com/tSU-RooT/ringot 1> $logfile 2>&1 &
   fi
 )
+#}}}
+### Rust{{{
+[ -f $HOME/.cargo/env ] && . $HOME/.cargo/env
 #}}}
 ### remove duplicate ENVs{{{
 {
@@ -773,10 +791,13 @@ export GOPATH=$HOME/work/share/go # workspace dir
 }
 #}}}
 ### homebrew{{{
-[ -s "`brew --prefix`/etc/bash_completion" ] &&
-  . `brew --prefix`/etc/bash_completion
-if [ "`which brew`" ] && [ -d $PYENV_ROOT ] ; then
-  alias brew="env PATH=${PATH/${PYENV_ROOT}\/shims:/} brew"
+if [ -x "`which brew`" ] ; then
+  if [ -s "`brew --prefix`/etc/bash_completion" ] ; then
+    . `brew --prefix`/etc/bash_completion
+  fi
+  if [ -d $PYENV_ROOT ] ; then
+    alias brew="env PATH=${PATH/${PYENV_ROOT}\/shims:/} brew"
+  fi
 fi
 #}}}
 

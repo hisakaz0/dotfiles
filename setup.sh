@@ -1,6 +1,22 @@
 #!/bin/bash
-dotfiles_root=$(cd $(dirname $0) && pwd)
-list=(.bashrc .config .cshrc .cshrc.body .gitconfig .inputrc .tmux.conf .vim/after .vim/autoload .vim/plugin .vim/templates .vim/colors .vimrc .screenrc .hammerspoon/init.lua)
+dotfiles_root=$(cd $(dirname $0) && pwd | sed -e "s@$HOME/@@")
+list=(.bashrc \
+  .config \
+  .cshrc \
+  .cshrc.body \
+  .gitconfig \
+  .inputrc \
+  .tmux.mac.conf \
+  .tmux.noplugin.conf \
+  .vim/after \
+  .vim/autoload \
+  .vim/plugin \
+  .vim/templates \
+  .vim/colors \
+  .vimrc \
+  .screenrc \
+  .hammerspoon/init.lua)
+
 cd $HOME
 for file in ${list[*]}
 do

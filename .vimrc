@@ -340,14 +340,16 @@ endif
    call dein#add('Shougo/vimproc.vim',
          \ {'build' : 'make' })
    call dein#add('cespare/vim-toml')
-   call dein#add('pinkienort/openrcnt.vim')
-   call dein#add('pinkienort/shimapan.vim')
+   " call dein#add('pinkienort/openrcnt.vim') " replace with unite.vim
+   " call dein#add('pinkienort/shimapan.vim') " to not need
    call dein#add('thinca/vim-themis')
    call dein#add('fuenor/JpFormat.vim')
    call dein#add('JuliaEditorSupport/julia-vim')
    " reStructured Text
    " call dein#add('Rykka/riv.vim')
    call dein#add('thinca/vim-quickrun')
+   " call dein#add('Shougo/unite.vim') " replace with denite.vim
+   call dein#add('Shougo/denite.nvim')
 
    " Completion plugins
    if has('lua')
@@ -629,7 +631,7 @@ autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.coffee set ft=coffee
 
 " ============================================================================
 " Common autocmd
-"autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.conf set ft=configuration
+" autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.conf set ft=configuration
 
 " ============================================================================
 " Javascript
@@ -688,6 +690,7 @@ command! Jq %!jq '.'
 augroup my_python
   autocmd!
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.py call MyPythonSetting()
+  autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.ipy call MyPythonSetting()
 augroup END
 
 function! MyPythonSetting()

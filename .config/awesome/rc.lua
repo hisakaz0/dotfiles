@@ -43,7 +43,7 @@ end
 beautiful.init(awful.util.get_themes_dir() .. "default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "/usr/bin/env LANG=ja_JP.UTF-8 xterm"
+terminal = "xterm"
 browser = "firefox"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
@@ -333,6 +333,14 @@ globalkeys = gears.table.join(
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
               {description = "show the menubar", group = "launcher"})
+
+    -- Suspend/Resume
+    -- awful.key({ modkey, "Shift", "Control" }, "s",
+    --           function ()
+    --             awful.spawn("(sudo acpiconf -s 3)")
+    --           end,
+    --           {description = 'Power Suspend'})
+
 )
 
 clientkeys = gears.table.join(
