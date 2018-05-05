@@ -36,10 +36,18 @@ set cmdheight=1
 set laststatus=2
 set t_Co=256
 set encoding=utf-8
-set fileencodings=iso-2022-jp,cp932,sjis,euc-jp,utf-8
-if has('xterm_clipboard')
-  set clipboard+=autoselect
-  set clipboard+=unnamed
+set fileencodings=utf-8,iso-2022-jp,cp932,sjis,euc-jp
+"" clipboard
+"reset
+set clipboard=
+if has('mac')
+  " Mac use clipboard plus register
+  set clipboard^=autoselectplus
+  if has('unnamedplus')
+    set clipboard^=unnamedplus
+  endif
+else
+  set clipboard=autoselect,unnamed
 endif
 set incsearch
 set nohlsearch
@@ -60,7 +68,7 @@ set colorcolumn=+1
 set wildmenu
 set wildmode=list:longest
 set display=lastline
-set textwidth=78
+set textwidth=0
 " If you edit or read binary file,
 " you should set following option, 'set binary'.
 " set binary
@@ -102,8 +110,8 @@ inoremap <C-j> <ESC>
 nnoremap <C-j> <ESC>
 nnoremap <F1> <Nop>
 inoremap <F1> <Nop>
-nnoremap ; :
-vnoremap ; :
+" nnoremap ; :
+" vnoremap ; :
 inoremap <C-Y> <C-X><C-Y>
 inoremap <C-E> <C-X><C-E>
 nnoremap <silent> <C-n> :bn<CR>
@@ -157,7 +165,10 @@ iabbrev assing assign
 iabbrev bse base
 "}}}
 " tabpage " ============================================================="{{{2
-if has('unix')
+if has('mac')
+  set <k0>=î
+  set <k1>=ð
+elseif has('unix')
   set <k0>=n " alt + n
   set <k1>=p " alt + p
 endif
@@ -333,6 +344,7 @@ endif
    call dein#add('pinkienort/shimapan.vim')
    call dein#add('thinca/vim-themis')
    call dein#add('fuenor/JpFormat.vim')
+   call dein#add('JuliaEditorSupport/julia-vim')
    " reStructured Text
    " call dein#add('Rykka/riv.vim')
    call dein#add('thinca/vim-quickrun')
@@ -617,7 +629,7 @@ autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.coffee set ft=coffee
 
 " ============================================================================
 " Common autocmd
-autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.conf set ft=configuration
+"autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.conf set ft=configuration
 
 " ============================================================================
 " Javascript
