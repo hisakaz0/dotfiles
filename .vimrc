@@ -362,6 +362,8 @@ endif
    endif
    call dein#add('justmao945/vim-clang',
          \ {'on_ft': ['c', 'cpp'] })
+   call dein#add('udalov/kotlin-vim')
+
 
 
    " Python plugins
