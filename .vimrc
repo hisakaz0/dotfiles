@@ -363,8 +363,10 @@ endif
    call dein#add('justmao945/vim-clang',
          \ {'on_ft': ['c', 'cpp'] })
    call dein#add('udalov/kotlin-vim')
-
-
+   call dein#add('scrooloose/nerdtree')
+   call dein#add('jwalton512/vim-blade')
+   call dein#add('tobyS/pdv')
+   call dein#add('vim-vdebug/vdebug')
 
    " Python plugins
    call dein#add('davidhalter/jedi-vim',
@@ -728,6 +730,17 @@ function! MyLatexSetting()
   set textwidth=78
 endfunction
 
+
+augroup my_php
+  autocmd! Filetype php call MyPhpSetting()
+augroup END
+
+function! MyPhpSetting()
+  set shiftwidth=4
+  set tabstop=4
+endfunction
+
+
 " colorsheme & cursorhighlight " =========================================={{{
 " NOTE: DO NOT CHANGE ORDER of COMMANDS.
 "       'dein.vim' ---> 'colorscheme' ---> 'highlight'
@@ -747,6 +760,12 @@ augroup my_highlight
   autocmd!
   autocmd BufRead,BufEnter,BufNewFile,BufReadPre * call MyCursorHighlight()
 augroup END
+
+
+
+" ============================================================================
+" Nerdtree
+autocmd VIMENTER * NERDTree
 
 " ============================================================================
 " JpFormat
