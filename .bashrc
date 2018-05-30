@@ -310,6 +310,10 @@ if [ -f "/etc/redhat-release" ] ; then
   unset -v __arr
 fi
 
+if [ -d /usr/local/share/app/flutter ] ; then
+  export PATH="/usr/local/share/app/flutter/bin:$PATH"
+fi
+
 #}}}
 ### machine specific .bashrc{{{
 if [ -s ".$__hostname/dot.bashrc.bash" ] ; then
@@ -572,7 +576,9 @@ esac
 #}}}
 #}}}
 ### nvm (Node Version Manager{{{
-export NVM_DIR="$HOME/.nvm"
+if [ -d $HOME/.nvm ] ; then
+  export NVM_DIR="$HOME/.nvm"
+fi
 # This loads nvm
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 # This loads nvm bash_completion
