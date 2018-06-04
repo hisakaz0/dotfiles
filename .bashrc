@@ -368,14 +368,11 @@ if [ -x "`which hub`" ] ; then
 fi
 #}}}
 ### autoupdate dotfiles{{{
+REMOTE_CONFIG_DIR="$HOME/.repository"
 (
   dotfiles_update () {
     [ $IS_INTERNET_ACTIVE -ne 0 ] && return
-    if [ "$__hostname" = 'quark' ] ; then
-      dotfiles_dir="$HOME/work/github/pinkienort/dotfiles"
-    else
-      dotfiles_dir="$HOME/work/github/dotfiles"
-    fi
+    dotfiles_dir="$REMOTE_CONFIG_DIR/github/pinkienort/dotfiles"
     [ ! -d $dotfiles_dir ] && return
     cd $dotfiles_dir
     git_status=`git status -s`
@@ -418,9 +415,9 @@ __github_install () {
     fi
     url="$1"
     arr=( $(__github_info "$url") )
-    user_dir="$HOME/work/github/${arr[0]}"
+    user_dir="$REMOTE_CONFIG_DIR/github/${arr[0]}"
     repo_dir="$user_dir/${arr[1]}"
-    log="$HOME/work/github/.install.log"
+    log="$REMOTE_CONFIG_DIR/.install.log"
     if [ -f "$user_dir" ] ; then
       return # exception
     fi
