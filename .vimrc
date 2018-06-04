@@ -368,6 +368,9 @@ endif
    call dein#add('tobyS/pdv')
    call dein#add('vim-vdebug/vdebug')
 
+   call dein#add('othree/yajs.vim')
+   call dein#add('maxmellon/vim-jsx-pretty')
+
    " Python plugins
    call dein#add('davidhalter/jedi-vim',
          \ {'on_ft': 'python' })
