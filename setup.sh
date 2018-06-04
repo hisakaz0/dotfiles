@@ -26,7 +26,7 @@ do
     echo "Make directory: $dist"
     mkdir -p "$dist"
   fi
-  cmd="ln -sf $src $dist"
+  cmd="ln -s $src $dist"
 
   echo $cmd ; $cmd
 done
