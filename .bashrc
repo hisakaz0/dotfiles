@@ -314,6 +314,10 @@ if [ -d /usr/local/share/app/flutter ] ; then
   export PATH="/usr/local/share/app/flutter/bin:$PATH"
 fi
 
+if [ -d "$HOME/.local/bin" ] ; then
+  export PATH="$HOME/.local/bin:$PATH"
+fi
+
 #}}}
 ### machine specific .bashrc{{{
 if [ -s ".$__hostname/dot.bashrc.bash" ] ; then
@@ -581,7 +585,9 @@ fi
 # This loads nvm bash_completion
 [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
 # Use latest node
-nvm use `ls -1 $NVM_DIR/versions/node/ | sort | tail -n1`
+if [ -x "`which nvm`" ] ; then
+  nvm use `ls -1 $NVM_DIR/versions/node/ | sort | tail -n1`
+fi
 #}}}
 ### java{{{
 [ -x "/usr/libexec/java_home" ] && \
