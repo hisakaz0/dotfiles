@@ -135,6 +135,13 @@ if [ -x "`which tmux`" ] ; then
   alias ta='tmux a'
   alias tat='tmux a -t'
 fi
+
+if [ "$__uname" = 'Darwin' ] ; then
+  TRASH_DIR="$HOME/.Trash/"
+  function trash () {
+    mv $* $TRASH_DIR
+  }
+fi
 #}}}
 ### tmux#{{{
 if [ "$__uname" = "Darwin" ] ; then
