@@ -69,6 +69,7 @@ set wildmenu
 set wildmode=list:longest
 set display=lastline
 set textwidth=0
+set autochdir
 " If you edit or read binary file,
 " you should set following option, 'set binary'.
 " set binary
@@ -165,13 +166,8 @@ iabbrev assing assign
 iabbrev bse base
 "}}}
 " tabpage " ============================================================="{{{2
-if has('mac')
-  set <k0>=î
-  set <k1>=ð
-elseif has('unix')
-  set <k0>=n " alt + n
-  set <k1>=p " alt + p
-endif
+set <k0>=n " alt + n
+set <k1>=p " alt + p
 nnoremap <k0> :tabn<CR>
 nnoremap <k1> :tabp<CR>
 nnoremap <Leader>tabn :tabn<CR>
