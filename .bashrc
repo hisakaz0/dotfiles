@@ -324,6 +324,9 @@ fi
 if [ -d "$HOME/.local/bin" ] ; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
+if [ -d "/usr/local/opt/gettext/bin" ] ; then
+  export PATH="/usr/local/opt/gettext/bin:$PATH"
+fi
 
 #}}}
 ### machine specific .bashrc{{{
