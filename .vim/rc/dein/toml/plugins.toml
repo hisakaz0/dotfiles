@@ -1,0 +1,182 @@
+[[plugins]]
+repo = 'Shougo/dein.vim'
+
+[[plugins]]
+repo = 'JuliaEditorSupport/julia-vim'
+
+[[plugins]]
+repo = 'LeafCage/foldCC.vim'
+hook_add = '''
+set foldtext=FoldCCtext()
+let g:foldCCtext_tail = 'printf("   %s[%4d lines  Lv%-2d]%s",
+      \ v:folddashes, v:foldend-v:foldstart+1, v:foldlevel, v:folddashes)'
+'''
+
+[[plugins]]
+repo = 'Shougo/deoplete.nvim'
+on_source = ['neoinclude.vim']
+hook_add = '''
+let g:deoplete#enable_at_startup = 1
+'''
+
+[[plugins]]
+repo = 'roxma/nvim-yarp'
+if = '!has("nvim")'
+
+[[plugins]]
+repo = 'roxma/vim-hug-neovim-rpc'
+if = '!has("nvim")'
+
+[[plugins]]
+repo = 'ap/vim-buftabline'
+
+[[plugins]]
+repo = 'bronson/vim-trailing-whitespace'
+
+[[plugins]]
+repo = 'cespare/vim-toml'
+
+[[plugins]]
+repo = 'ciaranm/inkpot'
+hook_add = '''
+colorscheme inkpot
+'''
+
+[[plugins]]
+repo = 'vim-jp/vimdoc-ja'
+type__depth = 1
+hook_add = '''
+set helplang=ja,en
+'''
+
+[[plugins]]
+repo = 'dhruvasagar/vim-table-mode'
+hook_add = '''
+let g:table_mode_corner_corner = "|"
+let g:table_mode_corner        = "|"
+'''
+
+[[plugins]]
+repo = 'elixir-editors/vim-elixir'
+
+[[plugins]]
+repo = 'fatih/vim-go'
+hook_add = '''
+let g:go_fmt_autosave = 0
+let g:go_play_open_browser = 0
+'''
+
+[[plugins]]
+repo = 'fuenor/JpFormat.vim'
+hook_add = '''
+set formatexpr=jpfmt#formatexpr()
+'''
+
+[[plugins]]
+repo = 'gabrielelana/vim-markdown'
+hook_add = '''
+let g:markdown_include_jekyll_support = 0
+let g:markdown_enable_spell_checking = 0
+'''
+
+[[plugins]]
+repo = 'joker1007/vim-markdown-quote-syntax'
+hook_add = '''
+let g:markdown_quote_syntax_filetypes =
+      \ {
+      \   'elixir' : {
+      \     "start" : "elixir",
+      \   },
+      \   'kotlin' : {
+      \     "start" : "\\%(kotlin\\|kt\\)",
+      \   },
+      \   'graphql' : {
+      \     "start" : "graphql",
+      \   },
+      \   'yaml' : {
+      \     "start" : "\\%(yaml\\|yml\\)",
+      \   },
+      \   'json' : {
+      \     "start" : "json",
+      \   },
+      \   'xml' : {
+      \     "start" : "xml",
+      \   },
+      \   'qf' : {
+      \     "start" : "qf",
+      \   },
+      \ }
+'''
+
+
+
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+
+[[plugins]]
+repo = 'jparise/vim-graphql'
+
+[[plugins]]
+repo = 'kannokanno/previm'
+hook_add = '''
+if has('mac')
+  let g:previm_open_cmd = 'open -a "/Applications/Google Chrome.app/"'
+endif
+'''
+
+[[plugins]]
+repo = 'roxma/nvim-yarp'
+if = '!has("nvim")'
+
+[[plugins]]
+repo = 'scrooloose/nerdtree'
+hook_add = '''
+autocmd VIMENTER * NERDTree
+'''
+
+[[plugins]]
+repo = 'thinca/vim-quickrun'
+
+[[plugins]]
+repo = 'thinca/vim-themis'
+
+[[plugins]]
+repo = 'tyru/caw.vim'
+
+[[plugins]]
+repo = 'udalov/kotlin-vim'
+
+#[[plugins]]
+#repo = 'sheerun/vim-polyglot'
+#
+[[plugins]]
+repo = 'davidhalter/jedi-vim'
+on_source = ['vim-pyenv']
+on_ft = ['python', 'python3']
+
+[[plugins]]
+repo = 'mopp/autodirmake.vim'
+hook_add = '''
+let g:autodirmake#is_confirm = 0 " No confirmation
+'''
+
+### vim-scripts
+[[plugins]]
+repo = 'vim-scripts/AnsiEsc.vim'
+
+[[plugins]]
+repo = 'vim-scripts/bats.vim'
+
+[[plugins]]
+repo = 'vim-scripts/matchit.zip'
+
+[[plugins]]
+repo = 'vim-scripts/xterm-color-table.vim'
+
+[[plugins]]
+repo = 'vim-scripts/bufferlist.vim'
+hook_add = '''
+command! BufferList call BufferList()
+'''
+
+

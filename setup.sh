@@ -1,32 +1,48 @@
-#!/bin/bash
-dotfiles_root=$(cd $(dirname $0) && pwd | sed -e "s@$HOME/@@")
-list=(.bashrc \
-  .config \
-  .cshrc \
-  .cshrc.body \
-  .gitconfig \
-  .inputrc \
-  .tmux.mac.conf \
-  .tmux.noplugin.conf \
-  .vim/after \
-  .vim/autoload \
-  .vim/plugin \
-  .vim/templates \
-  .vim/colors \
-  .vimrc \
-  .screenrc \
-  .hammerspoon/init.lua)
+#!/usr/bin/env bash
 
-cd $HOME
-for file in ${list[*]}
-do
-  src="$dotfiles_root/$file"
-  dist="$HOME/${file%\/*}"
-  if [ "${file%\/*}" != "$file" ] && [ ! -d "$dist" ] ; then
-    echo "Make directory: $dist"
-    mkdir -p "$dist"
-  fi
-  cmd="ln -s $src $dist"
+set -e
+#set -x # debug
 
-  echo $cmd ; $cmd
-done
+# @param array list
+#   The `list` variable containes list of src file/directory
+#   which will be linked to actual config one. The path is relative
+#   path from project root.
+
+: "preprocess" && {
+  cd $(dirname $0)
+  dotfiles_root=$(pwd)
+
+  list=( \
+    .bashrc \
+    .config/awesome \
+    .config/git \
+    .config/nvim \
+    .cshrc \
+    .cshrc.body \
+    .gitconfig \
+    .inputrc \
+    .tmux.mac.conf \
+    .tmux.noplugin.conf \
+    .vim/after \
+    .vim/autoload \
+    .vim/plugin \
+    .vim/templates \
+    .vim/colors \
+    .vim/rc \
+    .vim/script \
+    .vimrc \
+    .screenrc \
+    .hammerspoon/init.lua \
+    )
+}
+
+: "main" && {
+  cd $HOME
+  for file in ${list[*]}
+  do
+    src="$dotfiles_root/$file"
+    dist="$HOME/$file"
+    make_parent_directory "$dist"
+    make_symbolic_link "$src" "$dist"
+  done
+}

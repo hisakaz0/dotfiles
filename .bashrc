@@ -95,7 +95,7 @@ elif [ "$__uname" = "FreeBSD" ] ; then
   # export LANG=ja_JP.eucJP
   # export LC_ALL=ja_JP.eucJP
   :
-elif [ "$__uname" = "Linux" ] ; then
+else
   export LANG=en_US.UTF-8
   export LC_ALL=en_US.UTF-8
 fi
@@ -196,21 +196,10 @@ if [ "$__uname" = 'FreeBSD' ] ; then
   }
 elif [ "$__uname" = 'Darwin' ] ; then
   _print_battery_status () {
-    # Show current battery status on Mac.
-    # The items of battery status are both of percentage of remain battery,
-    # and remain time to charge.
-    #
-    # Input args:
-    #     <no parameters>
-    # Options:
-    #     -o: only percent of battery
-    if [ "$1" != "-o" ] ; then
-      pmset -g ps
-      return 0
-    fi
     pmset -g ps | egrep -o "[0-9]{1,3}%"
   }
 fi
+
 #}}}
 ### autoextract {{{
 # complete -W "vim study php html cake" cake # cake???????????????
@@ -227,7 +216,7 @@ export MEMO_PATH=${HOME}/.memo
 #}}}
 ### console style{{{
 if [ "$__uname" = "Darwin" ] || [ "$__uname" = "FreeBSD" ]  ; then
-  export PS1='($(_print_battery_status -o)) \u@\h:\W\$ '
+  export PS1='($(_print_battery_status)) \u@\h:\W\$ '
 else
   export PS1='\u@\h:\W\$ '
 fi
@@ -244,7 +233,7 @@ share_history() {
 }
 export HISTCONTROL=ignoredups
 export HISTFILE=$HOME/.bash_history
-export HISTIGNORE="cd*:pwd*:fg*:bg*"
+export HISTIGNORE="cd:pwd:fg*:bg*"
 shopt -u histappend
 export HISTSIZE=10000
 ## Current command name as window name
@@ -317,16 +306,28 @@ if [ -f "/etc/redhat-release" ] ; then
   unset -v __arr
 fi
 
-if [ -d /usr/local/share/app/flutter ] ; then
-  export PATH="/usr/local/share/app/flutter/bin:$PATH"
-fi
+function check_and_add_path () {
+  [ -d "$1" ] && export PATH="$1:$PATH"
+}
 
-if [ -d "$HOME/.local/bin" ] ; then
-  export PATH="$HOME/.local/bin:$PATH"
-fi
-if [ -d "/usr/local/opt/gettext/bin" ] ; then
-  export PATH="/usr/local/opt/gettext/bin:$PATH"
-fi
+check_and_add_path "/usr/local/sbin"
+check_and_add_path "/usr/local/share/app/flutter/bin"
+check_and_add_path "$HOME/.local/bin"
+check_and_add_path "$HOME/bin"
+check_and_add_path "/usr/local/opt/gettext/bin"
+check_and_add_path "$HOME/Library/Python/2.7/bin"
+check_and_add_path "$HOME/Library/Python/3.6/bin"
+check_and_add_path "$HOME/.rvm/bin"
+check_and_add_path "$HOME/Library/Android/sdk/platform-tools"
+check_and_add_path "$HOME/Library/Android/sdk/tools"
+check_and_add_path "$HOME/Library/Android/sdk/ndk-bundle"
+
+
+## Android
+[ -d "$HOME/Library/Android/sdk" ] && \
+  export ANDROID_HOME="$HOME/Library/Android/sdk"
+[ -d "$HOME/Library/Android/sdk" ] && \
+  export ANDROID_SDK_PATH="$HOME/Library/Android/sdk"
 
 #}}}
 ### machine specific .bashrc{{{
@@ -596,12 +597,14 @@ fi
 [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
 # Use latest node
 if [ -x "`which nvm`" ] ; then
-  nvm use `ls -1 $NVM_DIR/versions/node/ | sort | tail -n1`
+  nvm use default
 fi
 #}}}
 ### java{{{
 [ -x "/usr/libexec/java_home" ] && \
   export JAVA_HOME="`/usr/libexec/java_home`"
+[ -x "/System/Library/Frameworks/JavaVM.framework/Versions/A/Commands/java_home" ] && \
+  export JAVA_HOME="$(/System/Library/Frameworks/JavaVM.framework/Versions/A/Commands/java_home -v '1.8')"
 #}}}
 ### pyenv{{{
 #
@@ -819,10 +822,30 @@ if [ -x "`which brew`" ] ; then
   fi
 fi
 #}}}
+if [ -f $HOME/.env.dmm.sh ] ; then
+  . $HOME/.env.dmm.sh
+fi
 
+# these commands must be last of file.
 unset -v __uname
 unset -v __hostname
 
-
 update_date
 update_time
+
+if [ -x "$(which direnv)" ] ; then
+  eval "$(direnv hook bash)"
+fi
+
+if [ -f "/usr/local/opt/bash-git-prompt/share/gitprompt.sh" ]; then
+  GIT_PROMPT_ONLY_IN_REPO=1
+  export GIT_PROMPT_END_USER='\n\[\033[0;37m\]($(_print_battery_status)) $(date +%H:%M)\[\033[0;0m\] $ '
+  __GIT_PROMPT_DIR="/usr/local/opt/bash-git-prompt/share"
+  source "/usr/local/opt/bash-git-prompt/share/gitprompt.sh"
+fi
+
+# bash completion
+if [ -f "/usr/local/etc/bash_completion" ] ; then
+  . "/usr/local/etc/bash_completion"
+fi
+
