@@ -317,16 +317,15 @@ if [ -f "/etc/redhat-release" ] ; then
   unset -v __arr
 fi
 
-if [ -d /usr/local/share/app/flutter ] ; then
-  export PATH="/usr/local/share/app/flutter/bin:$PATH"
-fi
+function check_and_add_path () {
+  [ -d "$1" ] && export PATH="$1:$PATH"
+}
 
-if [ -d "$HOME/.local/bin" ] ; then
-  export PATH="$HOME/.local/bin:$PATH"
-fi
-if [ -d "/usr/local/opt/gettext/bin" ] ; then
-  export PATH="/usr/local/opt/gettext/bin:$PATH"
-fi
+check_and_add_path "/usr/local/share/app/flutter/bin"
+check_and_add_path "$HOME/.local/bin"
+check_and_add_path "/usr/local/opt/gettext/bin"
+check_and_add_path "$HOME/Library/Python/3.6/bin"
+check_and_add_path "$HOME/Library/Python/2.7/bin"
 
 #}}}
 ### machine specific .bashrc{{{
