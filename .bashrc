@@ -211,6 +211,7 @@ elif [ "$__uname" = 'Darwin' ] ; then
     pmset -g ps | egrep -o "[0-9]{1,3}%"
   }
 fi
+
 #}}}
 ### autoextract {{{
 # complete -W "vim study php html cake" cake # cake???????????????
@@ -323,9 +324,21 @@ function check_and_add_path () {
 
 check_and_add_path "/usr/local/share/app/flutter/bin"
 check_and_add_path "$HOME/.local/bin"
+check_and_add_path "$HOME/bin"
 check_and_add_path "/usr/local/opt/gettext/bin"
-check_and_add_path "$HOME/Library/Python/3.6/bin"
 check_and_add_path "$HOME/Library/Python/2.7/bin"
+check_and_add_path "$HOME/Library/Python/3.6/bin"
+check_and_add_path "$HOME/.rvm/bin"
+check_and_add_path "$HOME/Library/Android/sdk/platform-tools"
+check_and_add_path "$HOME/Library/Android/sdk/tools"
+check_and_add_path "$HOME/Library/Android/sdk/ndk-bundle"
+
+
+## Android
+[ -d "$HOME/Library/Android/sdk" ] && \
+  export ANDROID_HOME="$HOME/Library/Android/sdk"
+[ -d "$HOME/Library/Android/sdk" ] && \
+  export ANDROID_SDK_PATH="$HOME/Library/Android/sdk"
 
 #}}}
 ### machine specific .bashrc{{{
@@ -601,6 +614,8 @@ fi
 ### java{{{
 [ -x "/usr/libexec/java_home" ] && \
   export JAVA_HOME="`/usr/libexec/java_home`"
+[ -x "/System/Library/Frameworks/JavaVM.framework/Versions/A/Commands/java_home" ] && \
+  export JAVA_HOME="$(/System/Library/Frameworks/JavaVM.framework/Versions/A/Commands/java_home -v '1.8')"
 #}}}
 ### pyenv{{{
 #
@@ -825,3 +840,4 @@ unset -v __hostname
 
 update_date
 update_time
+

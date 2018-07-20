@@ -2,6 +2,7 @@
 [core]
 # Please adapt and uncomment the following lines:
   pager = less -x2
+	autocrlf = input
   # excludesfile = /Users/hisakazu/.gitignore_global
 [user]
   ae = pinkienort

@@ -158,6 +158,7 @@ endfunction
 "}}}
 " toggle highlight search " ============================================ "{{{2
 nnoremap <silent> <Leader>hls :set invhlsearch<CR>
+nnoremap <silent> <Leader>wrap :set invwrap<CR>
 " nnoremap <silent> <F5>        :set invhlsearch<CR>
 "}}}
 " abbreviatio " ========================================================="{{{2
@@ -365,7 +366,7 @@ endif
    call dein#add('vim-vdebug/vdebug')
 
    call dein#add('othree/yajs.vim')
-   call dein#add('maxmellon/vim-jsx-pretty')
+   " call dein#add('maxmellon/vim-jsx-pretty')
 
    " Python plugins
    call dein#add('davidhalter/jedi-vim',
@@ -530,8 +531,8 @@ let g:syntastic_mode_map = {
 " if you want to active save-on-check, change "passive" to "active"
 "}}}
 " VIM Table Mode " ======================================================"{{{2
-"let g:table_mode_corner_corner = "|"
-"let g:table_mode_corner        = "|"
+let g:table_mode_corner_corner = "|"
+let g:table_mode_corner        = "|"
 augroup my_vim_table_mode
   autocmd! Filetype rst call MyVimTableModeSettings()
 augroup END
