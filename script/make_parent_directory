@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+set -e
+
+: "preprocess" && {
+  target="$1"
+  if [ -z "$target" ] ; then
+    echo "usage: make_parent_directory <target>" 1>&2
+    exit 1
+  fi
+
+  target_parent=${target%\/*}
+  if [ "$target_parent" = "$HOME" ] ; then
+    exit 0
+  fi
+
+  if [ -f "$target_parent" ] ; then
+    echo "Error: '$target' parent is already existed as a regular file" 1>&2
+    exit 1
+  fi
+
+  if [ -d "$target_parent" ] ; then
+    exit 0
+  fi
+}
+
+: "main" && {
+  mkdir -p "$target_parent"
+  exit 0
+}
+
+# vim: set ft=sh shiftwidth=2 tabstop=2

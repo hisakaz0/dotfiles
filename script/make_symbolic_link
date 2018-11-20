@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+set -e
+
+: "preprocess" && {
+  src="$1"
+  dist="$2"
+  if [ -z "$dist" ] ; then
+    echo "usage: make_symbolic_link <src> <dist>" 1>&2
+    exit 1
+  fi
+
+  if [ ! -e "$src" ] ; then
+    echo "Error: '$src' is not exist" 1>&2
+    exit 1
+  fi
+
+  if [ -h "$src" ] ; then
+    echo "Error: '$src' must be regular file or directory" 1>&2
+    exit 1
+  elif [ ! -f "$src" ] && [ ! -d "$src" ] ; then
+    echo "Error: '$src' must be regular file or directory" 1>&2
+    exit 1
+  fi
+
+  if [ "${src:0:1}" != '/' ] ; then
+    echo "Error: '$src' path must be absolute path" 1>&2
+    exit 1
+  fi
+
+  if [ -h "$dist" ] ; then
+    exit 0 # success
+  fi
+
+  if [ -e "$dist" ] ; then
+    echo "Error: '$dist' which is not symbolic link, is already existed" 1>&2
+    exit 1
+  fi
+}
+
+: "main" && {
+  ln -s $src $dist
+  exit 0
+}
+
+# vim: set ft=sh tabstop=2 shiftwidth=2

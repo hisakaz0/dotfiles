@@ -608,7 +608,7 @@ fi
 [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
 # Use latest node
 if [ -x "`which nvm`" ] ; then
-  nvm use `ls -1 $NVM_DIR/versions/node/ | sort | tail -n1`
+  nvm use default
 fi
 #}}}
 ### java{{{
@@ -833,11 +833,35 @@ if [ -x "`which brew`" ] ; then
   fi
 fi
 #}}}
+### git{{{
+if [ -f "/usr/local/etc/bash_completion.d/git-completion.bash" ] ; then
+  # git-completion
+  . "/usr/local/etc/bash_completion.d/git-completion.bash"
+fi
+if [ -f "/usr/local/opt/bash-git-prompt/share/gitprompt.sh" ]; then
+  # git-prompt
+  __GIT_PROMPT_DIR="/usr/local/opt/bash-git-prompt/share"
+  . "/usr/local/opt/bash-git-prompt/share/gitprompt.sh"
+fi
+#}}}
+if [ -f $HOME/.env.dmm.sh ] ; then
+  . $HOME/.env.dmm.sh
+fi
 
+# these commands must be last of file.
 unset -v __uname
 unset -v __hostname
-
 
 update_date
 update_time
 
+function jira_ticket_url() {
+    if [ -z "$1" ] ; then
+        echo "Error: need ticket number." 1>&2
+        return 1
+    fi
+    echo "https://jira.arms.dmm.com/browse/"$1
+    return 0
+}
+
+eval "$(direnv hook bash)"

@@ -130,31 +130,13 @@ nnoremap ? ?\v
 inoremap <C-E> <C-X><C-E>
 inoremap <C-Y> <C-X><C-Y>
 
-" shift tab
-inoremap <S-Tab> <C-R>=RightShiftOneTab()<CR><BS>
+source $HOME/.vim/script/function-tab-action.vim
 
-function! RightShiftOneTab()
-  let s:pos  = getpos('.')
-  let s:line = getline('.')
-  let s:i = 0
-  let s:space = ' '
-  let s:volume = &tabstop
-  if (!(&expandtab))
-    let s:space = " "
-    let s:volume = 1
-  endif
-  while (s:i < s:volume)
-    if (s:line[0] == s:space)
-      let s:line = s:line[1:]
-    else
-      break
-    endif
-    let s:i = s:i + 1
-  endwhile
-  let s:pos[2] = s:pos[2] - s:i " col position
-  call setline('.', s:line)
-  call setpos('.', s:pos)
-endfunction
+" shift tab
+" TODO: <BS>を取り除く
+inoremap <S-Tab> <C-R>=ActionKeyShiftTab()<CR><BS>
+"inoremap <Tab> <C-R>=ActionKeyTab()<CR><BS>
+
 "}}}
 " toggle highlight search " ============================================ "{{{2
 nnoremap <silent> <Leader>hls :set invhlsearch<CR>
@@ -202,6 +184,8 @@ function! MyTabLabel (n)
   let winnr = tabpagewinnr(a:n)
   return bufname(buflist[winnr - 1])
 endfunction
+
+source $HOME/.vim/script/set-tags.vim
 
 " quickfix " ============================================================"{{{2
 nnoremap <silent> <Leader>cn :cn<CR>
@@ -292,218 +276,129 @@ endif
 " - plugins list: g:dein#_plugins
 "
 
- if &compatible
-   set nocompatible " Be iMproved
- endif
+if &compatible
+  set nocompatible " Be iMproved
+endif
 
- let s:bundle_path = $HOME ."/.vim/bundle"
- let s:dein_path = s:bundle_path ."/repos/github.com/Shougo/dein.vim"
- if ! isdirectory(s:dein_path)
-   let s:dein_installer_url =
-         \ "https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh"
-   let s:dein_installer_path = $HOME ."/.dein-installer.sh"
-   echo "Installing dein.vim"
-   call system(printf("curl %s > %s && sh %s %s",
-         \ s:dein_installer_url, s:dein_installer_path,
-         \ s:dein_installer_path, s:bundle_path))
- endif
+let s:bundle_path = $HOME ."/.vim/bundle"
+let s:dein_path = s:bundle_path ."/repos/github.com/Shougo/dein.vim"
+if ! isdirectory(s:dein_path)
+  let s:dein_installer_url =
+        \ "https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh"
+  let s:dein_installer_path = $HOME ."/.dein-installer.sh"
+  echo "Installing dein.vim"
+  call system(printf("curl %s > %s && sh %s %s",
+        \ s:dein_installer_url, s:dein_installer_path,
+        \ s:dein_installer_path, s:bundle_path))
+endif
 
- execute "set runtimepath^=" . s:dein_path
- if dein#load_state(s:bundle_path)
-   " Required:
-   call dein#begin('$HOME/.vim/bundle')
-   call dein#add('dhruvasagar/vim-table-mode')
-   call dein#add('ciaranm/inkpot')
-   call dein#add('tomtom/tcomment_vim')
-   call dein#add('ap/vim-buftabline')
-   call dein#add('kchmck/vim-coffee-script')
-   call dein#add('glidenote/memolist.vim')
-   call dein#add('joker1007/vim-markdown-quote-syntax')
-   call dein#add('godlygeek/tabular')
-   call dein#add('kannokanno/previm')
-   call dein#add('rcmdnk/vim-markdown')
-   call dein#add('vim-scripts/AnsiEsc.vim')
-   call dein#add('fatih/vim-go')
-   call dein#add('bronson/vim-trailing-whitespace')
-   call dein#add('itchyny/lightline.vim')
-   call dein#add('hail2u/vim-css3-syntax')
-   call dein#add('scrooloose/syntastic')
-   call dein#add('vim-jp/vimdoc-ja')
-   call dein#add('itchyny/dictionary.vim')
-   " NOTE: Too heavy to insatll the plugin
-   " call dein#add('apple/swift',
-   "       \ {'rtp': 'utils/vim' })
-   call dein#add('LeafCage/foldCC.vim')
-   call dein#add('Shougo/vimproc.vim',
-         \ {'build' : 'make' })
-   call dein#add('cespare/vim-toml')
-   " call dein#add('pinkienort/openrcnt.vim') " replace with unite.vim
-   " call dein#add('pinkienort/shimapan.vim') " to not need
-   call dein#add('thinca/vim-themis')
-   call dein#add('fuenor/JpFormat.vim')
-   call dein#add('JuliaEditorSupport/julia-vim')
-   " reStructured Text
-   " call dein#add('Rykka/riv.vim')
-   call dein#add('thinca/vim-quickrun')
-   " call dein#add('Shougo/unite.vim') " replace with denite.vim
-   call dein#add('Shougo/denite.nvim')
+execute "set runtimepath^=" . s:dein_path
+if dein#load_state(s:bundle_path)
+  " Required:
+  call dein#begin('$HOME/.vim/bundle')
+  call dein#add('dhruvasagar/vim-table-mode')
+  call dein#add('ciaranm/inkpot')
+  call dein#add('tomtom/tcomment_vim')
+  call dein#add('ap/vim-buftabline')
+  call dein#add('kchmck/vim-coffee-script')
+  call dein#add('glidenote/memolist.vim')
+  call dein#add('joker1007/vim-markdown-quote-syntax')
+  call dein#add('godlygeek/tabular')
+  call dein#add('kannokanno/previm')
+  call dein#add('rcmdnk/vim-markdown')
+  call dein#add('vim-scripts/AnsiEsc.vim')
+  call dein#add('fatih/vim-go')
+  call dein#add('bronson/vim-trailing-whitespace')
+  call dein#add('itchyny/lightline.vim')
+  call dein#add('hail2u/vim-css3-syntax')
+  call dein#add('scrooloose/syntastic')
+  call dein#add('vim-jp/vimdoc-ja')
+  call dein#add('itchyny/dictionary.vim')
+  " NOTE: Too heavy to insatll the plugin
+  " call dein#add('apple/swift',
+  "       \ {'rtp': 'utils/vim' })
+  call dein#add('LeafCage/foldCC.vim')
+  call dein#add('Shougo/vimproc.vim',
+        \ {'build' : 'make' })
+  call dein#add('cespare/vim-toml')
+  " call dein#add('pinkienort/openrcnt.vim') " replace with unite.vim
+  " call dein#add('pinkienort/shimapan.vim') " to not need
+  call dein#add('thinca/vim-themis')
+  call dein#add('fuenor/JpFormat.vim')
+  call dein#add('JuliaEditorSupport/julia-vim')
+  " reStructured Text
+  " call dein#add('Rykka/riv.vim')
+  call dein#add('thinca/vim-quickrun')
+  " call dein#add('Shougo/unite.vim') " replace with denite.vim
+  call dein#add('Shougo/denite.nvim')
 
-   " Completion plugins
-   if has('lua')
-     call dein#add('Shougo/NeoComplete.vim',
-           \ {'lazy': 1, 'on_i': 1 })
-     call dein#add('Shougo/neoinclude.vim',
-           \ {'on_source': ['NeoComplete.vim'] })
-     call dein#add('Shougo/context_filetype.vim',
-           \ {'on_source': ['NeoComplete.vim'] })
-   endif
-   call dein#add('justmao945/vim-clang',
-         \ {'on_ft': ['c', 'cpp'] })
-   call dein#add('udalov/kotlin-vim')
-   call dein#add('scrooloose/nerdtree')
-   call dein#add('jwalton512/vim-blade')
-   call dein#add('tobyS/pdv')
-   call dein#add('vim-vdebug/vdebug')
+  " Completion plugins
+  if has('lua')
+    call dein#add('Shougo/NeoComplete.vim',
+          \ {'lazy': 1, 'on_i': 1 })
+    call dein#add('Shougo/neoinclude.vim',
+          \ {'on_source': ['NeoComplete.vim'] })
+    call dein#add('Shougo/context_filetype.vim',
+          \ {'on_source': ['NeoComplete.vim'] })
+  endif
+  call dein#add('justmao945/vim-clang',
+        \ {'on_ft': ['c', 'cpp'] })
+  call dein#add('udalov/kotlin-vim')
+  call dein#add('scrooloose/nerdtree')
+  call dein#add('jwalton512/vim-blade')
+  call dein#add('tobyS/pdv')
+  call dein#add('vim-vdebug/vdebug')
+  call dein#add('jparise/vim-graphql') " GraphQL syntax
+  call dein#add('elixir-editors/vim-elixir') " elixir
 
-   call dein#add('othree/yajs.vim')
-   " call dein#add('maxmellon/vim-jsx-pretty')
+  call dein#add('othree/yajs.vim')
 
-   " Python plugins
-   call dein#add('davidhalter/jedi-vim',
-         \ {'on_ft': 'python' })
-   call dein#add('lambdalisue/vim-pyenv',
-         \ {'depends': ['jedi-vim'],
-         \  'on_source': ['jedi-vim'],
-         \  'lazy': 1,
-         \  'on_ft': ['python', 'python3'] })
+  " Deoplete
+  call dein#add('Shougo/deoplete.nvim')
+  if !has('nvim')
+    call dein#add('roxma/nvim-yarp')
+    call dein#add('roxma/vim-hug-neovim-rpc')
+  endif
 
-   " Required:
-   call dein#add('Shougo/dein.vim')
+  call dein#add('vim-scripts/bats.vim') "Syntax highlighting for Bats
 
-   " install all of plugins with only depth-1
-   call dein#config(keys(dein#get()), { 'type__depth': 1 })
-   " Let dein manage dein
+  " Python plugins
+  call dein#add('davidhalter/jedi-vim',
+        \ {'on_ft': 'python' })
+  call dein#add('lambdalisue/vim-pyenv',
+        \ {'depends': ['jedi-vim'],
+        \  'on_source': ['jedi-vim'],
+        \  'lazy': 1,
+        \  'on_ft': ['python', 'python3'] })
 
-   " Required:
-   call dein#end()
-   call dein#save_state()
- endif
+  " Required:
+  call dein#add('Shougo/dein.vim')
 
+  " install all of plugins with only depth-1
+  call dein#config(keys(dein#get()), { 'type__depth': 1 })
+  " Let dein manage dein
 
- " Required:
- filetype plugin indent on
+  " Required:
+  call dein#end()
+  call dein#save_state()
+endif
 
- " If you want to install not installed plugins on startup.
- if dein#check_install()
-   call dein#install()
- endif
+" Required:
+filetype plugin indent on
 
- " NOTE: dein_plugins_list_path is
- " $HOME . "/work/github/pinkienort/dotfiles/.vim/dein-plugins-list.bkup.toml
- " you can get contest of plugins list using following command.
- " dein#plugins2toml(values(dein#get()))
+" If you want to install not installed plugins on startup.
+if dein#check_install()
+  call dein#install()
+endif
+
+" NOTE: dein_plugins_list_path is
+" $HOME . "/work/github/pinkienort/dotfiles/.vim/dein-plugins-list.bkup.toml
+" you can get contest of plugins list using following command.
+" dein#plugins2toml(values(dein#get()))
 
 " "}}}
-" Neocomplete " ========================================================="{{{2
-if has('lua')
-  " Disable AutoComplPop. 0: disable | 1: enable
-  let g:acp_enableAtStartup = 0
-  " deoplete
-   let g:deoplete#enable_at_startup = 0
-
-  " Use neocomplete.
-  let g:neocomplete#enable_at_startup = 1
-  " Use smartcase.
-  let g:neocomplete#enable_smart_case = 1
-  " Set minimum syntax keyword length.
-  let g:neocomplete#sources#syntax#min_keyword_length = 3
-  let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-
-  " Define dictionary.
-  let g:neocomplete#sources#dictionary#dictionaries = {
-        \ 'default' : '',
-        \ 'vimshell' : $HOME.'/.vimshell_hist',
-        \ 'scheme' : $HOME.'/.gosh_completions'
-        \ }
-
-  " Define keyword.
-  if !exists('g:neocomplete#keyword_patterns')
-      let g:neocomplete#keyword_patterns = {}
-  endif
-  let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-  " Plugin key-mappings.
-  inoremap <expr><C-g> neocomplete#undo_completion()
-  inoremap <expr><C-l> neocomplete#complete_common_string()
-
-  " Recommended key-mappings.
-  " <CR>: close popup and save indent.
-  inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-  function! s:my_cr_function()
-    " return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-    " For no inserting <CR> key.
-    return pumvisible() ? "\<C-y>" : "\<CR>"
-  endfunction
-  " <TAB>: completion.
-  inoremap <expr><TAB>   pumvisible() ? "\<C-n>" : "\<TAB>"
-  inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-  " <C-h>, <BS>: close popup and delete backword char.
-  inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-  inoremap <expr><BS>  neocomplete#smart_close_popup()."\<C-h>"
-  " Close popup by <Space>.
-  "inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
-
-  " AutoComplPop like behavior.
-  "let g:neocomplete#enable_auto_select = 1
-
-  " Shell like behavior(not recommended).
-  "set completeopt+=longest
-  "let g:neocomplete#enable_auto_select = 1
-  "let g:neocomplete#disable_auto_complete = 1
-  "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-
-  " Enable omni completion.
-  " augroup neocomp_omni
-  "   autocmd!
-  "   autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-  "   autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-  "   autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-  "   autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-  "   autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-  " augroup END
-
-  " Enable heavy omni completion.
-  if !exists('g:neocomplete#sources#omni#input_patterns')
-    let g:neocomplete#sources#omni#input_patterns = {}
-  endif
-  if !exists('g:neocomplete#force_omni_input_patterns')
-    let g:neocomplete#force_omni_input_patterns = {}
-  endif
-
-  " Use vim-clang instead of neocomplete
-  " let g:neocomplete#force_overwrite_completefunc = 1
-  " let g:neocomplete#force_omni_input_patterns.c =
-  "       \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
-  " let g:neocomplete#force_omni_input_patterns.cpp =
-  "       \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
-
-  "let g:neocomplete#sources#omni#input_patterns.php =
-  "      \ '[^. \t]->\h\w*\|\h\w*::'
-
-  " For perlomni.vim setting.
-  " https://github.com/c9s/perlomni.vim
-  " let g:neocomplete#sources#omni#input_patterns.perl =
-  "       \ '\h\w*->\h\w*\|\h\w*::'
-
-  " For smart TAB completion.
-  "inoremap <expr><TAB>  pumvisible() ? "\<C-n>" :
-  "        \ <SID>check_back_space() ? "\<TAB>" :
-  "        \ neocomplete#start_manual_complete()
-  "  function! s:check_back_space() "{{{
-  "    let col = col('.') - 1
-  "    return !col || getline('.')[col - 1]  =~ '\s'
-  "  endfunction"}}}
-endif
+" Deoplete ================================================================{{{
+let g:deoplete#enable_at_startup = 1
 "}}}
 " Previm " =============================================================="{{{2
 if has('mac')
@@ -626,6 +521,8 @@ command! BufferList :call BufferList()
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+" Json
+autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.json set ft=json
 " Gnuplot
 autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.plt set ft=sh
 
@@ -648,9 +545,68 @@ autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.{ss,shortshort}
 
 " ===========================================================================
 " Markdown
-autocmd BufRead,BufEnter,BufNewFile,BufReadPre *.{mkd,mk,markdown}
-      \set filetype=markdown
+augroup my_markdown
+  autocmd!
+  autocmd! BufRead,BufEnter,BufNewFile,BufReadPre *.{md,mkd,mk,markdown}
+        \ call MyMarkdownSetting()
+  autocmd! Filetype markdown call MyMarkdownSetting()
+augroup END
+
 nnoremap <Leader>mkdn :set ft=markdown<CR>
+
+function! MyMarkdownSetting()
+  set shiftwidth=4
+  set tabstop=4
+endfunction
+
+function! GetStringMultiMarkdownQuoteSyntaxFileTypes(...)
+  let s:errmsg = "Error: param must be 'String'"
+  if a:0 == 0 | return "" | endif
+  if and(a:0 == 1, type(a:1) == type(""))
+    return a:1
+  elseif and(a:0 == 1, type(a:1) != type(""))
+    echoerr s:errmsg
+    return ""
+  endif
+  let s:start_str = "\\\\%("
+  let s:separate_str = "\\\\|"
+  let s:end_str = "\\)"
+  let s:syntax_list_str = ""
+  for name in a:000
+    if type(name) != type("") | echoerr s:errmsg | return "" | endif
+    let s:syntax_list_str .= name . s:separate_str
+  endfor
+  let s:syntax_list_str =
+        \ s:syntax_list_str[0:strlen(s:syntax_list_str) - strlen(s:separate_str)]
+  return s:start_str . s:syntax_list_str . s:end_str
+endfunction
+
+" vim-markdown-quote-syntax
+let g:markdown_quote_syntax_filetypes =
+      \ {
+      \   'elixir' : {
+      \     "start" : "elixir",
+      \   },
+      \   'kotlin' : {
+      \     "start" : "\\%(kotlin\\|kt\\)",
+      \   },
+      \   'graphql' : {
+      \     "start" : "graphql",
+      \   },
+      \   'yaml' : {
+      \     "start" : "\\%(yaml\\|yml\\)",
+      \   },
+      \   'json' : {
+      \     "start" : "json",
+      \   },
+      \   'xml' : {
+      \     "start" : "xml",
+      \   },
+      \   'qf' : {
+      \     "start" : "qf",
+      \   },
+      \ }
+
 
 " ============================================================================
 " C
@@ -730,7 +686,6 @@ function! MyLatexSetting()
   set textwidth=78
 endfunction
 
-
 augroup my_php
   autocmd! Filetype php call MyPhpSetting()
 augroup END
@@ -772,3 +727,4 @@ autocmd VIMENTER * NERDTree
 " set formatexpr=jpvim#formatexpr()
 "}}}
 
+SetCwdTagFile
