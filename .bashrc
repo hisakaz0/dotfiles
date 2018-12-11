@@ -95,7 +95,7 @@ elif [ "$__uname" = "FreeBSD" ] ; then
   # export LANG=ja_JP.eucJP
   # export LC_ALL=ja_JP.eucJP
   :
-elif [ "$__uname" = "Linux" ] ; then
+else
   export LANG=en_US.UTF-8
   export LC_ALL=en_US.UTF-8
 fi
@@ -196,18 +196,6 @@ if [ "$__uname" = 'FreeBSD' ] ; then
   }
 elif [ "$__uname" = 'Darwin' ] ; then
   _print_battery_status () {
-    # Show current battery status on Mac.
-    # The items of battery status are both of percentage of remain battery,
-    # and remain time to charge.
-    #
-    # Input args:
-    #     <no parameters>
-    # Options:
-    #     -o: only percent of battery
-    if [ "$1" != "-o" ] ; then
-      pmset -g ps
-      return 0
-    fi
     pmset -g ps | egrep -o "[0-9]{1,3}%"
   }
 fi
@@ -228,7 +216,7 @@ export MEMO_PATH=${HOME}/.memo
 #}}}
 ### console style{{{
 if [ "$__uname" = "Darwin" ] || [ "$__uname" = "FreeBSD" ]  ; then
-  export PS1='($(_print_battery_status -o)) \u@\h:\W\$ '
+  export PS1='($(_print_battery_status)) \u@\h:\W\$ '
 else
   export PS1='\u@\h:\W\$ '
 fi
@@ -245,7 +233,7 @@ share_history() {
 }
 export HISTCONTROL=ignoredups
 export HISTFILE=$HOME/.bash_history
-export HISTIGNORE="cd*:pwd*:fg*:bg*"
+export HISTIGNORE="cd:pwd:fg*:bg*"
 shopt -u histappend
 export HISTSIZE=10000
 ## Current command name as window name
@@ -855,6 +843,7 @@ unset -v __hostname
 update_date
 update_time
 
+
 function jira_ticket_url() {
     if [ -z "$1" ] ; then
         echo "Error: need ticket number." 1>&2
@@ -864,4 +853,14 @@ function jira_ticket_url() {
     return 0
 }
 
-eval "$(direnv hook bash)"
+if [ -x "$(which direnv)" ] ; then
+  eval "$(direnv hook bash)"
+fi
+
+if [ -f "/usr/local/opt/bash-git-prompt/share/gitprompt.sh" ]; then
+  GIT_PROMPT_ONLY_IN_REPO=1
+  export GIT_PROMPT_END_USER='\n\[\033[0;37m\]($(_print_battery_status)) $(date +%H:%M)\[\033[0;0m\] $ '
+  __GIT_PROMPT_DIR="/usr/local/opt/bash-git-prompt/share"
+  source "/usr/local/opt/bash-git-prompt/share/gitprompt.sh"
+fi
+

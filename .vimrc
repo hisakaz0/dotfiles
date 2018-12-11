@@ -38,17 +38,7 @@ set t_Co=256
 set encoding=utf-8
 set fileencodings=utf-8,iso-2022-jp,cp932,sjis,euc-jp
 "" clipboard
-"reset
-set clipboard=
-if has('mac')
-  " Mac use clipboard plus register
-  set clipboard^=autoselectplus
-  if has('unnamedplus')
-    set clipboard^=unnamedplus
-  endif
-else
-  set clipboard=autoselect,unnamed
-endif
+set clipboard=autoselect,unnamed
 set incsearch
 set nohlsearch
 set ignorecase
@@ -79,7 +69,7 @@ set autochdir
 " set option 'set scrollbind', 'set cursorbind'
 " set scrollbind
 " set cursorbind
-
+setglobal autochdir
 au BufRead,BufEnter,BufNewFile * set formatoptions-=ro
 
 " shell debug

@@ -44,10 +44,10 @@
   chb = checkout -b
   cm = commit -m
   diff = diff --word-diff
-  f = fetch
   pl = pull
   ps = push -u
   push = push -u
+  f = fetch
   l = log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s'
   s = status
   today = log --oneline --since='12 hour ago'
@@ -58,3 +58,5 @@
   clean = git-lfs clean %f
   smudge = git-lfs smudge %f
   required = true
+[commit]
+	template = 
