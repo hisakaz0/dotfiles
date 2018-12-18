@@ -29,7 +29,7 @@ set -e
   fi
 
   if [ -h "$dist" ] ; then
-    echo "Success: $src"
+    echo "Success: $dist is already linked."
     exit 0 # success
   fi
 
@@ -41,7 +41,7 @@ set -e
 
 : "main" && {
   ln -s $src $dist
-  echo "Success: $src"
+  echo "Success: $src is linked to $dist."
   exit 0
 }
 
