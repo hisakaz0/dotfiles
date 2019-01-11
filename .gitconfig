@@ -59,4 +59,4 @@
   smudge = git-lfs smudge %f
   required = true
 [commit]
-	template = 
+  template = ~/.git-commit-template.txt
