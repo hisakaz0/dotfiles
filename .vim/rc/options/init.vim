@@ -21,7 +21,7 @@ set laststatus=2
 set t_Co=256
 set encoding=utf-8
 set fileencodings=utf-8,iso-2022-jp,cp932,sjis,euc-jp
-set clipboard=autoselect,unnamed
+"set clipboard=autoselect,unnamed
 set incsearch
 set nohlsearch
 set ignorecase
@@ -37,7 +37,6 @@ set whichwrap=b,s,<,>,[,],
 set autoread
 set colorcolumn=+1
 set wildmenu
-set wildmode=list:longest
 set display=lastline
 set textwidth=0
 set autochdir

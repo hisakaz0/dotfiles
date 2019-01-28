@@ -19,3 +19,4 @@
 .screenrc
 .hammerspoon/init.lua
 .git-commit-template.txt
+.globalrc
