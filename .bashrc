@@ -761,8 +761,8 @@ fi
   export GOROOT=/usr/local/opt/go/libexec # go lang bin dir
 # linux
 [ -d $HOME/.go/versions/1.6 ] && \
-  export GOROOT=$HOME/.go/versions/1.6
-export GOPATH=$HOME/work/share/go # workspace dir
+  export GOROOT=$HOME/.golang/versions/1.6
+export GOPATH=$HOME/.golang # workspace dir
 [ ! -d "$GOPATH" ] && mkdir -p $GOPATH
 [   -d "$GOPATH" ] && export PATH=$GOPATH/bin:$PATH
 (
@@ -849,4 +849,11 @@ if [ -f "/usr/local/etc/bash_completion" ] ; then
   . "/usr/local/etc/bash_completion"
 fi
 
+[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
+
+
 eval "$(direnv hook bash)"
+
+if [ -x "`which toot`" ] ; then
+  t () { toot post "$@"; }
+fi
