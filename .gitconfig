@@ -8,8 +8,8 @@
   # excludesfile = /Users/hisakazu/.gitignore_global
 [user]
   ae = pinkienort
-  name = pinkienort
-  email = cantabilehisa@gmail.com
+  name = fukuoka-hisakazu
+  email = fukuoka-hisakazu@dmm.com
 [color]
   ui = auto
 [difftool "sourcetree"]
@@ -54,9 +54,11 @@
   pretty = log --pretty=oneline -10
   current-branch = ! git symbolic-ref HEAD | sed 's/refs\\/heads\\///'
   pull-force = ! git reset --hard origin/$(git current-branch)
+  branch-select = ! git branch -a | sed 's/^*/ /' | peco
 [filter "lfs"]
-  clean = git-lfs clean %f
-  smudge = git-lfs smudge %f
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
   required = true
+  process = git-lfs filter-process
 [commit]
   template = ~/.git-commit-template.txt
