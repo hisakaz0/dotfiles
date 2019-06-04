@@ -11,8 +11,8 @@ set -e
   fi
 
   if [ ! -e "$src" ] ; then
-    echo "Error: '$src' is not exist" 1>&2
-    exit 1
+    echo "Warning: '$src' is not exist" 1>&2
+    exit 0
   fi
 
   if [ -h "$src" ] ; then
@@ -29,17 +29,19 @@ set -e
   fi
 
   if [ -h "$dist" ] ; then
+    echo "Success: $dist is already linked."
     exit 0 # success
   fi
 
   if [ -e "$dist" ] ; then
-    echo "Error: '$dist' which is not symbolic link, is already existed" 1>&2
-    exit 1
+    echo "Warning: '$dist' which is not symbolic link, is already existed" 1>&2
+    exit 0
   fi
 }
 
 : "main" && {
   ln -s $src $dist
+  echo "Success: $src is linked to $dist."
   exit 0
 }
 

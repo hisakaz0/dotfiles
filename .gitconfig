@@ -4,12 +4,6 @@
   pager = less -x2
   autocrlf = input
   quotepath = false
-  excludesfile = /Users/fukuoka-hisakazu/.gitignore
-  # excludesfile = /Users/hisakazu/.gitignore_global
-[user]
-  ae = pinkienort
-  email = fukuoka-hisakazu@dmm.com
-  name = 福岡 久和
 [color]
   ui = auto
 [difftool "sourcetree"]
@@ -54,9 +48,11 @@
   pretty = log --pretty=oneline -10
   current-branch = ! git symbolic-ref HEAD | sed 's/refs\\/heads\\///'
   pull-force = ! git reset --hard origin/$(git current-branch)
+  branch-select = ! git branch -a | sed 's/^*/ /' | peco
 [filter "lfs"]
-  clean = git-lfs clean %f
-  smudge = git-lfs smudge %f
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
   required = true
 [commit]
 	template = 
+  process = git-lfs filter-process

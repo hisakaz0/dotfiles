@@ -310,6 +310,7 @@ function check_and_add_path () {
   [ -d "$1" ] && export PATH="$1:$PATH"
 }
 
+check_and_add_path "/usr/local/sbin"
 check_and_add_path "/usr/local/share/app/flutter/bin"
 check_and_add_path "$HOME/.local/bin"
 check_and_add_path "$HOME/bin"
@@ -320,7 +321,6 @@ check_and_add_path "$HOME/.rvm/bin"
 check_and_add_path "$HOME/Library/Android/sdk/platform-tools"
 check_and_add_path "$HOME/Library/Android/sdk/tools"
 check_and_add_path "$HOME/Library/Android/sdk/ndk-bundle"
-
 
 ## Android
 [ -d "$HOME/Library/Android/sdk" ] && \
@@ -760,8 +760,8 @@ fi
   export GOROOT=/usr/local/opt/go/libexec # go lang bin dir
 # linux
 [ -d $HOME/.go/versions/1.6 ] && \
-  export GOROOT=$HOME/.go/versions/1.6
-export GOPATH=$HOME/work/share/go # workspace dir
+  export GOROOT=$HOME/.golang/versions/1.6
+export GOPATH=$HOME/.golang # workspace dir
 [ ! -d "$GOPATH" ] && mkdir -p $GOPATH
 [   -d "$GOPATH" ] && export PATH=$GOPATH/bin:$PATH
 (
@@ -843,7 +843,6 @@ unset -v __hostname
 update_date
 update_time
 
-
 function jira_ticket_url() {
     if [ -z "$1" ] ; then
         echo "Error: need ticket number." 1>&2
@@ -864,3 +863,16 @@ if [ -f "/usr/local/opt/bash-git-prompt/share/gitprompt.sh" ]; then
   source "/usr/local/opt/bash-git-prompt/share/gitprompt.sh"
 fi
 
+# bash completion
+if [ -f "/usr/local/etc/bash_completion" ] ; then
+  . "/usr/local/etc/bash_completion"
+fi
+
+[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
+
+
+eval "$(direnv hook bash)"
+
+if [ -x "`which toot`" ] ; then
+  t () { toot post "$@"; }
+fi

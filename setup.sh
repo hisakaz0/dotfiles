@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 #set -x # debug
@@ -11,27 +11,8 @@ set -e
 : "preprocess" && {
   cd $(dirname $0)
   dotfiles_root=$(pwd)
-
-  list=( \
-    .bashrc \
-    .config/awesome \
-    .config/git \
-    .config/nvim \
-    .cshrc \
-    .cshrc.body \
-    .gitconfig \
-    .inputrc \
-    .tmux.mac.conf \
-    .tmux.noplugin.conf \
-    .vim/after \
-    .vim/autoload \
-    .vim/plugin \
-    .vim/templates \
-    .vim/colors \
-    .vimrc \
-    .screenrc \
-    .hammerspoon/init.lua \
-    )
+  list=$(cat list)
+  PATH="$(pwd)/script:$PATH"
 }
 
 : "main" && {
