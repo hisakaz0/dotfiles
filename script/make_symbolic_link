@@ -29,7 +29,8 @@ set -e
   fi
 
   if [ -h "$dist" ] ; then
-    echo "Success: $dist is already linked."
+    echo "Warning: overwrite $dist is linked to $src."
+    ln -sf $src $dist
     exit 0 # success
   fi
 
