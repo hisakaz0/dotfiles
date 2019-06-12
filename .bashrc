@@ -287,16 +287,6 @@ fi
   export PATH=$HOME/usr/bin:$PATH
 [ "$__uname" = "Linux" ] && [ -d $HOME/bin/centos ] && \
   export PATH=$HOME/bin/centos:$PATH
-[ -d $HOME/.bin ] && \
-  export PATH=$HOME/.bin:$PATH
-[ -d /usr/local/texlive/2015/bin/x86_64-darwin ] && \
-  export PATH=/usr/local/texlive/2015/bin/x86_64-darwin:$PATH
-[ -d /usr/local/wine/bin ] && \
-  export PATH=/usr/local/wine/bin:$PATH
-[ -d $HOME/tmp/utils/bin ] && \
-  export PATH=$HOME/tmp/utils/bin:$PATH
-[ -d $HOME/tmp/kancolle/utils/macosx-x64-ex.2.3.4 ] && \
-  export PATH=$HOME/tmp/kancolle/utils/macosx-x64-ex.2.3.4:$PATH
 if [ -f "/etc/redhat-release" ] ; then
   __arr=( `cat /etc/redhat-release | cut -d' ' -f3 | tr -s '.' ' '` )
   if [ ${__arr[0]} -eq 6 ] ; then
@@ -306,21 +296,31 @@ if [ -f "/etc/redhat-release" ] ; then
   unset -v __arr
 fi
 
-function check_and_add_path () {
+function _check_and_add_path () {
   [ -d "$1" ] && export PATH="$1:$PATH"
 }
 
-check_and_add_path "/usr/local/sbin"
-check_and_add_path "/usr/local/share/app/flutter/bin"
-check_and_add_path "$HOME/.local/bin"
-check_and_add_path "$HOME/bin"
-check_and_add_path "/usr/local/opt/gettext/bin"
-check_and_add_path "$HOME/Library/Python/2.7/bin"
-check_and_add_path "$HOME/Library/Python/3.6/bin"
-check_and_add_path "$HOME/.rvm/bin"
-check_and_add_path "$HOME/Library/Android/sdk/platform-tools"
-check_and_add_path "$HOME/Library/Android/sdk/tools"
-check_and_add_path "$HOME/Library/Android/sdk/ndk-bundle"
+_check_and_add_path "/usr/local/sbin"
+_check_and_add_path "/usr/local/share/app/flutter/bin"
+_check_and_add_path "$HOME/.local/bin"
+_check_and_add_path "$HOME/bin"
+_check_and_add_path "/usr/local/opt/gettext/bin"
+_check_and_add_path "$HOME/Library/Python/2.7/bin"
+_check_and_add_path "$HOME/Library/Python/3.6/bin"
+_check_and_add_path "$HOME/.rvm/bin"
+_check_and_add_path "$HOME/Library/Android/sdk/platform-tools"
+_check_and_add_path "$HOME/Library/Android/sdk/tools"
+_check_and_add_path "$HOME/Library/Android/sdk/ndk-bundle"
+_check_and_add_path "$HOME/Work/Tools/dmmgw_util"
+_check_and_add_path "$HOME/Work/Tools/onefetch/target/release"
+_check_and_add_path "$HOME/.bin"
+_check_and_add_path "/usr/local/texlive/2015/bin/x86_64-darwin"
+_check_and_add_path "/usr/local/wine/bin"
+_check_and_add_path "$HOME/tmp/utils/bin"
+_check_and_add_path "$HOME/tmp/kancolle/utils/macosx-x64-ex.2.3.4"
+_check_and_add_path "$HOME/Work/gist-dmm/slack-msg/slack-cli/build/bin" # src slack-cli
+
+unset -f _check_and_add_path
 
 ## Android
 [ -d "$HOME/Library/Android/sdk" ] && \
@@ -870,9 +870,9 @@ fi
 
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 
-
 eval "$(direnv hook bash)"
 
 if [ -x "`which toot`" ] ; then
-  t () { toot post "$@"; }
+  tt () { toot post "$@"; }
 fi
+

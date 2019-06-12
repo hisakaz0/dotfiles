@@ -30,7 +30,17 @@ nnoremap <silent> <Leader>cn :cn<CR>
 nnoremap <silent> <Leader>cp :cp<CR>
 nnoremap <silent> <Leader>cc :cc<CR>
 
-" options 
+" options
 nnoremap <silent> <Leader>hls :set invhlsearch<CR>
 nnoremap <silent> <Leader>wrap :set invwrap<CR>
+
+" gnu global
+if exists(":Gtags")
+nnoremap <C-h> :Gtags -f %<CR>
+nnoremap <C-]> :GtagsCursor<CR>
+endif
+
+" copy clipboard
+vnoremap <Leader>y "*y
+nnoremap <Leader>yy "*yy
 

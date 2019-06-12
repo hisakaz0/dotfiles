@@ -214,3 +214,6 @@ repo = 'easymotion/vim-easymotion'
 [[plugins]]
 repo = 'Shougo/denite.nvim'
 if = 'has("python3")'
+
+[[plugin]]
+repo = 'ConradIrwin/vim-bracketed-paste'

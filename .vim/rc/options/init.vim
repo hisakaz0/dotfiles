@@ -35,15 +35,23 @@ set ambiwidth=double
 set virtualedit=all
 set whichwrap=b,s,<,>,[,],
 set autoread
-set colorcolumn=+1
 set wildmenu
 set display=lastline
+
 set textwidth=0
+if (&textwidth == 0)
+  set colorcolumn=100
+else
+  set colorcolumn=+1
+endif
+
 set autochdir
 set foldmethod=indent
 "set spell
 set spelllang=en,cjk
 set autochdir
+" 大きいファイル開くときにhlがdisableされるので
+set redrawtime=5000 " msec
 
 exe 'source' expand('<sfile>:p:h') . '/' . 'tabline.vim'
 
