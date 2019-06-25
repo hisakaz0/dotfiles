@@ -55,7 +55,6 @@
   smudge = git-lfs smudge -- %f
   required = true
 [commit]
-	template = 
   process = git-lfs filter-process
 [merge]
 	tool = vimdiff
