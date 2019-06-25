@@ -2,6 +2,7 @@
 .config/awesome
 .config/git
 .config/nvim
+.config/peco
 .cshrc
 .cshrc.body
 .gitconfig
