@@ -215,5 +215,13 @@ repo = 'easymotion/vim-easymotion'
 repo = 'Shougo/denite.nvim'
 if = 'has("python3")'
 
+[[plugins]]
+repo = 'vim-jp/vim-go-extra'
+
 [[plugin]]
-repo = 'ConradIrwin/vim-bracketed-paste'
+on_source = 'prabirshrestha/vim-lsp'
+repo = 'prabirshrestha/async.vim'
+
+[[pplugin]]
+repo = 'dag/vim-fish'
+

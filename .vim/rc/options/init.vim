@@ -35,6 +35,7 @@ set ambiwidth=double
 set virtualedit=all
 set whichwrap=b,s,<,>,[,],
 set autoread
+set colorcolumn=+1
 set wildmenu
 set display=lastline
 
