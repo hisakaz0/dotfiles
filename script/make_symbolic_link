@@ -30,7 +30,8 @@ set -e
 
   if [ -h "$dist" ] ; then
     echo "Warning: overwrite $dist is linked to $src."
-    ln -sf $src $dist
+    rm -f $dist
+    ln -s $src $dist
     exit 0 # success
   fi
 
