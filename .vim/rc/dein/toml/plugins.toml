@@ -218,10 +218,10 @@ if = 'has("python3")'
 [[plugins]]
 repo = 'vim-jp/vim-go-extra'
 
-[[plugin]]
+[[plugins]]
 on_source = 'prabirshrestha/vim-lsp'
 repo = 'prabirshrestha/async.vim'
 
-[[pplugin]]
+[[plugins]]
 repo = 'dag/vim-fish'
 

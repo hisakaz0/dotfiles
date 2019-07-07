@@ -9,5 +9,5 @@ on_ft = ['c', 'cpp']
 repo = 'lambdalisue/vim-pyenv'
 on_ft = ['python', 'python3']
 
-[[plugin]]
+[[plugins]]
 repo = 'prabirshrestha/vim-lsp'
