@@ -3,6 +3,7 @@
 .config/git
 .config/nvim
 .config/peco
+.config/fish
 .cshrc
 .cshrc.body
 .gitconfig
