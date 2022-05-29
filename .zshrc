@@ -120,3 +120,4 @@ if [ -f "$HOME/.local/share/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/.loc
 # The next line enables shell command completion for gcloud.
 if [ -f "$HOME/.local/share/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/.local/share/google-cloud-sdk/completion.zsh.inc"; fi
 
+export PATH="/opt/homebrew/sbin:$PATH"
