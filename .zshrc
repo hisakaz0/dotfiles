@@ -15,24 +15,28 @@ alias ...='cd .. && cd ..'
 alias ....='cd .. && cd .. && cd ..'
 alias less='less -R'
 
+# エディタはvimだけど、Ctrl-AやCtrl-Rが効かなくなるので、shellではemacs
 export EDITOR='vim'
+bindkey -e
 
 # Java, Android Studio
 export PATH="/Applications/Android Studio.app/Contents/jre/Contents/Home/bin:$PATH"
+export PATH="$HOME/Library/Android/sdk/emulator:$PATH"
+export PATH="$HOME/Library/Android/sdk/platform-tools:$PATH"
+
+export JAVA_HOME="/Applications/Android Studio.app/Contents/jre/Contents/Home"
+
 # /usr/libexec/java_homeが動かない場合実行する
 #sudo ln -sfn "/Applications/Android Studio.app/Contents/jre" "/Library/Java/JavaVirtualMachines/openjdk.jdk" 
 
-# Set /usr/libexec/java_home
-#sudo ln -sfn "/Applications/Android Studio.app/Contents/jre" "/Library/Java/JavaVirtualMachines/openjdk-11.jdk"
-
 # Homebrew
 export PATH="$PATH:/opt/homebrew/bin" # システムのrubygemsを優先したいため後ろに追加
+export PATH="/opt/homebrew/sbin:$PATH"
 # 次のエラーを出さなくするため
 # zsh compinit: insecure directories, run compaudit for list.
 # Ignore insecure directories and continue [y] or abort compinit [n]?
 chmod 755 /opt/homebrew
 chmod 755 /opt/homebrew/share
-
 
 # Cisco VPN client
 export PATH="/opt/cisco/anyconnect/bin:$PATH"
@@ -96,8 +100,6 @@ vpn() (
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
 
-# android emulator`
-export PATH="$HOME/Library/Android/sdk/emulator:$PATH"
 
 eval "$(direnv hook zsh)"
 
@@ -109,8 +111,6 @@ if type brew &>/dev/null; then
   compinit
 fi
 
-export JAVA_HOME="/Applications/Android Studio.app/Contents/jre/Contents/Home"
-
 # git reset HEAD^ の^を使えるようにするため
 setopt noEXTENDED_GLOB
 
@@ -120,4 +120,3 @@ if [ -f "$HOME/.local/share/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/.loc
 # The next line enables shell command completion for gcloud.
 if [ -f "$HOME/.local/share/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/.local/share/google-cloud-sdk/completion.zsh.inc"; fi
 
-export PATH="/opt/homebrew/sbin:$PATH"
