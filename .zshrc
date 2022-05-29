@@ -1,10 +1,9 @@
 
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
-
 # rbenv
-export PATH="$HOME/.rbenv/bin:$PATH" 
-eval "$(rbenv init - zsh)"
+if type rbenv &>/dev/null; then
+  export PATH="$HOME/.rbenv/bin:$PATH"
+  eval "$(rbenv init - zsh)"
+fi
 
 # common alias
 alias ls='ls -G'
@@ -26,6 +25,12 @@ export PATH="/Applications/Android Studio.app/Contents/jre/Contents/Home/bin:$PA
 
 # Homebrew
 export PATH="$PATH:/opt/homebrew/bin" # システムのrubygemsを優先したいため後ろに追加
+# 次のエラーを出さなくするため
+# zsh compinit: insecure directories, run compaudit for list.
+# Ignore insecure directories and continue [y] or abort compinit [n]?
+chmod 755 /opt/homebrew
+chmod 755 /opt/homebrew/share
+
 
 # Cisco VPN client
 export PATH="/opt/cisco/anyconnect/bin:$PATH"
@@ -82,7 +87,6 @@ vpn() (
   open '/Applications/Cisco/Cisco AnyConnect Secure Mobility Client.app'
 )
 
-
 # Screenshot(一度だけ実行する)
 #defaults write com.apple.screencapture location ~/Pictures/Screenshots && killall SystemUIServer
 
@@ -113,3 +117,4 @@ if [ -f "$HOME/.local/share/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/.loc
 
 # The next line enables shell command completion for gcloud.
 if [ -f "$HOME/.local/share/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/.local/share/google-cloud-sdk/completion.zsh.inc"; fi
+
