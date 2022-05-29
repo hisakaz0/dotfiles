@@ -12,7 +12,7 @@
 .hammerspoon/init.lua
 .inputrc
 .screenrc
-.tmux.mac.conf
+.tmux.conf
 .tmux.noplugin.conf
 .vim/after
 .vim/autoload
