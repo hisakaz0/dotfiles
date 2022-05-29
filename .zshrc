@@ -15,6 +15,8 @@ alias ...='cd .. && cd ..'
 alias ....='cd .. && cd .. && cd ..'
 alias less='less -R'
 
+export EDITOR='vim'
+
 # Java, Android Studio
 export PATH="/Applications/Android Studio.app/Contents/jre/Contents/Home/bin:$PATH"
 # /usr/libexec/java_homeが動かない場合実行する
