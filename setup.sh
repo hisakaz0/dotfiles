@@ -10,7 +10,7 @@ dotfiles_root=$(pwd)
 #   which will be linked to actual config one. The path is relative
 #   path from project root.
 
-: "preprocess" && {
+: "pre-process" && {
   cd $(dirname $0)
   list=$(cat list)
   PATH="$(pwd)/script:$PATH"
@@ -32,5 +32,17 @@ dotfiles_root=$(pwd)
   if type brew &>/dev/null ; then
     brew bundle
     brew bundle cleanup
+  else
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
 }
+
+: "volta" && {
+  if type volta &>/dev/null ; then
+    volta install node
+    volta install yarn
+  else 
+    curl https://get.volta.sh | bash
+  fi
+}
+
