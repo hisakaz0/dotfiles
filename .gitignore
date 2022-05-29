@@ -2,3 +2,4 @@
 /.vim/bundle/
 *.swp
 .envrc!
+Brewfile.lock.json

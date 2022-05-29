@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-set -e
+set -eu
 #set -x # debug
+
+dotfiles_root=$(pwd)
 
 # @param array list
 #   The `list` variable containes list of src file/directory
@@ -10,7 +12,6 @@ set -e
 
 : "preprocess" && {
   cd $(dirname $0)
-  dotfiles_root=$(pwd)
   list=$(cat list)
   PATH="$(pwd)/script:$PATH"
 }
@@ -24,4 +25,12 @@ set -e
     make_parent_directory "$dist"
     make_symbolic_link "$src" "$dist"
   done
+}
+
+: "brew" && {
+  cd $dotfiles_root
+  if type brew &>/dev/null ; then
+    brew bundle
+    brew bundle cleanup
+  fi
 }
