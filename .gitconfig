@@ -15,7 +15,7 @@
 [alias]
   a = add
   b = branch
-  bc = git checkout $(git branch | peco)
+  bs = ! git switch $(git branch | peco)
   c = commit
   cma = commit -a -m
   cancel = reset --soft HEAD^
