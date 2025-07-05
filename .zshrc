@@ -75,3 +75,10 @@ GIT_PS1_SHOWSTASHSTATE=true
 GIT_PS1_SHOWUPSTREAM=auto
 setopt PROMPT_SUBST ; PS1='%F{green}%n@%m%f: %F{cyan}%~%f %F{red}$(__git_ps1 "(%s)")%f \$ '
 
+# asdf
+source /opt/homebrew/opt/asdf/libexec/asdf.sh
+
+# enhancd
+export ENHANCD_ENABLE_DOUBLE_DOT=false
+source /Users/hisakazu/.enhancd/enhancd/init.sh
+
