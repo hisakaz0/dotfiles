@@ -29,11 +29,14 @@
   f = fetch
   l = log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s'
   s = status
+  sw = switch
   today = log --oneline --since='12 hour ago'
   pretty = log --pretty=oneline -10
   current-branch = ! git symbolic-ref HEAD | sed 's/refs\\/heads\\///'
   pull-force = ! git reset --hard origin/$(git current-branch)
   branch-select = ! git branch -a | sed 's/^*/ /' | peco
+  rs = restore
+	ignore = "!gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}; gi"
 [filter "lfs"]
   clean = git-lfs clean -- %f
   smudge = git-lfs smudge -- %f
