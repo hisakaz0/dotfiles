@@ -13,22 +13,6 @@
   cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
   trustExitCode = true
 [alias]
-  # イシュー番号に紐付いたコミット
-  ic = "!f () {\
-    b=`git s | head -n 1 | cut -d '_' -f2`;\
-    git commit -m \"refs ${b} / $1\";\
-    }; f"
-  # イシュー番号に紐付いたブランチ
-  ib = "!f () {\
-    if [ $1 = '-r' ]; then\
-      lb=issue_#${2};\
-      rb=origin/issue_#${2};\
-    else\
-      lb=issue_#${1};\
-      rb='';\
-    fi;\
-    git ch -b ${lb} ${rb};\
-    }; f"
   a = add
   b = branch
   bc = git checkout $(git branch | peco)
