@@ -32,61 +32,6 @@ export PATH="/opt/homebrew/sbin:$PATH"
 chmod 755 /opt/homebrew
 chmod 755 /opt/homebrew/share
 
-# Cisco VPN client
-export PATH="/opt/cisco/anyconnect/bin:$PATH"
-
-vpn() (
-  # エラー対応
-  set -eu
-
-  # "vpn" "vpn connect" 以外の呼び出しは元のコマンドに流す
-  if [[ "$#" -ne 0 && ( "$#" -ne 1 || "$1" != 'connect' ) ]]; then
-    exec command vpn "$@"
-  fi
-
-  # GUI 版が起動していたら一度強制終了する
-  killall 'Cisco AnyConnect Secure Mobility Client' >/dev/null 2>&1 || :
-
-  # 既に VPN に接続していたら強制切断する
-  expect -c '
-    set log_user 0
-    set timeout 5
-    spawn vpn disconnect
-    expect ">> state: Disconnected"
-    interact
-  '
-
-  # キーチェーンからの取得
-  VPN_PASSWORD="$(security find-generic-password -s "$VPN_PASSWORD_KEYNAME" -w)"
-  VPN_TOKEN="$(oathtool --totp --base32 "$(security find-generic-password -s "$VPN_TOTP_SECRET_KEYNAME" -w)")"
-  export VPN_PASSWORD
-  export VPN_TOKEN
-
-  # 接続
-  expect -c '
-    set log_user 0
-    set timeout 5
-
-    spawn vpn connect $env(VPN_HOST)
-
-    expect "Group:"
-    send "$env(VPN_GROUP)\r"
-    expect "Username:"
-    send "$env(VPN_USERNAME)\r"
-    expect "Password:"
-    send "$env(VPN_PASSWORD)\r"
-    expect "Second Username:"
-    send "$env(VPN_SECOND_USERNAME)\r"
-    expect "Second Password:"
-    send "$env(VPN_TOKEN)\r"
-
-    interact
-  '
-
-  # GUI 版を起動
-  open '/Applications/Cisco/Cisco AnyConnect Secure Mobility Client.app'
-)
-
 # Screenshot(一度だけ実行する)
 #defaults write com.apple.screencapture location ~/Pictures/Screenshots && killall SystemUIServer
 
