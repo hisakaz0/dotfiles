@@ -35,11 +35,6 @@ chmod 755 /opt/homebrew/share
 # Screenshot(一度だけ実行する)
 #defaults write com.apple.screencapture location ~/Pictures/Screenshots && killall SystemUIServer
 
-# volta
-export VOLTA_HOME="$HOME/.volta"
-export PATH="$VOLTA_HOME/bin:$PATH"
-
-
 eval "$(direnv hook zsh)"
 
 # zsh completion
