@@ -13,11 +13,12 @@ export EDITOR='vim'
 bindkey -e
 
 # Java, Android Studio
-export PATH="/Applications/Android Studio.app/Contents/jre/Contents/Home/bin:$PATH"
+export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+export PATH="$JAVA_HOME/bin:$PATH"
 export PATH="$HOME/Library/Android/sdk/emulator:$PATH"
 export PATH="$HOME/Library/Android/sdk/platform-tools:$PATH"
+export PATH="$HOME/Library/Android/sdk/tools/bin:$PATH"
 
-export JAVA_HOME="/Applications/Android Studio.app/Contents/jre/Contents/Home"
 
 # /usr/libexec/java_homeが動かない場合実行する
 #sudo ln -sfn "/Applications/Android Studio.app/Contents/jre" "/Library/Java/JavaVirtualMachines/openjdk.jdk" 
