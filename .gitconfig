@@ -43,5 +43,14 @@
   required = true
 [commit]
   process = git-lfs filter-process
+	gpgsign = true
 [merge]
 	tool = vimdiff
+[user]
+	name = hisakazu
+	email = cantabilehisa@gmail.com
+	signingkey = /Users/hisakazu/.ssh/id_ed25519.pub
+[init]
+	defaultBranch = main
+[gpg]
+	format = ssh
