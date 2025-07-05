@@ -23,6 +23,7 @@
   chb = checkout -b
   cm = commit -m
   diff = diff --word-diff
+  dc = diff --cached
   pl = pull
   ps = push -u
   push = push -u
