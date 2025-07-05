@@ -53,12 +53,6 @@ fi
 setopt noEXTENDED_GLOB
 
 ### gcp sdk
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f "$HOME/.local/share/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/.local/share/google-cloud-sdk/path.zsh.inc"; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f "$HOME/.local/share/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/.local/share/google-cloud-sdk/completion.zsh.inc"; fi
-
 ### git prompt
 # git-promptの読み込み
 source ~/.zsh/git-prompt.sh
@@ -85,3 +79,10 @@ export PATH="/usr/local/go/bin:$PATH"
 
 ### gnu make
 #export PATH="/opt/homebrew/opt/make/libexec/gnubin:$PATH"
+
+### google cloud sdk
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/hisakazu/.google-cloud-sdk/path.zsh.inc' ]; then . '/Users/hisakazu/.google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/hisakazu/.google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/hisakazu/.google-cloud-sdk/completion.zsh.inc'; fi
