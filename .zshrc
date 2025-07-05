@@ -24,7 +24,7 @@ export PATH="$HOME/Library/Android/sdk/tools/bin:$PATH"
 #sudo ln -sfn "/Applications/Android Studio.app/Contents/jre" "/Library/Java/JavaVirtualMachines/openjdk.jdk" 
 
 # Homebrew
-export PATH="$PATH:/opt/homebrew/bin" # システムのrubygemsを優先したいため後ろに追加
+export PATH="/opt/homebrew/bin:$PATH"
 export PATH="/opt/homebrew/sbin:$PATH"
 # 次のエラーを出さなくするため
 # zsh compinit: insecure directories, run compaudit for list.
