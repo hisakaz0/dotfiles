@@ -40,7 +40,11 @@ eval "$(direnv hook zsh)"
 # zsh completion
 if type brew &>/dev/null; then
   FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
-
+  autoload -Uz compinit
+  compinit
+fi
+if [ -d "$(brew --prefix)/share/zsh/site-functions" ] ; then
+  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
   autoload -Uz compinit
   compinit
 fi
