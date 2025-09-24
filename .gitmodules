@@ -1,0 +1,3 @@
+[submodule "enhancd"]
+	path = enhancd
+	url = git@github.com:babarot/enhancd.git
