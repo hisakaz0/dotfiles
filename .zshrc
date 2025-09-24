@@ -77,7 +77,8 @@ setopt PROMPT_SUBST ; PS1='%F{green}%n@%m%f: %F{cyan}%~%f %F{red}$(__git_ps1 "(%
 ### enhancd
 export ENHANCD_ENABLE_DOUBLE_DOT=false
 export ENHANCD_COMMAND=ecd
-source /Users/hisakazu/.enhancd/enhancd/init.sh
+# dotfilesは $HOME/Works/dotfiles に配置する
+source $HOME/Works/dotfiles/enhancd/init.sh
 
 ### golang
 
