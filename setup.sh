@@ -38,12 +38,3 @@ dotfiles_root=$(pwd)
   fi
 }
 
-: "volta" && {
-  if type volta &>/dev/null ; then
-    volta install node
-    volta install yarn
-  else 
-    curl https://get.volta.sh | bash
-  fi
-}
-
