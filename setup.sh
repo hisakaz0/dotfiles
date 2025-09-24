@@ -27,6 +27,10 @@ dotfiles_root=$(pwd)
   done
 }
 
+: "vim" && {
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/Shougo/dein-installer.vim/master/installer.sh)"
+}
+
 : "brew" && {
   cd $dotfiles_root
   if type brew &>/dev/null ; then
