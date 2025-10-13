@@ -18,7 +18,7 @@ dotfiles_root=$(pwd)
 
 : "main" && {
 	echo
-	echo "link dotfiles..."
+	echo ">>> link dotfiles..."
   cd $HOME
   for file in ${list[*]}
   do
@@ -31,7 +31,7 @@ dotfiles_root=$(pwd)
 
 : "brew" && {
 	echo
-	echo "brew install..."
+	echo ">>> brew install..."
   cd $dotfiles_root
   if type brew &>/dev/null ; then
     brew bundle
@@ -42,9 +42,17 @@ dotfiles_root=$(pwd)
   fi
 }
 
+: "other tools" && {
+	echo
+	echo ">>> install other tools..."
+	# On macOS and Linux.
+	curl -LsSf https://astral.sh/uv/install.sh | sh
+}
+
+
 : "mac" && {
 	echo
-	echo "mac setting..."
+	echo ">>> mac setting..."
   # long pressでアクセント付き文字のポップアップを無効にする
   defaults write -g ApplePressAndHoldEnabled -bool false
 
