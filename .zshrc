@@ -116,6 +116,13 @@ export PATH="/Users/hisakazu/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
 
 
+### history
 # 履歴をすべてのzsh terminalで共有する
 setopt share_history
+# コマンド履歴に保持する行数を設定 (セッション内)
+HISTSIZE=10000
+# 履歴ファイルに保存する行数を設定 (再起動後も保持)
+SAVEHIST=10000
+# 重複したコマンドを無視する
+setopt HIST_IGNORE_DUPS
 
