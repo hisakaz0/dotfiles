@@ -17,47 +17,55 @@
   cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
   trustExitCode = true
 [alias]
+	### 基本コマンドのショートカット
   a = add
   b = branch
-  bs = ! git switch $(git branch | peco)
-  sb = ! git switch $(git branch | peco)
   c = commit
-  cma = commit -a -m
-  cancel = reset --soft HEAD^
   ch = checkout
-  chb = checkout -b
-  cm = commit -m
-  diff = diff --word-diff
-  dc = diff --cached
-  pl = pull
-  ps = push -u
-  push = push -u
+  chp = cherry-pick
   f = fetch
-  l = log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s'
-  dmb = ! git branch --merged | grep -v '\\*' | awk '{ print $1 }' | egrep -v '^main$' | xargs -I@ git branch -d @
+  pl = pull
+  rs = restore
   s = status
   sw = switch
-  today = log --oneline --since='12 hour ago'
-  pretty = log --pretty=oneline -10
-  current-branch = ! git symbolic-ref HEAD | sed 's/refs\\/heads\\///'
-  pull-force = ! git reset --hard origin/$(git current-branch)
-  branch-select = ! git branch -a | sed 's/^*/ /' | peco
-  rs = restore
-	wta = "!f() { \
-			temp_file=$(mktemp); \
-			vim \"$temp_file\"; \
-			worktree_name=$(head -n 1 \"$temp_file\"); \
-			repo_path=$(git rev-parse --show-toplevel); \
-			git worktree add -f \"${repo_path}-${worktree_name}\" \"main\"; \
-			rm \"$temp_file\"; \
-	}; f"
-	wtl = "worktree list"
-	wtr = "!f() { \
-			selected=$(git worktree list | peco | awk \"{print \\$1}\"); \
-			git worktree remove \"$selected\"; \
-      echo removed \"$selected\" ; \
-	}; f"
-	ignore = "!gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}; gi"
+	### ちょっと便利したコマンドのショートカット
+  # ブランチを選択して、ブランチを切り替える
+  bs = ! git switch $(git branch | peco)
+  sb = ! git switch $(git branch | peco)
+	# commit 対象ファイルをすべてキャンセルする
+  cancel = restore --staged **
+	# いい感じにdiffを表示する。
+	# 設定はgit diffのオプションも使うが基本的にdeltaのオプションを利用する
+  d = diff -w 
+  dc = diff -w --cached
+	## mainブランチとの差分を表示する
+  dd = ! git d origin/main...HEAD
+  # HEAD から直近のマージコミットまで
+  # 開発中のブランチに main を取り込むことがあるため、マージコミットを起点とする
+  rr = ! git rebase -i $(git log --merges -1 --pretty=format:%h)
+	# いい感じにログを表示する
+  l = log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s'
+  # マージ済みのブランチを削除する
+  dmb = ! git branch --merged | grep -v '\\*' | grep -v '\\+' | awk '{ print $1 }' | egrep -v '^main$' | xargs -I@ git branch -d @
+  # worktree add 
+  wta = "!f() { \
+		temp_file=$(mktemp); \
+		vim \"$temp_file\"; \
+		worktree_name=$(head -n 1 \"$temp_file\"); \
+		repo_path=$(git rev-parse --show-toplevel); \
+		git worktree add -f \"${repo_path}-${worktree_name}\"; \
+		rm \"$temp_file\"; \
+}; f"
+  # worktree list
+  wtl = "worktree list"
+  # worktreeを選択して削除する
+  wtr = "!f() { \
+		selected=$(git worktree list | peco | awk \"{print \\$1}\"); \
+		git worktree remove \"$selected\"; \
+		echo removed \"$selected\" ; \
+}; f"
+  # .gitignoreテンプレートツールを呼び出す
+  ignore = "!gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}; gi"
 [filter "lfs"]
   clean = git-lfs clean -- %f
   smudge = git-lfs smudge -- %f
