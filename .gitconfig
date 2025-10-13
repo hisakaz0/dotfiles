@@ -1,9 +1,13 @@
 # This is Git's per-user configuration file.
 [core]
-# Please adapt and uncomment the following lines:
-  pager = less -x2
+	# deltaを使ったpager(diffで使う)
+	pager = delta
+	# default pager
+	# pager = less -x2
   autocrlf = input
   quotepath = false
+[interactive]
+	diffFilter = delta --color-only
 [color]
   ui = auto
 [difftool "sourcetree"]
