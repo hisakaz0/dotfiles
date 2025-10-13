@@ -42,3 +42,11 @@ dotfiles_root=$(pwd)
   fi
 }
 
+: "mac" && {
+  # long pressでアクセント付き文字のポップアップを無効にする
+  defaults write -g ApplePressAndHoldEnabled -bool false
+
+  echo "スクリーンショットの保存ディレクトリの変更"
+  echo "https://www.reddit.com/r/macbookair/comments/1cg075e/how_can_i_change_the_default_folder_on_a_mac/"
+}
+
