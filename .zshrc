@@ -77,7 +77,8 @@ setopt PROMPT_SUBST ; PS1='%F{247}%D{%H:%M:%S}%f %F{green}%n@%m%f: %F{cyan}%~%f 
 
 ### enhancd
 export ENHANCD_ENABLE_DOUBLE_DOT=false
-export ENHANCD_COMMAND=ecd
+# cd は claude など agent 系が利用するので別名にする
+export ENHANCD_COMMAND=c
 # dotfilesは $HOME/Works/dotfiles に配置する
 source $HOME/Works/dotfiles/enhancd/init.sh
 
