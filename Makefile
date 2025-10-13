@@ -13,7 +13,7 @@ install_link:
 install_brew:
 	brew update && brew upgrade
 	./setup_brew.sh
-	brew doctor
+	brew cleanup && brew doctor
 
 install_other:
 	./setup_other.sh
