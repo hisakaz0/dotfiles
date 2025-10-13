@@ -2,7 +2,6 @@
 .config/awesome
 .config/fish
 .config/git
-.config/nvim
 .config/peco
 .cshrc
 .cshrc.body
@@ -14,13 +13,10 @@
 .screenrc
 .tmux.conf
 .tmux.noplugin.conf
-.vim/after
-.vim/autoload
-.vim/colors
-.vim/plugin
-.vim/rc
-.vim/script
-.vim/templates
 .vimrc
 .zshrc
 .zsh
+.claude/settings.json
+.claude/plugins/config.json
+.claude/commands
+.claude/CLAUDE.md
