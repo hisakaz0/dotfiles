@@ -126,3 +126,15 @@ SAVEHIST=10000
 # 重複したコマンドを無視する
 setopt HIST_IGNORE_DUPS
 
+
+# pnpm
+export PNPM_HOME="/Users/hisakazu/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+export PATH="$HOME/.local/bin:$PATH"
+
+. "$HOME/.local/bin/env"
