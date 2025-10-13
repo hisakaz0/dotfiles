@@ -67,6 +67,7 @@
 	gpgsign = true
 [merge]
 	tool = vimdiff
+	conflictStyle = zdiff3
 [user]
 	name = hisakaz0
 	email = cantabilehisa@gmail.com
@@ -77,3 +78,8 @@
 	format = ssh
 [push]
 	autoSetupRemote = true
+[delta]
+	line-numbers = true
+	navigate = true  # use n and N to move between diff sections
+	dark = true      # or light = true, or omit for auto-detection
+
