@@ -14,7 +14,12 @@ set tabstop=2
 set shiftwidth=2
 " バッファを保存していない状態でも別のバッファを開けるように
 set hidden
+" ヘルプを日本語で表示する
 set helplang=ja,en
+" いい感じにignorecase
+set smartcase
+" vim内でコピーしたら、OSのクリップボードにコピーする
+set clipboard^=unnamed
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Netrw
@@ -46,6 +51,19 @@ function! OpenNetrwOrJump()
 endfunction
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
+" vim-plug
+""""""""""""""""""""""""""""""""""""""""""""""""""
+call plug#begin()
+
+" List your plugins here
+Plug 'vim-jp/vimdoc-ja'
+Plug '/opt/homebrew/opt/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
+call plug#end()
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
 " Key mapping
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Netrwを左カラムに起動する。既に起動している場合はそのwindowに移動する
@@ -54,13 +72,6 @@ nnoremap <Leader>e :call OpenNetrwOrJump()<CR>
 " vimrcを再読み込みする
 nnoremap <Leader>r :source ~/.vimrc<CR>
 
-""""""""""""""""""""""""""""""""""""""""""""""""""
-" vim-plug
-""""""""""""""""""""""""""""""""""""""""""""""""""
-call plug#begin()
-
-" List your plugins here
-Plug 'vim-jp/vimdoc-ja'
-
-call plug#end()
+" fzf.vim: Ctrl-P でファイル検索
+nnoremap <C-p> :GFiles<CR>
 

@@ -3,6 +3,7 @@
 .config/fish
 .config/git
 .config/peco
+.config/delta
 .cshrc
 .cshrc.body
 .git-commit-template.txt
@@ -20,3 +21,5 @@
 .claude/plugins/config.json
 .claude/commands
 .claude/CLAUDE.md
+.local/bin/claude-pr-check.sh
+.local/bin/claude-pr-comments.sh
