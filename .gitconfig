@@ -1,22 +1,23 @@
-# This is Git's per-user configuration file.
 [core]
-	# deltaを使ったpager(diffで使う)
-	pager = delta
+	#	deltaを使ったpager(diffで使う)
+	# まだテーマ設定がうまくいかず見づらいので使わない
+	# pager = delta
 	# default pager
-	# pager = less -x2
+	pager = less -x2
   autocrlf = input
   quotepath = false
 [interactive]
 	diffFilter = delta --color-only
 [color]
   ui = auto
-[difftool "sourcetree"]
-  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-  path =
-[mergetool "sourcetree"]
-  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-  trustExitCode = true
+# claude だと見にくいので、aliasで使う
+# [diff]
+# 	external = difft
 [alias]
+	### alias 命名
+	# git commandから連想しやすいコマンド
+	# * 先頭1~3文字 ( add:a, cherry-pick:chp
+	# * 先頭1文字を重ねる ( diff:dd, rebase:rr
 	### 基本コマンドのショートカット
   a = add
   b = branch
@@ -28,23 +29,61 @@
   rs = restore
   s = status
   sw = switch
+	# commit 系
+	amend = commit --amend
+	squash = commit --amend
+	fixup = commit --amend --no-edit
 	### ちょっと便利したコマンドのショートカット
   # ブランチを選択して、ブランチを切り替える
-  bs = ! git switch $(git branch | peco)
-  sb = ! git switch $(git branch | peco)
+  bs = ! git switch $(git branch | fzf)
+  sb = bs
 	# commit 対象ファイルをすべてキャンセルする
   cancel = restore --staged **
 	# いい感じにdiffを表示する。
 	# 設定はgit diffのオプションも使うが基本的にdeltaのオプションを利用する
-  d = diff -w 
-  dc = diff -w --cached
+	d  = -c diff.external='difft' diff 
+	dc = -c diff.external='difft' diff --cached
 	## mainブランチとの差分を表示する
-  dd = ! git d origin/main...HEAD
-  # HEAD から直近のマージコミットまで
-  # 開発中のブランチに main を取り込むことがあるため、マージコミットを起点とする
-  rr = ! git rebase -i $(git log --merges -1 --pretty=format:%h)
+	dd = -c diff.external='difft' diff origin/main...HEAD
+	## claude 用
+  df = diff origin/main...HEAD
+	## webで見たい場合
+	difit = ! difit HEAD origin/main 
+	# head-mregeを始点としてrebase -iする
+	# 汎用 rebase コマンド。PRレビュー中にpushしたコミットがわからなくなったら↓を使う
+	rr = ! git rebase -i $(git head-merge)
+	# 選択したブランチでrebaseする
+	rb = ! git rebase $(git b | fzf)
+	# git xxx --abort系を実行する
+	abort = ! $(git s  | grep -o -e 'git.*--abort') 
+	ab = ! git abort
+	# git xxx --continue系を実行する
+	continue = ! $(git s  | grep -o -e 'git.*--continue') 
+	cont = ! git continue
+	# head-remoteかhead-mergeか遡ってどちらか新しいを始点としてrebase -iする
+	# PRレビュー中に、レビュー修正をpushする前にrebaseしたいときに使う
+	r2 = "!f() { \
+			REMOTE_HASH=$(git head-remote 2>/dev/null); \
+			MERGE_HASH=$(git head-merge); \
+			if [ -z \"$REMOTE_HASH\" ]; then \
+					BASE_HASH=\"$MERGE_HASH\"; \
+			elif git merge-base --is-ancestor \"$MERGE_HASH\" \"$REMOTE_HASH\" >/dev/null 2>&1; then \
+					BASE_HASH=\"$REMOTE_HASH\"; \
+			elif git merge-base --is-ancestor \"$REMOTE_HASH\" \"$MERGE_HASH\" >/dev/null 2>&1; then \
+					BASE_HASH=\"$MERGE_HASH\"; \
+			else \
+					BASE_HASH=\"$MERGE_HASH\"; \
+			fi; \
+			git rebase -i \"$BASE_HASH\"; \
+	}; f"
+	# current branchの直近のmerge commit hash
+	head-merge = log --merges -1 --pretty=format:%h
+	# current branchに対応するremote repoのbranchのHEAD commit hash
+	head-remote = rev-parse --short @{u}
 	# いい感じにログを表示する
-  l = log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s'
+	ll = lg
+	l = lg -n 10
+	lg = log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s'
   # マージ済みのブランチを削除する
   dmb = ! git branch --merged | grep -v '\\*' | grep -v '\\+' | awk '{ print $1 }' | egrep -v '^main$' | xargs -I@ git branch -d @
   # worktree add 
@@ -55,15 +94,25 @@
 		repo_path=$(git rev-parse --show-toplevel); \
 		git worktree add -f \"${repo_path}-${worktree_name}\"; \
 		rm \"$temp_file\"; \
-}; f"
+	}; f"
   # worktree list
   wtl = "worktree list"
   # worktreeを選択して削除する
   wtr = "!f() { \
-		selected=$(git worktree list | peco | awk \"{print \\$1}\"); \
+		selected=$(git worktree list | fzf | awk \"{print \\$1}\"); \
 		git worktree remove \"$selected\"; \
 		echo removed \"$selected\" ; \
-}; f"
+	}; f"
+	# 現在のブランチ名をvimを経由して変更する
+	mb = "!f() { \
+		OLD_BRANCH=$(git branch --show-current); \
+		TEMP_FILE=$(mktemp); \
+		echo \"$OLD_BRANCH\n ^rename branch name!\" > \"$TEMP_FILE\"; \
+		vim \"$TEMP_FILE\"; \
+		NEW_BRANCH=$(head -n 1 \"$TEMP_FILE\"); \
+		rm \"$TEMP_FILE\"; \
+		git branch -m  \"$NEW_BRANCH\"; \
+	}; f"
   # .gitignoreテンプレートツールを呼び出す
   ignore = "!gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}; gi"
 [filter "lfs"]
@@ -75,7 +124,7 @@
 	gpgsign = true
 [merge]
 	tool = vimdiff
-	conflictStyle = zdiff3
+	# conflictStyle = zdiff3
 [user]
 	name = hisakaz0
 	email = cantabilehisa@gmail.com
@@ -88,6 +137,9 @@
 	autoSetupRemote = true
 [delta]
 	line-numbers = true
+	side-by-side = true
 	navigate = true  # use n and N to move between diff sections
-	dark = true      # or light = true, or omit for auto-detection
-
+	theme = GitHub
+	tabs = 2
+[include]
+	path = ~/.config/delta/themes.gitconfig
