@@ -154,16 +154,25 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# Claude
+### Claude
 **/.claude/settings.local.json
 
-## AI Agentへの指示やそのリポジトリのメモ
+# AI Agentへの指示やそのリポジトリのメモ
 **/__manuals
 **/__sandbox
 
 ## 個人用のCLAUDE.md
-## 運用として、./CLAUDE.md がgitで管理されている
-## ./CLAUDE.local.md は非推奨になり、 ~/.claude/CLAUDE.md は個人全体設定。
-## 個々人のプロジェクトメモリの適切な置き場所がわからないため、一旦 .claude/CLAUDE.md とする
+# 運用として、./CLAUDE.md がgitで管理されている
+# ./CLAUDE.local.md は非推奨になり、 ~/.claude/CLAUDE.md は個人全体設定。
+# 個々人のプロジェクトメモリの適切な置き場所がわからないため、一旦 .claude/CLAUDE.md とする
 **/.claude/CLAUDE.md
 
+# sub agents
+# 現状チームで管理しておらず、個人で利用したいため除く
+**/.claude/agents
+
+# secretが含まれている可能性があるため除く
+**/.envrc
+
+# go debug用のコード
+**/cmd/debug/**
