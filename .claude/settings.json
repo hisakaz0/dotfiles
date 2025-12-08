@@ -1,3 +1,69 @@
 {
-  "alwaysThinkingEnabled": false
+  "env": {
+    "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(awk:*)",
+      "Bash(tree:*)",
+      "Bash(find:*)",
+      "Write(~/.claude/claude-self-memo.md)",
+      "Read(~/.claude/claude-self-memo.md)",
+      "Write(/tmp)",
+      "Read(/tmp)",
+      "Bash(claude-pr-check.sh)",
+      "mcp__gopls__go_workspace",
+      "mcp__gopls__go_search",
+      "Bash(make:*)",
+      "Bash(make lint)",
+      "Bash(go test:*)",
+      "Bash(go run:*)",
+      "Bash(gcloud logging read:*)",
+      "Bash(git dd:*)",
+      "WebSearch",
+      "Bash(claude-pr-comments.sh:*)",
+      "Bash(claude-pr-check.sh:*)",
+      "Bash(./scripts/lib/gqlgenc_e2e_client.sh:*)",
+      "Bash(./scripts/e2e.sh:*)",
+      "Search(//Users/hisakazu/Works/buildbystack/erp/**)",
+      "Read(//Users/hisakazu/Works/buildbystack/erp/**)",
+      "Write(//Users/hisakazu/Works/buildbystack/erp/**)",
+      "Read(//Users/hisakazu/Works/buildbystack/erp-sub1/beamsproxy/**)",
+      "mcp__gopls__go_symbol_references",
+      "WebFetch(domain:code.claude.com)",
+      "Bash(git df)"
+    ],
+    "deny": [
+      "Bash(go build:*)",
+      "Bash(rm:*)",
+      "Bash(make gen)",
+      "Bash(make gen_server)",
+      "Bash(make gen_client)",
+      "Bash(make gen_e2e_client)",
+      "Bash(make deploy_staging)",
+      "Bash(make deploy_prod)",
+      "Bash(make update_table_dev)",
+      "Bash(make update_table_e2e_a1)",
+      "Bash(make update_table_staging)",
+      "Bash(make update_table_prod)",
+      "Bash(make)"
+    ],
+    "ask": [],
+    "defaultMode": "default"
+  },
+  "model": "sonnet",
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"claude code\" with title \"Claude Code\" subtitle \"入力待ちです\"'"
+          }
+        ]
+      }
+    ]
+  },
+  "alwaysThinkingEnabled": true
 }
