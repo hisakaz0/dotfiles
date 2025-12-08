@@ -34,6 +34,8 @@
 	squash = commit --amend
 	fixup = commit --amend --no-edit
 	### ちょっと便利したコマンドのショートカット
+	refresh = ! git fetch origin && git rebase origin/main
+	refresh-merge = ! git fetch origin && git merge origin/main
   # ブランチを選択して、ブランチを切り替える
   bs = ! git switch $(git branch | fzf)
   sb = bs

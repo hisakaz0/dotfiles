@@ -15,6 +15,7 @@
 .tmux.conf
 .tmux.noplugin.conf
 .vimrc
+.vim/autoload/plug.vim
 .zshrc
 .zsh
 .claude/settings.json
