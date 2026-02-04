@@ -4,12 +4,18 @@
 	# pager = delta
 	# default pager
 	pager = less -x2
-  autocrlf = input
-  quotepath = false
+	autocrlf = input
+	quotepath = false
+	# 以下の2つは、大きめのリポジトリで git repository に追加していないファイルを 
+	# git status で見るときに2,3秒ほど時間がかかっている。早くするための設定。キャッシュがない最初は遅いらしい。
+	# 追跡対象外ファイルのキャッシュを有効にする
+	untrackedCache = true
+	# ファイルシステムモニタを有効にする
+	fsmonitor = true
 [interactive]
 	diffFilter = delta --color-only
 [color]
-  ui = auto
+	ui = auto
 # claude だと見にくいので、aliasで使う
 # [diff]
 # 	external = difft
@@ -19,37 +25,43 @@
 	# * 先頭1~3文字 ( add:a, cherry-pick:chp
 	# * 先頭1文字を重ねる ( diff:dd, rebase:rr
 	### 基本コマンドのショートカット
-  a = add
-  b = branch
-  c = commit
-  ch = checkout
-  chp = cherry-pick
-  f = fetch
-  pl = pull
-  rs = restore
-  s = status
-  sw = switch
+	a = add
+	b = branch
+	c = commit
+	ch = checkout
+	chp = cherry-pick
+	f = fetch
+	pl = pull
+	rs = restore
+	s = status
+	sw = switch
 	# commit 系
+	cm = commit -m 
 	amend = commit --amend
 	squash = commit --amend
+	# なぜかエラーになるのでコメントアウト
+	# am = commit --amend -m
 	fixup = commit --amend --no-edit
+	wip = commit -m 'wip'
 	### ちょっと便利したコマンドのショートカット
-	refresh = ! git fetch origin && git rebase origin/main
-	refresh-merge = ! git fetch origin && git merge origin/main
-  # ブランチを選択して、ブランチを切り替える
-  bs = ! git switch $(git branch | fzf)
-  sb = bs
+	# ベースブランチを取り込む
+	rebase-main = ! git fetch origin && git rebase origin/main
+	merge-main = ! git fetch origin && git merge origin/main
+	# ブランチを選択して、ブランチを切り替える
+	bs = ! git switch $(git branch | fzf)
+	sb = bs
 	# commit 対象ファイルをすべてキャンセルする
-  cancel = restore --staged **
+	cancel = restore --staged **
 	# いい感じにdiffを表示する。
 	# 設定はgit diffのオプションも使うが基本的にdeltaのオプションを利用する
 	d  = -c diff.external='difft' diff 
 	dc = -c diff.external='difft' diff --cached
 	## mainブランチとの差分を表示する
 	dd = -c diff.external='difft' diff origin/main...HEAD
-	## claude 用
-  df = diff origin/main...HEAD
-	## webで見たい場合
+	df = diff origin/main...HEAD
+	# ai agents が `df` と入力しても `diff` の省略形と認識するため、`diff-main` を追加する
+	diff-main = ! git df
+	# ブラウザで main との差分を見る
 	difit = ! difit HEAD origin/main 
 	# head-mregeを始点としてrebase -iする
 	# 汎用 rebase コマンド。PRレビュー中にpushしたコミットがわからなくなったら↓を使う
@@ -84,12 +96,12 @@
 	head-remote = rev-parse --short @{u}
 	# いい感じにログを表示する
 	ll = lg
-	l = lg -n 10
-	lg = log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s'
-  # マージ済みのブランチを削除する
-  dmb = ! git branch --merged | grep -v '\\*' | grep -v '\\+' | awk '{ print $1 }' | egrep -v '^main$' | xargs -I@ git branch -d @
-  # worktree add 
-  wta = "!f() { \
+	l = lg -n 7
+	lg = log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s' --first-parent
+	# マージ済みのブランチを削除する
+	dmb = ! git branch --merged | grep -v '\\*' | grep -v '\\+' | awk '{ print $1 }' | egrep -v '^main$' | xargs -I@ git branch -d @
+	# worktree add 
+	wta = "!f() { \
 		temp_file=$(mktemp); \
 		vim \"$temp_file\"; \
 		worktree_name=$(head -n 1 \"$temp_file\"); \
@@ -97,10 +109,10 @@
 		git worktree add -f \"${repo_path}-${worktree_name}\"; \
 		rm \"$temp_file\"; \
 	}; f"
-  # worktree list
-  wtl = "worktree list"
-  # worktreeを選択して削除する
-  wtr = "!f() { \
+	# worktree list
+	wtl = "worktree list"
+	# worktreeを選択して削除する
+	wtr = "!f() { \
 		selected=$(git worktree list | fzf | awk \"{print \\$1}\"); \
 		git worktree remove \"$selected\"; \
 		echo removed \"$selected\" ; \
@@ -115,14 +127,14 @@
 		rm \"$TEMP_FILE\"; \
 		git branch -m  \"$NEW_BRANCH\"; \
 	}; f"
-  # .gitignoreテンプレートツールを呼び出す
-  ignore = "!gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}; gi"
+	# .gitignoreテンプレートツールを呼び出す
+	ignore = "!gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}; gi"
 [filter "lfs"]
-  clean = git-lfs clean -- %f
-  smudge = git-lfs smudge -- %f
-  required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	required = true
 [commit]
-  process = git-lfs filter-process
+	process = git-lfs filter-process
 	gpgsign = true
 [merge]
 	tool = vimdiff
