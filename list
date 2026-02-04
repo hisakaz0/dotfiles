@@ -21,6 +21,7 @@
 .claude/settings.json
 .claude/plugins/config.json
 .claude/commands
+.claude/hooks
 .claude/CLAUDE.md
 .local/bin/claude-pr-check.sh
 .local/bin/claude-pr-comments.sh

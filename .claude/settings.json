@@ -4,49 +4,139 @@
   },
   "permissions": {
     "allow": [
+      "Bash(./scripts/e2e.sh src/entrypoin/:*)",
+      "Bash(./scripts/lib/gqlgenc_e2e_client.sh src/entrypoint:*)",
       "Bash(awk:*)",
-      "Bash(tree:*)",
-      "Bash(find:*)",
-      "Write(~/.claude/claude-self-memo.md)",
-      "Read(~/.claude/claude-self-memo.md)",
-      "Write(/tmp)",
-      "Read(/tmp)",
-      "Bash(claude-pr-check.sh)",
-      "mcp__gopls__go_workspace",
-      "mcp__gopls__go_search",
-      "Bash(make:*)",
-      "Bash(make lint)",
-      "Bash(go test:*)",
-      "Bash(go run:*)",
-      "Bash(gcloud logging read:*)",
-      "Bash(git dd:*)",
-      "WebSearch",
-      "Bash(claude-pr-comments.sh:*)",
+      "Bash(cat:*)",
+      "Bash(chmod:*)",
       "Bash(claude-pr-check.sh:*)",
-      "Bash(./scripts/lib/gqlgenc_e2e_client.sh:*)",
-      "Bash(./scripts/e2e.sh:*)",
-      "Search(//Users/hisakazu/Works/buildbystack/erp/**)",
-      "Read(//Users/hisakazu/Works/buildbystack/erp/**)",
-      "Write(//Users/hisakazu/Works/buildbystack/erp/**)",
-      "Read(//Users/hisakazu/Works/buildbystack/erp-sub1/beamsproxy/**)",
+      "Bash(claude-pr-comments.sh:*)",
+      "Bash(echo:*)",
+      "Bash(fillstruct:*)",
+      "Bash(find:*)",
+      "Bash(gcloud logging read:*)",
+      "Bash(gh api:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh pr comment:*)",
+      "Bash(gh run view:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git checkout --ours)",
+      "Bash(git checkout --theirs)",
+      "Bash(git dd:*)",
+      "Bash(git df:*)",
+      "Bash(git diff-main:*)",
+      "Bash(git diff:*)",
+      "Bash(git fetch:*)",
+      "Bash(git grep:*)",
+      "Bash(git log:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(git merge-main:*)",
+      "Bash(git mv:*)",
+      "Bash(git remote get-url:*)",
+      "Bash(git restore:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git rm:*)",
+      "Bash(git show:*)",
+      "Bash(git status:*)",
+      "Bash(go doc:*)",
+      "Bash(go generate:*)",
+      "Bash(go get:*)",
+      "Bash(go mod tidy)",
+      "Bash(go run:*)",
+      "Bash(go test:*)",
+      "Bash(go tool cover:*)",
+      "Bash(go tool gci:*)",
+      "Bash(go tool golangci-lint run:*)",
+      "Bash(go tool gqlgen:*)",
+      "Bash(go tool gqlgenc:*)",
+      "Bash(go version:*)",
+      "Bash(go vet:*)",
+      "Bash(grep:*)",
+      "Bash(head:*)",
+      "Bash(iconv:*)",
+      "Bash(ls:*)",
+      "Bash(make lint)",
+      "Bash(make:*)",
+      "Bash(mktemp:*)",
+      "Bash(mkdir:*)",
+      "Bash(rg:*)",
+      "Bash(sed:*)",
+      "Bash(tail:*)",
+      "Bash(tree:*)",
+      "Bash(wc:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm codege:*)",
+      "Bash(pnpm fmt:*)",
+      "Bash(pnpm typecheck:*)",
+      "Read(/tmp)",
+      "Read(/var/folders)",
+      "Read(~/.claude/claude-self-memo.md)",
+      "Read(~/.claude/plans)",
+      "Read(~/.claude/hooks)",
+      "Read(~/.claude/settings.json)",
+      "Read(~/Works/buildbystack/erp/.claude/settings.local.json)",
+      "Read(~/Works/buildbystack/erp-1/.claude/settings.local.json)",
+      "Read(~/Works/buildbystack/erp-2/.claude/settings.local.json)",
+      "Skill(async-implementation)",
+      "Skill(code-reviewer)",
+      "Skill(conflict-resolution)",
+      "Skill(unit-testing)",
+      "Skill(usecase-implementation)",
+      "Skill(z-fix-checks)",
+      "Skill(z-fix-checks)",
+      "Skill(z-gql-doc)",
+      "Skill(z-merge-main)",
+      "Skill(z-update-unit-test)",
+      "SlashCommand(/z-fix-checks)",
+      "WebFetch(domain:anthropic.com)",
+      "WebFetch(domain:claude.com)",
+      "WebFetch(domain:geminicli.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:githubusercontent.com)",
+      "WebFetch(domain:ko.build)",
+      "WebFetch(domain:w3.org)",
+      "WebSearch",
+      "Write(/tmp)",
+      "Write(/var/folders)",
+      "Write(~/.claude/claude-self-memo.md)",
+      "Write(~/.claude/plans)",
+      "Write(~/.claude/hooks)",
+      "Write(~/.claude/settings.json)",
+      "Write(~/Works/buildbystack/erp/.claude/settings.local.json)",
+      "Write(~/Works/buildbystack/erp-1/.claude/settings.local.json)",
+      "Write(~/Works/buildbystack/erp-2/.claude/settings.local.json)",
+      "mcp__gopls__go_diagnostics",
+      "mcp__gopls__go_rename_symbol",
+      "mcp__gopls__go_search",
       "mcp__gopls__go_symbol_references",
-      "WebFetch(domain:code.claude.com)",
-      "Bash(git df)"
+      "mcp__gopls__go_workspace",
+      "mcp__plugin_greptile_greptile__list_pull_requests",
+      "mcp__plugin_greptile_greptile__get_merge_request"
     ],
     "deny": [
+      "Bash(E2E_TARGET_API_URI=:*)",
       "Bash(go build:*)",
-      "Bash(rm:*)",
+      "Bash(make build_e2e)",
+      "Bash(make deploy_prod)",
+      "Bash(make deploy_staging)",
       "Bash(make gen)",
-      "Bash(make gen_server)",
       "Bash(make gen_client)",
       "Bash(make gen_e2e_client)",
-      "Bash(make deploy_staging)",
-      "Bash(make deploy_prod)",
+      "Bash(make gen_server)",
       "Bash(make update_table_dev)",
       "Bash(make update_table_e2e_a1)",
-      "Bash(make update_table_staging)",
       "Bash(make update_table_prod)",
-      "Bash(make)"
+      "Bash(make update_table_staging)",
+      "Bash(make)",
+      "Bash(perl:*)",
+      "Bash(python3:*)",
+      "Bash(python:*)",
+      "Bash(rm:*)"
     ],
     "ask": [],
     "defaultMode": "default"
@@ -63,7 +153,60 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/hisakazu/.claude/hooks/check-e2e-target-api-uri.sh"
+          },
+          {
+            "type": "command",
+            "command": "/Users/hisakazu/.claude/hooks/check-cd-and-command.sh"
+          },
+          {
+            "type": "command",
+            "command": "/Users/hisakazu/.claude/hooks/check-rm-command.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/hisakazu/.claude/hooks/check-plan-build-commands.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/hisakazu/.claude/hooks/check-completion.sh"
+          }
+        ]
+      }
     ]
   },
-  "alwaysThinkingEnabled": true
+  "statusLine": {
+    "type": "command",
+    "command": "/Users/hisakazu/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "gopls-lsp@claude-plugins-official": true,
+    "agent-sdk-dev@claude-plugins-official": true,
+    "plugin-dev@claude-plugins-official": true,
+    "greptile@claude-plugins-official": true
+  },
+  "language": "日本語",
+  "alwaysThinkingEnabled": true,
+  "autoUpdatesChannel": "stable"
 }
