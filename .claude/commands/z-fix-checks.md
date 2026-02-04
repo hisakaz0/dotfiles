@@ -1,4 +1,4 @@
-checks をパスする
+CIマージ前の checks をパスする
 
 * auto approve モードに移動してください
 * タスクを実行するとき timeout を10分に伸ばしてください
