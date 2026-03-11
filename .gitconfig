@@ -35,14 +35,16 @@
 	rs = restore
 	s = status
 	sw = switch
+	# add 系
+	au = add -u
 	# commit 系
+	# 省略形は2文字で `-m` を付ける
 	cm = commit -m 
-	amend = commit --amend
-	squash = commit --amend
-	# なぜかエラーになるのでコメントアウト
-	# am = commit --amend -m
+	# 直前のコミットメッセージを変更する
+	reword = commit --amend
+	rw = commit --amend -m
+	# 変更を1つ前のコミットに混ぜる
 	fixup = commit --amend --no-edit
-	wip = commit -m 'wip'
 	### ちょっと便利したコマンドのショートカット
 	# ベースブランチを取り込む
 	rebase-main = ! git fetch origin && git rebase origin/main
@@ -95,9 +97,9 @@
 	# current branchに対応するremote repoのbranchのHEAD commit hash
 	head-remote = rev-parse --short @{u}
 	# いい感じにログを表示する
-	ll = lg
 	l = lg -n 7
-	lg = log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s' --first-parent
+	ll = ! git lg HEAD...$(git head-merge)
+	lg = log --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s' --first-parent
 	# マージ済みのブランチを削除する
 	dmb = ! git branch --merged | grep -v '\\*' | grep -v '\\+' | awk '{ print $1 }' | egrep -v '^main$' | xargs -I@ git branch -d @
 	# worktree add 
