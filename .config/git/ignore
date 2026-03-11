@@ -83,7 +83,8 @@ fabric.properties
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -160,12 +161,10 @@ $RECYCLE.BIN/
 # AI Agentへの指示やそのリポジトリのメモ
 **/__manuals
 **/__sandbox
+**/__memos
 
 ## 個人用のCLAUDE.md
-# 運用として、./CLAUDE.md がgitで管理されている
-# ./CLAUDE.local.md は非推奨になり、 ~/.claude/CLAUDE.md は個人全体設定。
-# 個々人のプロジェクトメモリの適切な置き場所がわからないため、一旦 .claude/CLAUDE.md とする
-**/.claude/CLAUDE.md
+CLAUDE.local.md
 
 # sub agents
 # 現状チームで管理しておらず、個人で利用したいため除く
