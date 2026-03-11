@@ -5,7 +5,7 @@ backup:
 	brew bundle dump -f
 
 .PHONY: install
-install: install_link install_brew install_other install_mac 
+install: install_link install_brew install_other install_mac
 
 install_link:
 	./setup_link.sh
