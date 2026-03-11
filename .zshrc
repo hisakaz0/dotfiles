@@ -124,11 +124,11 @@ setopt PROMPT_SUBST ; PS1='%F{green}%n@%m%f: %F{cyan}%~%f %F{red}$(__git_ps1 "(%
 # dotfilesは $HOME/Works/dotfiles に配置する
 #source $HOME/Works/dotfiles/enhancd/init.sh
 
-### golang
-export PATH="/Users/hisakazu/go/bin:$PATH"
-
 ### gnu make
 export PATH="/opt/homebrew/opt/make/libexec/gnubin:$PATH"
+
+### go, golang
+export PATH="$HOME/go/bin:$PATH"
 
 ### google cloud sdk
 # The next line updates PATH for the Google Cloud SDK.
@@ -229,3 +229,4 @@ eval "$(zoxide init zsh)"
 
 # GCP
 export GOOGLE_CLOUD_PROJECT_ID='erp-server-dev'
+
