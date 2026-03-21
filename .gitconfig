@@ -37,6 +37,7 @@
 	sw = switch
 	# add 系
 	au = add -u
+	ap = add -p
 	# commit 系
 	# 省略形は2文字で `-m` を付ける
 	cm = commit -m 
