@@ -24,5 +24,7 @@
 .claude/commands
 .claude/hooks
 .claude/CLAUDE.md
+.claude/docs
+.claude/statusline-command.sh
 .local/bin/claude-pr-check.sh
 .local/bin/claude-pr-comments.sh
