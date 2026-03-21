@@ -3,18 +3,19 @@
 set -e
 
 : "preprocess" && {
+	# src, dist が入力されているか
   src="$1"
   dist="$2"
   if [ -z "$dist" ] ; then
     echo "usage: make_symbolic_link <src> <dist>" 1>&2
     exit 1
   fi
-
   if [ ! -e "$src" ] ; then
     echo "Warning: '$src' is not exist" 1>&2
     exit 0
   fi
 
+	# src がファイルかディレクトリかチェック
   if [ -h "$src" ] ; then
     echo "Error: '$src' must be regular file or directory" 1>&2
     exit 1
@@ -23,11 +24,13 @@ set -e
     exit 1
   fi
 
+	# src が絶対パスだったらエラー
   if [ "${src:0:1}" != '/' ] ; then
-    echo "Error: '$src' path must be absolute path" 1>&2
+    echo "Error: '$src' path must not be absolute path" 1>&2
     exit 1
   fi
 
+	# dist がシンボリックリンクかチェック
   if [ -h "$dist" ] ; then
     echo "Warning: overwrite $dist is linked to $src."
     rm -f $dist
@@ -35,6 +38,7 @@ set -e
     exit 0 # success
   fi
 
+	# dist が存在いるかチェック
   if [ -e "$dist" ] ; then
     echo "Warning: '$dist' which is not symbolic link, is already existed" 1>&2
     exit 0
