@@ -17,6 +17,7 @@
 .vimrc
 .vim/autoload/plug.vim
 .zshrc
+.zshenv
 .zsh
 .claude/settings.json
 .claude/plugins/config.json
