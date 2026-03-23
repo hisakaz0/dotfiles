@@ -6,9 +6,8 @@
 * rules は**必ず**守ってください
 * go言語で、構造体に適当に値を設定したい場合は fillstruct を使ってください
   * https://github.com/nametake/fillstruct
-* **pythonの利用は禁止です。** 大規模なファイルを編集する場合は、Edit/Search/Grepツールを使え
+* **python/sed/awkの利用は禁止です。** 大規模なファイルを編集する場合は、Edit/Search/Grepツールを使え
 * タブやスペースの数が違ってもOK。最後にフォーマットを実行してください
-* `cd` は単体で実行してください。 `cd <path> && some_comand` 禁止
 * コードコメントは日本語で書いてください
 * git commitするときは、co-author は**絶対に**付けないでください
 * 調査やプラン検討は
@@ -18,9 +17,10 @@
   * 関心事はある程度の塊に分割し、並行して調査・統合するようにしてください
 * 調査してもわからない知識は Web 検索してください
 * `while true; do ... ; done` 禁止。sleepを使って手動でポーリングしてください。
-* ビルドやテストのタイムアウトは10分
-* 一時的なファイルやディレクトリを扱いたい場合は `/var/tmp/AgentsSandbox` を使え
-  * ファイルの指定がない場合も
+* ビルドやテストのタイムアウトは10分に伸ばす
+* 一時的なファイルやディレクトリを扱いたい場合
+  * 一時ファイル: ` mktemp -p /var/tmp/AgentsSandbox`
+  * 一時ディレクトリ: ` mktemp -d -p /var/tmp/AgentsSandbox`
 
 # import
 - @~/.claude/docs/karpathy-guidelines.md
