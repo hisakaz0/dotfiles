@@ -133,7 +133,8 @@ _timer_stop_and_print_exec_time() {
   if (( _cmd_start_time )); then
     local delta=$(( EPOCHREALTIME - _cmd_start_time ))
     if (( delta >= 60 )); then
-      local mins=$(( int(delta / 60) ))
+      local mins=$(( delta / 60 ))
+      mins=${mins%.*}
       local secs=$(( delta - mins * 60 ))
       printf "\n\e[2m(Process took: %dm%.1fs)\e[0m\n" $mins $secs
     elif (( delta >= 1 )); then
