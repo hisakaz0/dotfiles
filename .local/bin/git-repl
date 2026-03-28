@@ -1,0 +1,21 @@
+#!/bin/zsh -i
+# git repl で起動するサブコマンド
+# -i: .zshrc のaliasを使えるようにするため対話モードで起動
+
+echo "--- git repl ---"
+
+while true; do
+  tmp_cmd=""
+  read "tmp_cmd?git> " || break
+
+  [[ "$tmp_cmd" == "exit" ]] && break
+  [[ -z "$tmp_cmd" ]] && continue
+
+  # !で始まる場合は通常コマンドとして実行
+  if [[ "$tmp_cmd" == !* ]]; then
+    raw_cmd="${tmp_cmd#!}"
+    eval "$raw_cmd"
+  else
+    eval "git $tmp_cmd"
+  fi
+done

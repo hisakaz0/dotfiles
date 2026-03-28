@@ -55,17 +55,19 @@
 	sb = bs
 	# commit 対象ファイルをすべてキャンセルする
 	cancel = restore --staged **
+	# フォースプッシュ(自分のコミットの場合だけ)
+	pushf = push --force-with-lease
 	# いい感じにdiffを表示する。
 	# 設定はgit diffのオプションも使うが基本的にdeltaのオプションを利用する
 	d  = -c diff.external='difft' diff 
 	dc = -c diff.external='difft' diff --cached
-	## mainブランチとの差分を表示する
-	dd = -c diff.external='difft' diff origin/main...HEAD
-	df = diff origin/main...HEAD
+	## mainブランチとの差分を表示する（未ステージの変更も含む）
+	dd = ! git -c diff.external='difft' diff $(git merge-base origin/main HEAD)
+	df = ! git diff $(git merge-base origin/main HEAD)
 	# ai agents が `df` と入力しても `diff` の省略形と認識するため、`diff-main` を追加する
-	diff-main = ! git df
+	diff-main = df
 	# ブラウザで main との差分を見る
-	difit = ! difit HEAD origin/main 
+	difit = ! git df | difit
 	# head-mregeを始点としてrebase -iする
 	# 汎用 rebase コマンド。PRレビュー中にpushしたコミットがわからなくなったら↓を使う
 	rr = ! git rebase -i $(git head-merge)
@@ -73,7 +75,6 @@
 	rb = ! git rebase $(git b | fzf)
 	# git xxx --abort系を実行する
 	abort = ! $(git s  | grep -o -e 'git.*--abort') 
-	ab = ! git abort
 	# git xxx --continue系を実行する
 	continue = ! $(git s  | grep -o -e 'git.*--continue') 
 	cont = ! git continue

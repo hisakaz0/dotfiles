@@ -9,6 +9,7 @@ alias ..='cd ..'
 alias ...='cd .. && cd ..'
 alias ....='cd .. && cd .. && cd ..'
 alias less='less -R'
+alias g='git'
 # python, pip コマンドで pip3, python3 を動かせるように
 alias pip='pip3'
 alias python='python3'
@@ -47,6 +48,61 @@ setopt hist_find_no_dups
 # setopt extended_history
 # コマンド実行後すぐに履歴に追加
 setopt inc_append_history_time
+
+################################################################################
+# zsh マクロ展開設定 (連想配列版)
+################################################################################
+
+# input の `git-diff-pathspec` が展開される
+# input : git diff HEAD~10 --stat -- git-diff-pathspec 
+# output: git diff HEAD~10 --stat -- ':!src/domain/*_test.go' ':!*_gen.go' ':!.gqlgenc.yml'    
+
+# 1. マクロリストの定義
+typeset -A MY_MACROS
+MY_MACROS=(
+  "git-diff-pathspec" "':!src/domain/*_test.go' ':!*_gen.go' ':!.gqlgenc.yml'"
+)
+
+# 2. 共通の展開ロジック
+_expand_macro_logic() {
+  # 現在の入力行の最後の単語を取得
+  local last_word="${LBUFFER##* }"
+  
+  # マクロリストに存在するかチェック
+  if [[ -n "$MY_MACROS[$last_word]" ]]; then
+    # マクロを置換（最後の単語を削除して中身を挿入）
+    LBUFFER="${LBUFFER%$last_word}$MY_MACROS[$last_word]"
+    return 0 # 展開成功
+  fi
+  return 1 # 展開なし
+}
+
+# 3. スペース用ウィジェット
+_magic_space_macro() {
+  _expand_macro_logic
+  # 展開の有無に関わらず、最後にスペースを挿入
+  zle self-insert
+}
+
+# 4. エンター用ウィジェット
+_magic_enter_macro() {
+  if _expand_macro_logic; then
+    # 展開された場合は、そこで止まる（実行しない）
+    return
+  else
+    # 展開されなかった（マクロがなかった）場合は、即座に実行
+    zle .accept-line
+  fi
+}
+
+# 5. ZLEウィジェットとして登録
+zle -N _magic_space_macro
+zle -N _magic_enter_macro
+
+# 6. キーバインドの設定
+bindkey ' ' _magic_space_macro  # スペースキー
+bindkey '^M' _magic_enter_macro # エンターキー（Ctrl+M）
+
 
 ################################################################################
 # Workaround
