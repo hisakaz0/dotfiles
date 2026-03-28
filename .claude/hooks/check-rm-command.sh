@@ -2,7 +2,6 @@
 set -euo pipefail
 
 # rm コマンドをチェックして ~/.Trash/ への移動を提案するフック
-j
 input=$(cat)
 
 # Bashコマンドかチェック
