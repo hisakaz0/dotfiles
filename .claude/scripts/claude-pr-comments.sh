@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+PR_NUMBER="${1:-$(gh pr view --json number --jq .number)}"
+OWNER="$(gh repo view --json owner --jq .owner.login)"
+REPO="$(gh repo view --json name --jq .name)"
+
 gh api graphql -f query="
   query(\$owner:String!, \$repo:String!, \$pr:Int!) {
     repository(owner:\$owner, name:\$repo) {
@@ -19,10 +23,21 @@ gh api graphql -f query="
             }
           }
         }
+        reviews(first:100) {
+          nodes {
+            author { login }
+            body
+            state
+            createdAt
+          }
+        }
       }
     }
   }" \
-  -F owner="$(gh repo view --json owner --jq .owner.login)" \
-  -F repo="$(gh repo view --json name --jq .name)" \
-  -F pr="$(gh pr view --json number --jq .number)" \
-  --jq ".data.repository.pullRequest.reviewThreads.nodes | map(select(.isResolved | not))"
+  -F owner="$OWNER" \
+  -F repo="$REPO" \
+  -F pr="$PR_NUMBER" \
+  --jq '{
+    reviewThreads: (.data.repository.pullRequest.reviewThreads.nodes | map(select(.isResolved | not))),
+    reviews: (.data.repository.pullRequest.reviews.nodes | map(select(.body != null and .body != "")))
+  }'

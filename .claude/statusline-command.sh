@@ -33,17 +33,31 @@ compact_threshold="${CLAUDE_AUTOCOMPACT_PCT_OVERRIDE:-83}"
 adjusted_pct=$(awk "BEGIN { v=$used_pct*100/$compact_threshold; print (v>100?100:v) }")
 used_int=$(printf "%.0f" "$adjusted_pct")
 
-# コンテキストバー（20文字）を生成
-bar_length=20
-filled=$(( used_int * bar_length / 100 ))
-empty=$(( bar_length - filled ))
+# 点字ブロックによるコンテキストバー（13文字, 1ドット≒1%）
+bar_length=13
+filled_steps=$used_int
+if [ $filled_steps -gt 100 ]; then filled_steps=100; fi
 
 bar=""
-for i in $(gseq 1 $filled); do
-  bar="${bar}█"
-done
-for i in $(gseq 1 $empty); do
-  bar="${bar}░"
+remaining_steps=$filled_steps
+for i in $(gseq 1 $bar_length); do
+  if [ $remaining_steps -ge 8 ]; then
+    bar="${bar}⣿"
+    remaining_steps=$(( remaining_steps - 8 ))
+  elif [ $remaining_steps -gt 0 ]; then
+    case $remaining_steps in
+      1) bar="${bar}⡀" ;;
+      2) bar="${bar}⡄" ;;
+      3) bar="${bar}⡆" ;;
+      4) bar="${bar}⡇" ;;
+      5) bar="${bar}⣇" ;;
+      6) bar="${bar}⣧" ;;
+      7) bar="${bar}⣷" ;;
+    esac
+    remaining_steps=0
+  else
+    bar="${bar}⠀"
+  fi
 done
 
 # バーの色（50%超: 黄色、80%超: 赤色）
