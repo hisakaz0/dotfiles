@@ -28,3 +28,4 @@
 .claude/scripts
 .claude/statusline-command.sh
 .local/bin
+.boto

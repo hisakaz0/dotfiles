@@ -57,6 +57,8 @@
 	cancel = restore --staged **
 	# フォースプッシュ(自分のコミットの場合だけ)
 	pushf = push --force-with-lease
+	# いい感じにblameを表示する。
+	bl = ! tig blame 
 	# いい感じにdiffを表示する。
 	# 設定はgit diffのオプションも使うが基本的にdeltaのオプションを利用する
 	d  = -c diff.external='difft' diff 
@@ -67,10 +69,15 @@
 	# ai agents が `df` と入力しても `diff` の省略形と認識するため、`diff-main` を追加する
 	diff-main = df
 	# ブラウザで main との差分を見る
-	difit = ! git df | difit
+	difit = ! difit HEAD $(git merge-base origin/main HEAD)
 	# head-mregeを始点としてrebase -iする
 	# 汎用 rebase コマンド。PRレビュー中にpushしたコミットがわからなくなったら↓を使う
 	rr = ! git rebase -i $(git head-merge)
+	r2 = ! git rebase -i $(git head-remote)
+	# current branchの直近のmerge commit hash
+	head-merge = log --merges -1 --pretty=format:%h
+	# current branchに対応するremote repoのbranchのHEAD commit hash
+	head-remote = rev-parse --short @{u}
 	# 選択したブランチでrebaseする
 	rb = ! git rebase $(git b | fzf)
 	# git xxx --abort系を実行する
@@ -78,26 +85,6 @@
 	# git xxx --continue系を実行する
 	continue = ! $(git s  | grep -o -e 'git.*--continue') 
 	cont = ! git continue
-	# head-remoteかhead-mergeか遡ってどちらか新しいを始点としてrebase -iする
-	# PRレビュー中に、レビュー修正をpushする前にrebaseしたいときに使う
-	r2 = "!f() { \
-			REMOTE_HASH=$(git head-remote 2>/dev/null); \
-			MERGE_HASH=$(git head-merge); \
-			if [ -z \"$REMOTE_HASH\" ]; then \
-					BASE_HASH=\"$MERGE_HASH\"; \
-			elif git merge-base --is-ancestor \"$MERGE_HASH\" \"$REMOTE_HASH\" >/dev/null 2>&1; then \
-					BASE_HASH=\"$REMOTE_HASH\"; \
-			elif git merge-base --is-ancestor \"$REMOTE_HASH\" \"$MERGE_HASH\" >/dev/null 2>&1; then \
-					BASE_HASH=\"$MERGE_HASH\"; \
-			else \
-					BASE_HASH=\"$MERGE_HASH\"; \
-			fi; \
-			git rebase -i \"$BASE_HASH\"; \
-	}; f"
-	# current branchの直近のmerge commit hash
-	head-merge = log --merges -1 --pretty=format:%h
-	# current branchに対応するremote repoのbranchのHEAD commit hash
-	head-remote = rev-parse --short @{u}
 	# いい感じにログを表示する
 	l = lg -n 7
 	ll = ! git lg HEAD...$(git head-merge)
