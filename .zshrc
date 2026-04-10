@@ -124,19 +124,14 @@ bindkey '^M' _magic_enter_macro # エンターキー（Ctrl+M）
 eval "$(direnv hook zsh)"
 
 ################################################################################
-# zsh completion
+# zsh fpath
 ################################################################################
 if type brew &>/dev/null; then
   FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
-  autoload -Uz compinit
-  compinit
 fi
 if [ -d "$(brew --prefix)/share/zsh/site-functions" ] ; then
   FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
-  autoload -Uz compinit
-  compinit
 fi
-
 
 ################################################################################
 # git prompt
@@ -148,7 +143,6 @@ source ~/.zsh/git-prompt.sh
 # git-completionの読み込み
 fpath=(~/.zsh $fpath)
 zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
-autoload -Uz compinit && compinit
 
 # プロンプトのオプション表示設定
 export GIT_PS1_SHOWDIRTYSTATE=true
@@ -270,9 +264,13 @@ eval "$(zoxide init zsh)"
 
 # The following lines have been added by Docker Desktop to enable Docker CLI completions.
 fpath=(/Users/hisakazu/.docker/completions $fpath)
+# End of Docker CLI completions
+
+################################################################################
+# compinit
+################################################################################
 autoload -Uz compinit
 compinit
-# End of Docker CLI completions
 
 # 速度計測したい場合は、コメントアウトを外す（ファイル先頭も確認すること）
 # zprof
