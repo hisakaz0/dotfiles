@@ -112,21 +112,11 @@ bindkey '^M' _magic_enter_macro # エンターキー（Ctrl+M）
 ################################################################################
 # shell の初期設定時やツールを入れ替え時に必要になったコマンド。
 #
-# /usr/libexec/java_homeが動かない場合実行する
-#sudo ln -sfn "/Applications/Android Studio.app/Contents/jre" "/Library/Java/JavaVirtualMachines/openjdk.jdk" 
-#
-# Screenshot(一度だけ実行する)
-#defaults write com.apple.screencapture location ~/Pictures/Screenshots && killall SystemUIServer
-#
 # Homebrew で次のエラーを出さなくするため
 # zsh compinit: insecure directories, run compaudit for list.
 # Ignore insecure directories and continue [y] or abort compinit [n]?
 #chmod 755 /opt/homebrew
 #chmod 755 /opt/homebrew/share
-
-################################################################################
-# Homebrew
-################################################################################
 
 ################################################################################
 # direnv
