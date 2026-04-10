@@ -266,11 +266,15 @@ eval "$(zoxide init zsh)"
 fpath=(/Users/hisakazu/.docker/completions $fpath)
 # End of Docker CLI completions
 
+
 ################################################################################
-# compinit
+# compinit (一番最後)
 ################################################################################
 autoload -Uz compinit
-compinit
+# 補完関数の更新が重たいのでキャッシュを利用する
+compinit -C
+# 次回起動時のために、バックグラウンドで更新を走らせ、キャッシュを最新化する
+{ compinit; } &!
 
 # 速度計測したい場合は、コメントアウトを外す（ファイル先頭も確認すること）
 # zprof
