@@ -16,6 +16,7 @@ alias g='git'
 # python, pip コマンドで pip3, python3 を動かせるように
 alias pip='pip3'
 alias python='python3'
+alias nvm='fnm'
 
 ################################################################################
 # zsh config 
