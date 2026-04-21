@@ -26,6 +26,7 @@
 .claude/CLAUDE.md
 .claude/docs
 .claude/scripts
+.claude/skills
 .claude/statusline-command.sh
 .local/bin
 .boto
