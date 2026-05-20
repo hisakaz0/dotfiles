@@ -250,7 +250,7 @@
       "Bash(gh pr edit *)",
       "Bash(gh pr create *)"
     ],
-    "defaultMode": "default"
+    "defaultMode": "auto"
   },
   "hooks": {
     "Notification": [
@@ -334,7 +334,9 @@
   "outputStyle": "default",
   "language": "日本語",
   "alwaysThinkingEnabled": true,
+  "effortLevel": "high",
   "promptSuggestionEnabled": false,
   "autoUpdatesChannel": "latest",
-  "prefersReducedMotion": true
+  "prefersReducedMotion": true,
+  "skipAutoPermissionPrompt": true
 }
