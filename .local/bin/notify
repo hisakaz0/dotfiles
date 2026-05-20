@@ -1,0 +1,20 @@
+#!/bin/bash
+# macOSの通知センターへ通知を送るスクリプト
+# 使い方: notify <title> <body>
+
+set -euo pipefail
+
+if [ "$#" -lt 2 ]; then
+  echo "Usage: $(basename "$0") <title> <body>" >&2
+  exit 1
+fi
+
+title="$1"
+body="$2"
+
+# 引数をAppleScriptに直接埋め込むとクォート/特殊文字で壊れるため、argvで安全に渡す
+osascript \
+  -e 'on run argv
+    display notification (item 2 of argv) with title (item 1 of argv)
+  end run' \
+  -- "$title" "$body"
