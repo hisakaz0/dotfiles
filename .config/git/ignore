@@ -157,6 +157,7 @@ $RECYCLE.BIN/
 
 ### Claude
 **/.claude/settings.local.json
+**/.claude/scheduled_tasks.lock
 
 # AI Agentへの指示やそのリポジトリのメモ
 **/__manuals
@@ -169,6 +170,7 @@ CLAUDE.local.md
 # sub agents
 # 現状チームで管理しておらず、個人で利用したいため除く
 **/.claude/agents
+
 
 # secretが含まれている可能性があるため除く
 **/.envrc

@@ -1,7 +1,4 @@
 [core]
-	#	deltaを使ったpager(diffで使う)
-	# まだテーマ設定がうまくいかず見づらいので使わない
-	# pager = delta
 	# default pager
 	pager = less -x2
 	autocrlf = input
@@ -12,8 +9,6 @@
 	untrackedCache = true
 	# ファイルシステムモニタを有効にする
 	fsmonitor = true
-[interactive]
-	diffFilter = delta --color-only
 [color]
 	ui = auto
 # claude だと見にくいので、aliasで使う
@@ -91,6 +86,9 @@
 	lg = log --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s' --first-parent
 	# マージ済みのブランチを削除する
 	dmb = ! git branch --merged | grep -v '\\*' | grep -v '\\+' | awk '{ print $1 }' | egrep -v '^main$' | xargs -I@ git branch -d @
+	# ローカルにあるゴミを掃除する(マージ済みブランチ、削除したリモートブランチ、到達不可能になったオブジェクト、使わなくなったワークツリー)
+	# どのコマンドを実行しているか可視化するため set -x を付ける
+    tidy = ! set -x && git fetch --prune && git dmb && git gc && git worktree prune
 	# worktree add 
 	wta = "!f() { \
 		temp_file=$(mktemp); \
@@ -140,11 +138,6 @@
 	format = ssh
 [push]
 	autoSetupRemote = true
-[delta]
-	line-numbers = true
-	side-by-side = true
-	navigate = true  # use n and N to move between diff sections
-	theme = GitHub
-	tabs = 2
-[include]
-	path = ~/.config/delta/themes.gitconfig
+[fetch]
+	# remote で削除したが local に残っているデータを fetch 時に削除する
+	prune = true

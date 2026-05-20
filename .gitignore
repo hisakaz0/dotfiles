@@ -3,3 +3,6 @@
 *.swp
 .envrc!
 Brewfile.lock.json
+.local/bin/claude
+.claude/skills/spanner-index-optimizer/**
+.claude/skills/admin-api-debug/**
