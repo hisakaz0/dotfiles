@@ -68,7 +68,6 @@
 	# head-mregeを始点としてrebase -iする
 	# 汎用 rebase コマンド。PRレビュー中にpushしたコミットがわからなくなったら↓を使う
 	rr = ! git rebase -i $(git head-merge)
-	r2 = ! git rebase -i $(git head-remote)
 	# current branchの直近のmerge commit hash
 	head-merge = log --merges -1 --pretty=format:%h
 	# current branchに対応するremote repoのbranchのHEAD commit hash
