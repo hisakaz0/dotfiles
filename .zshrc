@@ -64,8 +64,8 @@ setopt inc_append_history_time
 # 1. マクロリストの定義
 typeset -A MY_MACROS
 MY_MACROS=(
-  "git-diff-pathspec"      "':!src/domain/*_test.go' ':!*_gen.go' ':!.gqlgenc.yml'"
-  "git-diff-pathspec-more" "':!src/domain/*_test.go' ':!*_gen.go' ':!.gqlgenc.yml' '!*_test.go'"
+  "git-diff-ignores"      "':!src/domain/*_test.go' ':!*_gen.go' ':!*.generated.go' ':!.gqlgenc.yml'"
+  "git-diff-ignores-test" "':!src/domain/*_test.go' ':!*_gen.go' ':!*.generated.go' ':!.gqlgenc.yml' ':!*_test.go'"
 )
 
 # 2. 共通の展開ロジック
