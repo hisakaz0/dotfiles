@@ -5,9 +5,9 @@ local で test, fmt, lint をパスする
 
 ## 作業
 
-1. 次の make ターゲットが実行していないか確認する。実行している場合は終了するまで待機する。
-    * 確認方法: `pgrep -af 'make (fmt|lint_slow|golangci-lint|test)'`
-    * 待機方法: `until ! pgrep -af 'make (fmt|lint_slow|golangci-lint|test)'; do sleep 30; done` で polling する（最大30分。30分経っても終わらない場合はユーザに通知して指示を仰ぐ）
+1. 他のビルド等のコマンドが実行していないか確認する。実行している場合は終了するまで待機する。
+    * 確認方法: `pgrep -af 'make (fmt|lint_slow|golangci-lint|test)|go test'`
+    * 待機方法: `until ! pgrep -af 'make (fmt|lint_slow|golangci-lint|test)|go test'; do sleep 30; done` で polling する（最大30分。30分経っても終わらない場合はユーザに通知して指示を仰ぐ）
     * 待機する理由: 1マシンで並列開発しているため、以下の重たい処理が同時に実行するとマシンが重たくなり、雑務ができなくなるため。
 2. make ターゲットをリストの上から順に1つずつ実行する
     * 変更があったディレクトリが複数ある場合は、1つのディレクトリで全ターゲット（fmt→lint_slow→golangci-lint→test）を完了してから次のディレクトリへ移る

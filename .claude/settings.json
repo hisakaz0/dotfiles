@@ -218,9 +218,6 @@
       "Bash(make)",
       "Bash(env)",
       "Bash(printenv)",
-      "Bash(perl *)",
-      "Bash(python3 *)",
-      "Bash(python *)",
       "Bash(rm *)",
       "Read(.env*)",
       "Write(.env*)",
@@ -243,7 +240,30 @@
       "Bash(git push --force:*)",
       "Bash(git push -f:*)",
       "Bash(git reset:*)",
-      "Bash(git rebase:*)"
+      "Bash(git rebase:*)",
+      "mcp__backlog__add_project",
+      "mcp__backlog__update_project",
+      "mcp__backlog__delete_project",
+      "mcp__backlog__add_issue",
+      "mcp__backlog__update_issue",
+      "mcp__backlog__delete_issue",
+      "mcp__backlog__add_issue_comment",
+      "mcp__backlog__add_watching",
+      "mcp__backlog__update_watching",
+      "mcp__backlog__delete_watching",
+      "mcp__backlog__mark_watching_as_read",
+      "mcp__backlog__add_version_milestone",
+      "mcp__backlog__update_version_milestone",
+      "mcp__backlog__delete_version",
+      "mcp__backlog__add_wiki",
+      "mcp__backlog__add_pull_request",
+      "mcp__backlog__update_pull_request",
+      "mcp__backlog__add_pull_request_comment",
+      "mcp__backlog__update_pull_request_comment",
+      "mcp__backlog__reset_unread_notification_count",
+      "mcp__backlog__mark_notification_as_read",
+      "mcp__backlog__update_wiki",
+      "mcp__backlog__addDocument"
     ],
     "ask": [
       "Bash(git push --force-with-lease *)",
@@ -259,7 +279,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "osascript -e 'display notification \"claude code\" with title \"Claude Code\" subtitle \"入力待ちです\"'"
+            "command": "/Users/hisakazu/.claude/hooks/log-notification.sh"
           }
         ]
       }
@@ -291,15 +311,7 @@
           },
           {
             "type": "command",
-            "command": "/Users/hisakazu/.claude/hooks/check-cd-and-command.sh"
-          },
-          {
-            "type": "command",
             "command": "/Users/hisakazu/.claude/hooks/check-rm-command.sh"
-          },
-          {
-            "type": "command",
-            "command": "/Users/hisakazu/.claude/hooks/check-and-or-operator.sh"
           }
         ]
       }
@@ -327,16 +339,17 @@
     "code-simplifier@claude-plugins-official": true,
     "claude-md-management@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
-    "ralph-loop@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
-    "hookify@claude-plugins-official": true
+    "frontend-design@claude-plugins-official": true,
+    "slack@claude-plugins-official": true,
+    "shopify@claude-plugins-official": true
   },
   "outputStyle": "default",
   "language": "日本語",
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high",
   "promptSuggestionEnabled": false,
   "autoUpdatesChannel": "latest",
+  "tui": "default",
   "prefersReducedMotion": true,
   "skipAutoPermissionPrompt": true
 }
