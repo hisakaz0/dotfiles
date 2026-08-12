@@ -332,7 +332,8 @@
     "superpowers@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": false,
     "frontend-design@claude-plugins-official": false,
-    "slack@claude-plugins-official": false
+    "slack@claude-plugins-official": false,
+    "lua-lsp@claude-plugins-official": false
   },
   "outputStyle": "default",
   "language": "日本語",

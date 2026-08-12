@@ -4,6 +4,8 @@
 .config/git
 .config/peco
 .config/delta
+.config/nvim
+.config/ghostty
 .cshrc
 .cshrc.body
 .git-commit-template.txt
