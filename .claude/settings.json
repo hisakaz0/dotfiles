@@ -1,6 +1,9 @@
 {
   "env": {
-    "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1"
+    "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
+    "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS": "1",
+    "BASH_DEFAULT_TIMEOUT_MS": "1800000",
+    "BASH_MAX_TIMEOUT_MS": "1800000"
   },
   "permissions": {
     "allow": [
@@ -183,16 +186,16 @@
       "WebFetch(domain:x.com)",
       "WebFetch(domain:zed.dev)",
       "WebSearch",
-      "Write(//var/folders/**)",
-      "Write(//var/tmp/AgentsSandbox/**)",
-      "Write(//private/var/folders/**)",
-      "Write(//private/var/tmp/AgentsSandbox/**)",
-      "Write(//Users/hisakazu/.claude/**)",
-      "Write(//Users/hisakazu/.local/**)",
-      "Write(//Users/hisakazu/Works/dotfiles/**)",
-      "Write(//Users/hisakazu/Works/buildbystack/erp/**)",
-      "Write(//Users/hisakazu/Works/buildbystack/erp-1/**)",
-      "Write(//Users/hisakazu/Works/buildbystack/erp-2/**)"
+      "Edit(//var/folders/**)",
+      "Edit(//var/tmp/AgentsSandbox/**)",
+      "Edit(//private/var/folders/**)",
+      "Edit(//private/var/tmp/AgentsSandbox/**)",
+      "Edit(//Users/hisakazu/.claude/**)",
+      "Edit(//Users/hisakazu/.local/**)",
+      "Edit(//Users/hisakazu/Works/dotfiles/**)",
+      "Edit(//Users/hisakazu/Works/buildbystack/erp/**)",
+      "Edit(//Users/hisakazu/Works/buildbystack/erp-1/**)",
+      "Edit(//Users/hisakazu/Works/buildbystack/erp-2/**)"
     ],
     "deny": [
       "Bash(git -C *)",
@@ -220,27 +223,22 @@
       "Bash(printenv)",
       "Bash(rm *)",
       "Read(.env*)",
-      "Write(.env*)",
-      "Write(*_gen.go)",
+      "Edit(.env*)",
+      "Edit(*_gen.go)",
       "Bash(sudo *)",
       "Bash(rm -rf *)",
       "Bash(gh repo delete *)",
       "Bash(git push -f *)",
       "Bash(git push --force *)",
-      "Bash(git push --force-with-lease *)",
-      "Bash(git reset *)",
-      "Bash(git rebase *)",
       "Read(id_rsa)",
       "Bash(go install *@*)",
       "Bash(go install */*/*)",
-      "READ(.env*)",
+      "Read(.env*)",
       "Bash(sudo:*)",
       "Bash(rm -rf:*)",
       "Bash(gh repo delete:*)",
       "Bash(git push --force:*)",
       "Bash(git push -f:*)",
-      "Bash(git reset:*)",
-      "Bash(git rebase:*)",
       "mcp__backlog__add_project",
       "mcp__backlog__update_project",
       "mcp__backlog__delete_project",
@@ -267,23 +265,13 @@
     ],
     "ask": [
       "Bash(git push --force-with-lease *)",
+      "Bash(git reset *)",
       "Bash(gh pr edit *)",
       "Bash(gh pr create *)"
     ],
     "defaultMode": "auto"
   },
   "hooks": {
-    "Notification": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/Users/hisakazu/.claude/hooks/log-notification.sh"
-          }
-        ]
-      }
-    ],
     "PreToolUse": [
       {
         "matcher": "Read|Write|Edit",
@@ -329,27 +317,32 @@
     ],
     "Stop": []
   },
+  "worktree": {
+    "baseRef": "fresh"
+  },
   "statusLine": {
     "type": "command",
     "command": "/Users/hisakazu/.claude/statusline-command.sh"
   },
   "enabledPlugins": {
-    "agent-sdk-dev@claude-plugins-official": true,
-    "plugin-dev@claude-plugins-official": true,
-    "code-simplifier@claude-plugins-official": true,
-    "claude-md-management@claude-plugins-official": true,
+    "agent-sdk-dev@claude-plugins-official": false,
+    "plugin-dev@claude-plugins-official": false,
+    "code-simplifier@claude-plugins-official": false,
+    "claude-md-management@claude-plugins-official": false,
     "superpowers@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true,
-    "slack@claude-plugins-official": true,
-    "shopify@claude-plugins-official": true
+    "skill-creator@claude-plugins-official": false,
+    "frontend-design@claude-plugins-official": false,
+    "slack@claude-plugins-official": false
   },
   "outputStyle": "default",
   "language": "日本語",
-  "alwaysThinkingEnabled": true,
   "promptSuggestionEnabled": false,
   "autoUpdatesChannel": "latest",
   "tui": "default",
   "prefersReducedMotion": true,
-  "skipAutoPermissionPrompt": true
+  "skipWorkflowUsageWarning": true,
+  "inputNeededNotifEnabled": false,
+  "agentPushNotifEnabled": false,
+  "skipAutoPermissionPrompt": true,
+  "useAutoModeDuringPlan": true
 }

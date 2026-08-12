@@ -22,6 +22,14 @@ fi
 # モデル表示名を取得
 model_name=$(echo "$input" | jq -r '.model.display_name // "unknown"')
 
+# reasoning effort レベルを取得（auto が実際に選んだ値を反映）
+# effort 非対応モデルではフィールドが存在しないため、その場合は表示しない
+effort_level=$(echo "$input" | jq -r '.effort.level // empty')
+effort_suffix=""
+if [ -n "$effort_level" ]; then
+  effort_suffix=" ⚡️ ${effort_level}"
+fi
+
 # context利用率を取得
 used_pct=$(echo "$input" | jq -r '.context_window.used_percentage // 0')
 
@@ -168,9 +176,56 @@ fi
 
 # 1行表示: ディレクトリ | ブランチ | モデル | コンテキストバー | セッション使用率
 if [ -n "$git_branch" ]; then
-  printf "${CYAN}📁 %s${RESET}  ${GREEN}🌿 %s${RESET}  ${YELLOW}💪 %s${RESET}  🧠 ${bar_color}[%s]${RESET} %d%%${session_usage}${week_usage}\n" \
-    "$display_cwd" "$git_branch" "$model_name" "$bar" "$used_int"
+  printf "${CYAN}📁 %s${RESET}  ${GREEN}🌿 %s${RESET}  ${YELLOW}🛠️ %s%s${RESET}  🧠 ${bar_color}[%s]${RESET} %d%%${session_usage}${week_usage}\n" \
+    "$display_cwd" "$git_branch" "$model_name" "$effort_suffix" "$bar" "$used_int"
 else
-  printf "${CYAN}📁 %s${RESET}  ${YELLOW}💪 %s${RESET}  🧠 ${bar_color}[%s]${RESET} %d%%${session_usage}${week_usage}\n" \
-    "$display_cwd" "$model_name" "$bar" "$used_int"
+  printf "${CYAN}📁 %s${RESET}  ${YELLOW}🛠️ %s%s${RESET}  🧠 ${bar_color}[%s]${RESET} %d%%${session_usage}${week_usage}\n" \
+    "$display_cwd" "$model_name" "$effort_suffix" "$bar" "$used_int"
+fi
+
+# --- 統計ログ: model / branch / effort / context 使用量などを JSONL に溜める ---
+# log-notification.sh と同じく ~/.claude/logs 配下に JSONL 形式で蓄積する。
+# Claude Code が statusline を数秒ごとに呼ぶため、シグネチャ (model|branch|effort|context%)
+# が前回から変わったときだけ 1 行追記する。重複行を防ぎつつ context 使用量の推移を残す。
+STATS_LOG_DIR="$HOME/.claude/logs"
+STATS_LOG_FILE="$STATS_LOG_DIR/statusline.jsonl"
+STATS_MAX_LINES=100000
+session_id=$(echo "$input" | jq -r '.session_id // "unknown"')
+
+# セッション別に前回シグネチャを保持し、変化を検知する
+sig="${model_name}|${git_branch}|${effort_level}|${used_int}"
+sig_cache="/tmp/claude-statusline-sig-${session_id}"
+last_sig=""
+[ -f "$sig_cache" ] && last_sig=$(cat "$sig_cache")
+
+if [ "$sig" != "$last_sig" ]; then
+  mkdir -p "$STATS_LOG_DIR"
+  printf '%s' "$sig" > "$sig_cache"
+  stats_ts=$(date "+%Y-%m-%dT%H:%M:%S%z")
+  # input のキー名・構造をそのまま尊重して出力する (独自リネームしない)。
+  # timestamp と branch (git 由来) だけ input に存在しないため、こちらで付与する。
+  echo "$input" | jq -c \
+    --arg timestamp "$stats_ts" \
+    --arg branch "$git_branch" \
+    '{
+      timestamp: $timestamp,
+      session_id: .session_id,
+      version: .version,
+      model: {id: .model.id},
+      output_style: .output_style,
+      workspace: .workspace,
+      branch: $branch,
+      effort: .effort,
+      context_window: .context_window,
+      cost: .cost
+    }' \
+    >> "$STATS_LOG_FILE"
+
+  # ローテーション: 上限行数を超えたら末尾を残す
+  stats_line_count=$(wc -l < "$STATS_LOG_FILE" | tr -d ' ')
+  if [ "$stats_line_count" -gt "$STATS_MAX_LINES" ]; then
+    stats_tmp=$(mktemp)
+    tail -n "$STATS_MAX_LINES" "$STATS_LOG_FILE" > "$stats_tmp"
+    mv "$stats_tmp" "$STATS_LOG_FILE"
+  fi
 fi

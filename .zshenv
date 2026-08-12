@@ -28,7 +28,11 @@ export PATH="/opt/homebrew/opt/make/libexec/gnubin:$PATH"
 # go
 ################################################################################
 export PATH="$HOME/go/bin:$PATH"
-export GOFLAGS="-trimpath"
+# 固定のworktreeを使っており、-trimpath を付けて1つのビルドキャッシュを使いまわすより
+# worktreeそれぞれのキャッシュを使ったほうが、キャッシュの差分が小さくなるため
+# 増分ビルドが速くなると仮定し、一時的に -trimpath のオプションをオフにする
+# export GOFLAGS="-trimpath"
+export GOFLAGS=""
 
 ################################################################################
 # ripgrep

@@ -62,7 +62,7 @@
 	dd = ! git -c diff.external='difft' diff $(git merge-base origin/main HEAD)
 	df = ! git diff $(git merge-base origin/main HEAD)
 	# ai agents が `df` と入力しても `diff` の省略形と認識するため、`diff-main` を追加する
-	diff-main = df
+	diff-main = df 
 	# ブラウザで main との差分を見る
 	difit = ! difit HEAD $(git merge-base origin/main HEAD)
 	# head-mregeを始点としてrebase -iする
@@ -81,13 +81,13 @@
 	cont = ! git continue
 	# いい感じにログを表示する
 	l = lg -n 7
-	ll = ! git lg HEAD...$(git head-merge)
+	ll = ! git lg origin/main..HEAD
 	lg = log --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s' --first-parent
 	# マージ済みのブランチを削除する
 	dmb = ! git branch --merged | grep -v '\\*' | grep -v '\\+' | awk '{ print $1 }' | egrep -v '^main$' | xargs -I@ git branch -d @
-	# ローカルにあるゴミを掃除する(マージ済みブランチ、削除したリモートブランチ、到達不可能になったオブジェクト、使わなくなったワークツリー)
+	# ローカルにあるゴミを掃除する(マージ済みブランチ、削除したリモートブランチ、到達不可能になったオブジェクト)
 	# どのコマンドを実行しているか可視化するため set -x を付ける
-    tidy = ! set -x && git fetch --prune && git dmb && git gc && git worktree prune
+    tidy = ! set -x && git fetch --prune && git dmb && git gc
 	# worktree add 
 	wta = "!f() { \
 		temp_file=$(mktemp); \
@@ -133,6 +133,10 @@
 	signingkey = /Users/hisakazu/.ssh/id_ed25519.pub
 [init]
 	defaultBranch = main
+[diff]
+	# algorithm = myers # デフォルト
+	# algorithm = patience # 辛抱強いらしい
+	algorithm = histogram # patience の進化版
 [gpg]
 	format = ssh
 [push]

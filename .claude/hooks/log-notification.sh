@@ -3,7 +3,9 @@ set -euo pipefail
 
 # Notification hook: ログ書き込み + 通知判定を一体化
 # - 通知発生時に stdin / 環境変数 / アクティブな background task をログに残す
-# - notification_type == "idle_prompt" かつ background task が無い時だけ osascript で macOS 通知
+# - notification_type == "idle_prompt" は background task が無く、かつ会話で Claude が
+#   1 回でも応答済み (transcript の assistant 行が 1 件以上) の時だけ osascript で macOS 通知。
+#   /clear 直後の空会話 (assistant 行 0 件) では通知しない
 # - それ以外の notification_type は一旦そのまま通知 (傾向観察用)
 # - 100,000 行を超えたら末尾を切り詰める
 
@@ -29,6 +31,7 @@ cwd=$(echo "$input" | jq -r '.cwd // ""')
 notification_type=$(echo "$input" | jq -r '.notification_type // ""')
 message=$(echo "$input" | jq -r '.message // ""')
 hook_event_name=$(echo "$input" | jq -r '.hook_event_name // ""')
+transcript_path=$(echo "$input" | jq -r '.transcript_path // ""')
 
 # 自セッションの tasks ディレクトリを特定
 # 例: /private/tmp/claude-501/-Users-hisakazu-Works-buildbystack-erp/<session_id>/tasks
@@ -62,14 +65,25 @@ fi
 
 active_count=$(echo "$active_tasks_json" | jq 'length')
 
-# 通知判定: idle_prompt は background が無いときだけ通知。それ以外は一旦通知
+# transcript の assistant 応答数を数える (会話で Claude が 1 回でも応答したか判定する)
+# /clear 直後の空会話は assistant 行が 0 件になるため、これで新規会話を識別する
+assistant_count=0
+if [ -n "$transcript_path" ] && [ -f "$transcript_path" ]; then
+  assistant_count=$(jq -rs '[.[] | select(.type == "assistant")] | length' "$transcript_path" 2>/dev/null || echo 0)
+fi
+
+# 通知判定: idle_prompt は background が無く、かつ Claude が応答済みのときだけ通知。それ以外は一旦通知
 if [ "$notification_type" = "idle_prompt" ]; then
-  if [ "$active_count" -eq 0 ]; then
-    notified=true
-    notified_reason="idle_no_bg"
-  else
+  if [ "$active_count" -ne 0 ]; then
     notified=false
     notified_reason="idle_bg_active"
+  elif [ "$assistant_count" -eq 0 ]; then
+    # /clear 直後など Claude が未応答の新規会話では通知しない
+    notified=false
+    notified_reason="idle_fresh_conversation"
+  else
+    notified=true
+    notified_reason="idle_no_bg"
   fi
 else
   notified=true
@@ -92,11 +106,12 @@ jq -cn \
   --arg hook_event_name "$hook_event_name" \
   --argjson tasks "$tasks_json" \
   --argjson active_tasks "$active_tasks_json" \
+  --argjson assistant_count "$assistant_count" \
   --argjson notified "$notified" \
   --arg notified_reason "$notified_reason" \
   --argjson claude_env "$env_json" \
   --argjson stdin "$stdin_json" \
-  '{timestamp:$timestamp, session_id:$session_id, cwd:$cwd, notification_type:$notification_type, message:$message, hook_event_name:$hook_event_name, tasks:$tasks, active_tasks:$active_tasks, notified:$notified, notified_reason:$notified_reason, claude_env:$claude_env, stdin:$stdin}' \
+  '{timestamp:$timestamp, session_id:$session_id, cwd:$cwd, notification_type:$notification_type, message:$message, hook_event_name:$hook_event_name, tasks:$tasks, active_tasks:$active_tasks, assistant_count:$assistant_count, notified:$notified, notified_reason:$notified_reason, claude_env:$claude_env, stdin:$stdin}' \
   >> "$LOG_FILE"
 
 # ローテーション
