@@ -1,0 +1,22 @@
+# Ghostty の設定
+# 参照: https://ghostty.org/docs/config/reference
+
+# フォント
+#
+# VSCode の editor.fontFamily / terminal.integrated.fontFamily と同じ指定にする。
+#   "'UDEV Gothic NFLG', 'Moralerspace Argon HW', Menlo, Monaco, 'Courier New', monospace"
+# Ghostty は font-family を複数回書くとフォールバックチェーンになるので、
+# VSCode の CSS 風リストと同じ優先順位で上から並べる。
+font-family = UDEV Gothic NFLG
+font-family = Moralerspace Argon HW
+font-family = Menlo
+font-family = Monaco
+font-family = Courier New
+
+# VSCode の macOS 既定 editor.fontSize / terminal.integrated.fontSize に合わせる
+# (Ghostty の既定は 13)
+font-size = 12
+
+# VSCode の editor.fontLigatures / terminal.integrated.fontLigatures.enabled = true 相当。
+# Ghostty は標準の合字 (liga / calt) を既定で有効にするため追加の指定は不要。
+# 合字を切りたくなったら `font-feature = -liga` と `font-feature = -calt` を書く。
