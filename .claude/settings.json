@@ -266,6 +266,7 @@
     "ask": [
       "Bash(git push --force-with-lease *)",
       "Bash(git reset *)",
+      "Bash(brew *)",
       "Bash(gh pr edit *)",
       "Bash(gh pr create *)"
     ],
@@ -300,6 +301,10 @@
           {
             "type": "command",
             "command": "/Users/hisakazu/.claude/hooks/check-rm-command.sh"
+          },
+          {
+            "type": "command",
+            "command": "/Users/hisakazu/.claude/hooks/check-gh-comment.sh"
           }
         ]
       }
@@ -315,7 +320,18 @@
         ]
       }
     ],
-    "Stop": []
+    "Stop": [],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/hisakazu/.claude/hooks/notify-input-needed.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
   },
   "worktree": {
     "baseRef": "fresh"
@@ -342,6 +358,7 @@
   "tui": "default",
   "prefersReducedMotion": true,
   "skipWorkflowUsageWarning": true,
+  "verbose": false,
   "inputNeededNotifEnabled": false,
   "agentPushNotifEnabled": false,
   "skipAutoPermissionPrompt": true,

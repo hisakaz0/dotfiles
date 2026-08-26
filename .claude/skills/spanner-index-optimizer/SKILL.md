@@ -76,3 +76,45 @@ CREATE TABLE InventoryLogicalChange (
   UpdatedAt TIMESTAMP NOT NULL OPTIONS (allow_commit_timestamp = true),
 ) PRIMARY KEY(ID);
 ```
+## STORING の使い所
+
+STORING 列はインデックスの並び順に関与しない。役割は「インデックス行に列の値を同居させ、テーブル本体のバック結合を減らす」ことだけで、走査範囲を狭める効果はない。
+
+* キー列: 絞り込み・並び順で走査範囲そのものを狭める
+* STORING 列: 走査範囲は狭めず、読んだ行の判定と取得をインデックス内で完結させる
+
+このプロジェクトは最終取得を `SELECT *` にするルールなので、最終取得でのカバリングインデックスは成立しない。使い所は「`SELECT *` に至る前の中間段階」に集まる。
+
+1. Join テーブル経由の絞り込み（最多）
+   * `XxxAndYyyJoin(OrganizationID, XxxID) STORING (YyyID)` の形で、Join テーブルからは ID だけ取り出し、本体テーブルを `SELECT *` する
+   * 例: `InventoryLogicalChangeAndDraftOrderJoin(OrganizationID, DraftOrderID) STORING (InventoryLogicalChangeID)`、`LocationGroupAndLocationJoin(OrganizationID, LocationGroupID) STORING (LocationID)`
+2. 集計クエリ
+   * `SUM` / `COUNT` の対象列を STORING すると、集計がインデックス内で完結する
+   * 例: `InventoryLogicalChange(OrganizationID, LocationID, InventoryLogicalState, InventoryItemID) STORING (Delta)`、`InventoryLogicalQuantitySnapshot(OrganizationID, TargetMonth) STORING (Quantity)`
+3. 残余フィルタ
+   * 並び順を変えずに WHERE の判定をインデックス内で済ませ、バック結合を該当行だけに絞る
+   * 向く条件: 既存の並び順で走査してよい / 絞り込みで読む行が数倍程度に収まる / 専用のキー列インデックスを足すほど頻度・選択性が高くない / 絞り込み条件が今後増える見込みで、条件ごとにインデックスを増やしたくない
+   * 絞り込みが強く効き（該当行が全体のごく一部）かつ頻繁に呼ぶクエリなら、STORING ではなくキー列に置く。走査行数が桁で変わる
+4. 小さい子テーブルの全列 STORING
+   * 例: `InventoryPurchaseOrderContact(OrganizationID, InventoryPurchaseOrderID) STORING (FirstName, LastName, Email, ...)`
+   * `SELECT *` なら列追加のたびに STORING も追従が要る。保守負担が大きいので積極的には勧めない
+
+### 例: 任意の絞り込みを持つ一覧クエリ
+
+```sql
+SELECT * FROM DraftOrder
+WHERE OrganizationID = @organizationID
+  AND RetailLocationID = @retailLocationID  -- 任意。無い場合もある
+ORDER BY CreatedAt DESC, ID DESC
+LIMIT @p_limit OFFSET @p_offset
+```
+
+| 候補 | 絞り込みなし | 絞り込みあり | 今後の絞り込み追加 |
+|---|---|---|---|
+| 1. `(OrganizationID, CreatedAt DESC, ID DESC) STORING (RetailLocationID)` | インデックス順に読み LIMIT で早期終了 | CreatedAt 順に走査し STORING 列で残余フィルタ。走査行数は `(LIMIT + OFFSET) ÷ 該当店舗の割合` 程度に増える | STORING に列を足すだけで 1 本が全パターンを担う |
+| 2. `(OrganizationID, RetailLocationID, CreatedAt DESC, ID DESC)` | 使えない。別インデックスが必要 | 最適。必要な行だけ読む | 条件の組み合わせごとにインデックスが増える |
+
+* 「絞り込みなしもある」「絞り込みが今後増える」なら 1 を選ぶ。2 は結局 1 相当も必要になり、インデックスが 2 本になる
+* 1 と 2 を単体で比べると mutation コストはほぼ同じ（どちらも 1 行につきインデックス行 1 件）。コストが増えるのは 2 に加えて絞り込みなし用のインデックスを足し、2 本になった時点
+* キー列の更新はインデックス行の削除 + 挿入、STORING 列の更新はインデックス行の更新で済む。ただし絞り込み列を後から変えることが稀なら、この差は無視できる
+* DDL 追加後は `spanner-plan-analyze` で両クエリの実行計画を確認する。オプティマイザが 1 を選ばなければ理由付きで `FORCE_INDEX` を検討する
