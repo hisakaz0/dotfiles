@@ -17,33 +17,45 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.keymap.set(mode, lhs, rhs, { buffer = ev.buf, desc = 'LSP: ' .. desc })
     end
 
-    -- コードジャンプ
-    map('n', 'gd', vim.lsp.buf.definition, '定義へジャンプ')
-    map('n', 'gD', vim.lsp.buf.declaration, '宣言へジャンプ')
-    map('n', 'gi', vim.lsp.buf.implementation, '実装へジャンプ')
-    map('n', 'gy', vim.lsp.buf.type_definition, '型定義へジャンプ')
-    map('n', 'gr', function()
-      require('fzf-lua').lsp_references()
-    end, '参照一覧')
-
     -- シンボルのリネーム
-    map('n', '<F2>', vim.lsp.buf.rename, 'シンボルをリネーム')
-    map('n', '<leader>cr', vim.lsp.buf.rename, 'シンボルをリネーム')
+    map('n', '<leader>rr', vim.lsp.buf.rename, 'シンボルをリネーム')
 
-    -- その他
-    map({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, 'コードアクション')
-    map('n', '<leader>cf', function()
-      require('conform').format({ async = true, lsp_format = 'fallback' })
-    end, 'フォーマット')
     map('n', 'K', vim.lsp.buf.hover, 'ホバー')
-    map('n', '<leader>cd', vim.diagnostic.open_float, '診断を表示')
 
-    -- インレイヒント (型注釈などを薄く表示する)。<leader>uh でトグル
+    ------------------------------------------------------------------
+    -- 呼び出し元をたどる
+    --
+    -- <C-]> は LSP 接続時に tagfunc (v:lua.vim.lsp.tagfunc) 経由で
+    -- 「定義へ飛ぶ」になる。その逆向き、つまり「ここを使っている箇所の一覧」を
+    -- <C-S-]> に割り当てる (Ghostty の kitty keyboard protocol で
+    -- <C-]> と区別して受け取れる。詳細は plugins/picker.lua のコメント参照)。
+    --
+    -- Neovim 標準の grr は quickfix に流し込むだけなので、
+    -- プレビュー付きで絞り込める fzf-lua のピッカーに寄せる。
+    ------------------------------------------------------------------
+    if client:supports_method('textDocument/references') then
+      local function references()
+        -- カーソル行そのものは候補から省く
+        require('fzf-lua').lsp_references({ ignore_current_line = true })
+      end
+      map('n', '<C-S-]>', references, '呼び出し元 (参照) の一覧')
+      map('n', 'grr', references, '呼び出し元 (参照) の一覧')
+    end
+
+    -- 呼び出し階層。references が「識別子を書いている場所」を全部出すのに対し、
+    -- こちらは「その関数を呼んでいる関数」だけを辿れる
+    if client:supports_method('textDocument/prepareCallHierarchy') then
+      map('n', '<leader>ci', function()
+        require('fzf-lua').lsp_incoming_calls()
+      end, '呼び出し元の階層')
+      map('n', '<leader>co', function()
+        require('fzf-lua').lsp_outgoing_calls()
+      end, '呼び出し先の階層')
+    end
+
+    -- インレイヒント (型注釈などを薄く表示する)
     if client:supports_method('textDocument/inlayHint') then
       vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
-      map('n', '<leader>uh', function()
-        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = ev.buf }), { bufnr = ev.buf })
-      end, 'インレイヒントをトグル')
     end
 
     -- Neovim 組み込みの LSP 補完を使う (補完プラグインは入れていない)

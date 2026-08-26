@@ -18,7 +18,6 @@ return {
     keys = {
       { '<leader>e', '<Cmd>Neotree toggle<CR>', desc = 'ファイラーを開閉' },
       { '<leader>E', '<Cmd>Neotree reveal<CR>', desc = 'ファイラーで現在のファイルを表示' },
-      { '<leader>ge', '<Cmd>Neotree git_status<CR>', desc = 'ファイラー (Git 変更のみ)' },
     },
     opts = {
       close_if_last_window = true,

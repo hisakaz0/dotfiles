@@ -22,13 +22,6 @@ return {
         desc = '全文検索・一括置換',
       },
       {
-        '<leader>sw',
-        function()
-          require('grug-far').open({ prefills = { search = vim.fn.expand('<cword>') } })
-        end,
-        desc = 'カーソル位置の単語で全文検索',
-      },
-      {
         '<leader>s',
         function()
           require('grug-far').with_visual_selection()

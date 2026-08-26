@@ -16,27 +16,6 @@ map('n', '<C-l>', '<C-w>l', { desc = '右のウィンドウへ' })
 -- バッファ移動
 map('n', '[b', '<Cmd>bprevious<CR>', { desc = '前のバッファ' })
 map('n', ']b', '<Cmd>bnext<CR>', { desc = '次のバッファ' })
-map('n', '<leader>bd', '<Cmd>bdelete<CR>', { desc = 'バッファを閉じる' })
-
--- ターミナル
-map('t', '<Esc><Esc>', [[<C-\><C-n>]], { desc = 'ターミナルをノーマルモードへ' })
-
--- 保存時フォーマットの一時無効化
-map('n', '<leader>uf', function()
-  vim.g.disable_autoformat = not vim.g.disable_autoformat
-  vim.notify('保存時フォーマット: ' .. (vim.g.disable_autoformat and 'OFF' or 'ON'))
-end, { desc = '保存時フォーマットをトグル' })
-
--- 設定を再読み込みする (プラグインは対象外)
-map('n', '<leader>ur', function()
-  for name in pairs(package.loaded) do
-    if name:match('^config%.') then
-      package.loaded[name] = nil
-    end
-  end
-  dofile(vim.env.MYVIMRC)
-  vim.notify('設定を再読み込みしました')
-end, { desc = '設定を再読み込み' })
 
 ----------------------------------------------------------------------
 -- ワークスペース (VSCode の multi-root workspace 相当)
@@ -78,10 +57,5 @@ map('n', '<leader>wc', function()
   vim.notify('このタブのルート: ' .. vim.fn.getcwd())
 end, { desc = '現在のファイルの場所をこのタブのルートにする' })
 
-map('n', '<leader>wp', function()
-  vim.notify('このタブのルート: ' .. vim.fn.getcwd())
-end, { desc = 'このタブのルートを表示' })
-
-map('n', '<leader>wq', '<Cmd>tabclose<CR>', { desc = 'ワークスペース (タブ) を閉じる' })
 map('n', ']w', '<Cmd>tabnext<CR>', { desc = '次のワークスペース' })
 map('n', '[w', '<Cmd>tabprevious<CR>', { desc = '前のワークスペース' })

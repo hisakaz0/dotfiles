@@ -33,8 +33,5 @@ return {
         jump_prev_row = { '<S-Enter>', mode = { 'n', 'v' } },
       },
     },
-    keys = {
-      { '<leader>mc', '<Cmd>CsvViewToggle<CR>', desc = 'CSV の表形式表示を開閉' },
-    },
   },
 }
