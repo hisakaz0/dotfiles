@@ -13,8 +13,12 @@ fi
 # コマンドを取得
 command=$(echo "$input" | jq -r '.tool_input.command // empty')
 
+# `git rm` を判定対象から除去する。
+# git がインデックスからも消すため、削除したファイルを git の履歴から復元できる。
+checked_command=$(echo "$command" | gsed -E 's/\bgit[[:space:]]+rm\b//g')
+
 # rm コマンドパターンをチェック
-if echo "$command" | grep -qE '\brm\s+'; then
+if echo "$checked_command" | grep -qE '\brm\s+'; then
   cat >&2 <<'EOF'
 {
   "hookSpecificOutput": {
