@@ -296,10 +296,6 @@
           },
           {
             "type": "command",
-            "command": "/Users/hisakazu/.claude/hooks/check-server-project.sh"
-          },
-          {
-            "type": "command",
             "command": "/Users/hisakazu/.claude/hooks/check-rm-command.sh"
           },
           {

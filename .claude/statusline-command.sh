@@ -184,7 +184,7 @@ else
 fi
 
 # --- 統計ログ: model / branch / effort / context 使用量などを JSONL に溜める ---
-# log-notification.sh と同じく ~/.claude/logs 配下に JSONL 形式で蓄積する。
+# ~/.claude/logs 配下に JSONL 形式で蓄積する。
 # Claude Code が statusline を数秒ごとに呼ぶため、シグネチャ (model|branch|effort|context%)
 # が前回から変わったときだけ 1 行追記する。重複行を防ぎつつ context 使用量の推移を残す。
 STATS_LOG_DIR="$HOME/.claude/logs"
