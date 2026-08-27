@@ -2,8 +2,8 @@
   "env": {
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
     "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS": "1",
-    "BASH_DEFAULT_TIMEOUT_MS": "1800000",
-    "BASH_MAX_TIMEOUT_MS": "1800000"
+    "BASH_DEFAULT_TIMEOUT_MS": "600000",
+    "BASH_MAX_TIMEOUT_MS": "3600000"
   },
   "permissions": {
     "allow": [
@@ -274,6 +274,10 @@
         "hooks": [
           {
             "type": "command",
+            "command": "/Users/hisakazu/.claude/hooks/set-bash-timeout.sh"
+          },
+          {
+            "type": "command",
             "command": "/Users/hisakazu/.claude/hooks/allow-cd.sh"
           },
           {
@@ -327,7 +331,6 @@
     "plugin-dev@claude-plugins-official": false,
     "code-simplifier@claude-plugins-official": false,
     "claude-md-management@claude-plugins-official": false,
-    "superpowers@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": false,
     "frontend-design@claude-plugins-official": false,
     "slack@claude-plugins-official": false,
